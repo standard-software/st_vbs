@@ -44,9 +44,9 @@ Public fso: Set fso = CreateObject("Scripting.FileSystemObject")
 '----------------------------------------
 '◆テスト
 '----------------------------------------
-Call test01
+Call test
 
-Public Sub test01
+Public Sub test
 '    Call WScript.Echo("test")
 '    Call WScript.Echo(vbObjectError)
 '    Call testAssert
@@ -58,14 +58,15 @@ Public Sub test01
 '    Call testFirstStrLastDelim
 '    Call testLastStrFirstDelim
 '    Call testLastStrLastDelim
-
-    Call testIsFirstStr()
-    Call testIncludeFirstStr()
-    Call testExcludeFirstStr()
-    Call testIsLastStr()
-    Call testIncludeLastStr()
-    Call testExcludeLastStr()
-
+'    Call testIsFirstStr()
+'    Call testIncludeFirstStr()
+'    Call testExcludeFirstStr()
+'    Call testIsLastStr()
+'    Call testIncludeLastStr()
+'    Call testExcludeLastStr()
+    Call testTrimFirstStrs
+    Call testTrimLastStrs
+    Call testStringCombine
 End Sub
 
 '----------------------------------------
@@ -138,9 +139,8 @@ End Sub
 '----------------------------------------
 
 '------------------------------
-'◇First/Last Include/Exclude
+'◇First Include/Exclude
 '------------------------------
-
 Public Function IsFirstStr(ByVal Str , ByVal SubStr)
     Dim Result: Result = False
     Do
@@ -195,6 +195,9 @@ Private Sub testExcludeFirstStr()
     Call Check("12345", ExcludeFirstStr("12345", "23"))
 End Sub
 
+'------------------------------
+'◇Last Include/Exclude
+'------------------------------
 Public Function IsLastStr(ByVal Str, ByVal SubStr)
     Dim Result: Result = False
     Do
@@ -348,6 +351,97 @@ Private Sub testLastStrLastDelim
     Call Check("456", LastStrLastDelim("123ttt456", "tt"))
     Call Check("456", LastStrLastDelim("123ttt456", "t"))
     Call Check("", LastStrLastDelim("123ttt456", ","))
+End Sub
+
+'------------------------------
+'◇Trim
+'------------------------------
+Public Function TrimFirstStrs(ByVal Str, ByVal TrimStrs)
+    Assert IsArray(TrimStrs), "Error:TrimFirstStrs:TrimStrs is not Array."
+    Dim Result: Result = Str
+    Do
+        Str = Result
+        Dim I
+        For I = LBound(TrimStrs) To UBound(TrimStrs)
+            Result = ExcludeFirstStr(Result, TrimStrs(I))
+        Next
+    Loop While Result <> Str
+    TrimFirstStrs = Result
+End Function
+
+Private Sub testTrimFirstStrs
+    Call Check("123 ",              TrimFirstStrs("   123 ", Array(" ")))
+    Call Check(vbTab + "  123 ",    TrimFirstStrs("   " + vbTab + "  123 ", Array(" ")))
+    Call Check("123 ",              TrimFirstStrs("   " + vbTab + "  123 ", Array(" ", vbTab)))
+End Sub
+
+Public Function TrimLastStrs(ByVal Str, ByVal TrimStrs)
+    Assert IsArray(TrimStrs), "Error:TrimLastStrs:TrimStrs is not Array."
+    Dim Result: Result = Str
+    Do
+        Str = Result
+        Dim I
+        For I = LBound(TrimStrs) To UBound(TrimStrs)
+            Result = ExcludeLastStr(Result, TrimStrs(I))
+        Next
+    Loop While Result <> Str
+    TrimLastStrs = Result
+End Function
+
+Private Sub testTrimLastStrs
+    Call Check(" 123",           TrimLastStrs(" 123   ", Array(" ")))
+    Call Check(" 123  " + vbTab, TrimLastStrs(" 123  " + vbTab + "   ", Array(" ")))
+    Call Check(" 123",           TrimLastStrs(" 123  " + vbTab + "   ", Array(" ", vbTab)))
+End Sub
+
+Public Function TrimBothEndsStrs(ByVal Str, ByVal TrimStrs)
+    TrimBothEndsStrs = _
+        TrimFirstStrs(TrimLastStrs(Str, TrimStrs), TrimStrs)
+End Function
+
+'------------------------------
+'◇文字列結合
+'------------------------------
+Public Function StringCombine(ByVal Delimiter, ByVal Values)
+    Assert IsArray(Values), "Error:StringCombine:Values is not Array."
+    Dim Result: Result = ""
+    Dim Count: Count = ArrayCount(Values)
+    If Count = 0 Then
+
+    ElseIf Count = 1 Then
+        Result = Values(0)
+    Else
+        Dim I
+        For I = 0 To Count - 2
+        Do
+            If Values(I) = "" Then Exit Do
+            If IsFirstStr(Values(I + 1), Delimiter) Then
+                Result = Result + Values(I)
+            Else
+                Result = Result + IncludeLastStr(Values(I), Delimiter)
+            End If
+        Loop While False
+        Next
+        Result = Result + Values(Count - 1)
+    End If
+    StringCombine = Result
+End Function
+
+Private Sub testStringCombine()
+    Call Check("1.2.3.4", StringCombine(".", Array("1", "2", "3", "4")))
+    Call Check("1.2", StringCombine(".", Array("1.", "2")))
+    Call Check("1..2", StringCombine(".", Array("1.", ".2")))
+    Call Check("1..2", StringCombine(".", Array("1..", "2")))
+    Call Check("1..2", StringCombine(".", Array("1", "..2")))
+
+    Call Check("1..2.3", StringCombine(".", Array("1.", ".2", "3")))
+    Call Check("1..2.3", StringCombine(".", Array("1.", ".2.", "3")))
+    Call Check("1..2.3", StringCombine(".", Array("1.", ".2", ".3")))
+    Call Check("1..2..3", StringCombine(".", Array("1.", ".2.", ".3")))
+
+    Call Check("1..2.3..4", StringCombine(".", Array("1.", ".2", "3", "..4")))
+    Call Check("1...2.3...4", StringCombine(".", Array("1..", ".2", "3.", "..4")))
+    Call Check(".1...2.3...4..", StringCombine(".", Array(".1..", ".2", "3.", "..4..")))
 End Sub
 
 '----------------------------------------
@@ -508,6 +602,18 @@ Private Sub testSaveTextFile()
     Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-16LEBOM有り3_File.txt", "UTF-16")
 End Sub
 
+'----------------------------------------
+'◆配列処理
+'----------------------------------------
+
+'--------------------
+'・配列の長さを求める関数
+'--------------------
+Function ArrayCount(ByVal ArrayValue)
+    Assert IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array."
+    ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
+End Function
+
 '--------------------------------------------------
 '■履歴
 '◇ ver 2015/01/20
@@ -522,5 +628,8 @@ End Sub
 '◇ ver 2015/01/26
 '・ IsFirstStr/IncludeFirstStr/ExcludeFirstStr
 '   /IsLastStr/IncludeLastStr/ExcludeLastStr
-'   
+'◇ ver 2015/01/27
+'・ ArrayCount
+'・ TrimFirstStrs/TrimLastStrs/TrimBothEndsStrs
+'・ StringCombine
 '--------------------------------------------------
