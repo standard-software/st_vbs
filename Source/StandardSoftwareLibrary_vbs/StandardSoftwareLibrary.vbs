@@ -3,7 +3,7 @@
 '
 'ModuleName:    StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'バージョン     2015/01/21
+'バージョン     2015/01/26
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -58,6 +58,14 @@ Public Sub test01
 '    Call testFirstStrLastDelim
 '    Call testLastStrFirstDelim
 '    Call testLastStrLastDelim
+
+    Call testIsFirstStr()
+    Call testIncludeFirstStr()
+    Call testExcludeFirstStr()
+    Call testIsLastStr()
+    Call testIncludeLastStr()
+    Call testExcludeLastStr()
+
 End Sub
 
 '----------------------------------------
@@ -128,6 +136,131 @@ End Sub
 '----------------------------------------
 '◆文字列処理
 '----------------------------------------
+
+'------------------------------
+'◇First/Last Include/Exclude
+'------------------------------
+
+Public Function IsFirstStr(ByVal Str , ByVal SubStr)
+    Dim Result: Result = False
+    Do
+        If SubStr = "" Then Exit Do
+        If Str = "" Then Exit Do
+        If Len(Str) < Len(SubStr) Then Exit Do
+        
+        If InStr(1, Str, SubStr) = 1 Then
+            Result = True
+        End If
+    Loop While False
+    IsFirstStr = Result
+End Function
+
+Private Sub testIsFirstStr()
+    Call Check(True, IsFirstStr("12345", "1"))
+    Call Check(True, IsFirstStr("12345", "12"))
+    Call Check(True, IsFirstStr("12345", "123"))
+    Call Check(False, IsFirstStr("12345", "23"))
+    Call Check(False, IsFirstStr("", "34"))
+    Call Check(False, IsFirstStr("12345", ""))
+    Call Check(False, IsFirstStr("123", "1234"))
+End Sub
+
+Public Function IncludeFirstStr(ByVal Str, ByVal SubStr)
+    If IsFirstStr(Str, SubStr) Then
+        IncludeFirstStr = Str
+    Else
+        IncludeFirstStr = SubStr + Str
+    End If
+End Function
+
+Private Sub testIncludeFirstStr()
+    Call Check("12345", IncludeFirstStr("12345", "1"))
+    Call Check("12345", IncludeFirstStr("12345", "12"))
+    Call Check("12345", IncludeFirstStr("12345", "123"))
+    Call Check("2312345", IncludeFirstStr("12345", "23"))
+End Sub
+
+Public Function ExcludeFirstStr(ByVal Str, ByVal SubStr)
+    If IsFirstStr(Str, SubStr) Then
+        ExcludeFirstStr = Mid(Str, Len(SubStr) + 1)
+    Else
+        ExcludeFirstStr = Str
+    End If
+End Function
+
+Private Sub testExcludeFirstStr()
+    Call Check("2345", ExcludeFirstStr("12345", "1"))
+    Call Check("345", ExcludeFirstStr("12345", "12"))
+    Call Check("45", ExcludeFirstStr("12345", "123"))
+    Call Check("12345", ExcludeFirstStr("12345", "23"))
+End Sub
+
+Public Function IsLastStr(ByVal Str, ByVal SubStr)
+    Dim Result: Result = False
+    Do
+        If SubStr = "" Then Exit Do
+        If Str = "" Then Exit Do
+        If Len(Str) < Len(SubStr) Then Exit Do
+        
+        If Right(Str, Len(SubStr)) = SubStr Then
+            Result = True
+        End If
+    Loop While False
+    IsLastStr = Result
+End Function
+
+Private Sub testIsLastStr()
+    Call Check(True, IsLastStr("12345", "5"))
+    Call Check(True, IsLastStr("12345", "45"))
+    Call Check(True, IsLastStr("12345", "345"))
+    Call Check(False, IsLastStr("12345", "34"))
+    Call Check(False, IsLastStr("", "34"))
+    Call Check(False, IsLastStr("12345", ""))
+    Call Check(False, IsLastStr("123", "1234"))
+End Sub
+
+Public Function IncludeLastStr(ByVal Str, ByVal SubStr)
+    If IsLastStr(Str, SubStr) Then
+        IncludeLastStr = Str
+    Else
+        IncludeLastStr = Str + SubStr
+    End If
+End Function
+
+Private Sub testIncludeLastStr()
+    Call Check("12345", IncludeLastStr("12345", "5"))
+    Call Check("12345", IncludeLastStr("12345", "45"))
+    Call Check("12345", IncludeLastStr("12345", "345"))
+    Call Check("1234534", IncludeLastStr("12345", "34"))
+End Sub
+
+Public Function ExcludeLastStr(ByVal Str, ByVal SubStr)
+    If IsLastStr(Str, SubStr) Then
+        ExcludeLastStr = Mid(Str, 1, Len(Str) - Len(SubStr))
+    Else
+        ExcludeLastStr = Str
+    End If
+End Function
+
+Private Sub testExcludeLastStr()
+    Call Check("1234", ExcludeLastStr("12345", "5"))
+    Call Check("123", ExcludeLastStr("12345", "45"))
+    Call Check("12", ExcludeLastStr("12345", "345"))
+    Call Check("12345", ExcludeLastStr("12345", "34"))
+End Sub
+
+'------------------------------
+'◇Both
+'------------------------------
+Public Function IncludeBothEndsStr(ByVal Str, ByVal SubStr)
+    IncludeBothEndsStr = _
+        IncludeFirstStr(IncludeLastStr(Str, SubStr), SubStr)
+End Function
+
+Public Function ExcludeBothEndsStr(ByVal Str, ByVal SubStr)
+    ExcludeBothEndsStr = _
+        ExcludeFirstStr(ExcludeLastStr(Str, SubStr), SubStr)
+End Function
 
 '------------------------------
 '◇First/Last Delimiter
@@ -386,4 +519,8 @@ End Sub
 '◇ ver 2015/01/21
 '・ FirstStrFirstDelim/FirstStrLastDelim
 '   /LastStrFirstDelim/LastStrLastDelim
+'◇ ver 2015/01/26
+'・ IsFirstStr/IncludeFirstStr/ExcludeFirstStr
+'   /IsLastStr/IncludeLastStr/ExcludeLastStr
+'   
 '--------------------------------------------------
