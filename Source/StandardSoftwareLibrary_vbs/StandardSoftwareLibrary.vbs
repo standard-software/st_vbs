@@ -468,8 +468,8 @@ End Function
 '   ShiftJIS            SHIFT_JIS
 '   UTF-16LE BOM有/無   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
 '                       BOMの有無に関わらず読込可能
-'   UTF-16BE _BOM_ON    UNICODEFEFF
-'   UTF-16BE _BOM_OFF    UTF-16BE
+'   UTF-16BE BOM有り    UNICODEFEFF
+'   UTF-16BE BOM無し    UTF-16BE
 '   UTF-8 BOM有/無      UTF-8/UTF-8N
 '                       BOMの有無に関わらず読込可能
 '   JIS                 ISO-2022-JP
@@ -535,16 +535,16 @@ End Sub
 'エンコード指定は下記の通り
 '   エンコード          指定文字
 '   ShiftJIS            SHIFT_JIS
-'   UTF-16LE _BOM_ON    UNICODEFFFE/UNICODE/UTF-16
-'   UTF-16LE _BOM_OFF    UTF-16LE
-'   UTF-16BE _BOM_ON    UNICODEFEFF
-'   UTF-16BE _BOM_OFF    UTF-16BE
-'   UTF-8 _BOM_ON       UTF-8
-'   UTF-8 _BOM_OFF       UTF-8N
+'   UTF-16LE BOM有り    UNICODEFFFE/UNICODE/UTF-16
+'   UTF-16LE BOM無し    UTF-16LE
+'   UTF-16BE BOM有り    UNICODEFEFF
+'   UTF-16BE BOM無し    UTF-16BE
+'   UTF-8 BOM有り       UTF-8
+'   UTF-8 BOM無し       UTF-8N
 '   JIS                 ISO-2022-JP
 '   EUC-JP              EUC-JP
 '   UTF-7               UTF-7
-'UTF-16LEとUTF-8はそのままだと_BOM_ONになるので
+'UTF-16LEとUTF-8はそのままだとBOM有りになるので
 'BON無し指定の場合は特殊処理をしている
 '------------------------------
 Public Sub SaveTextFile(ByVal Text, _
