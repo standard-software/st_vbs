@@ -3,46 +3,46 @@
 '
 'ModuleName:    StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'ƒo[ƒWƒ‡ƒ“     2015/01/26
+'ãƒãƒ¼ã‚¸ãƒ§ãƒ³     2015/01/27
 '--------------------------------------------------
 
 '--------------------------------------------------
-'¡ƒ}[ƒN
+'â– ãƒãƒ¼ã‚¯
 '--------------------------------------------------
 
     '--------------------------------------------------
-    '¡
+    'â– 
     '--------------------------------------------------
 
     '----------------------------------------
-    'Ÿ
+    'â—†
     '----------------------------------------
 
     '------------------------------
-    '
+    'â—‡
     '------------------------------
 
     '--------------------
-    'E
+    'ãƒ»
     '--------------------
 
 Option Explicit
 
 '--------------------------------------------------
-'¡’è”/Œ^éŒ¾
+'â– å®šæ•°/å‹å®£è¨€
 '--------------------------------------------------
 
 '----------------------------------------
-'ŸFileSystemObject
+'â—†FileSystemObject
 '----------------------------------------
 Public fso: Set fso = CreateObject("Scripting.FileSystemObject")
 
 '--------------------------------------------------
-'¡À‘•
+'â– å®Ÿè£…
 '--------------------------------------------------
 
 '----------------------------------------
-'ŸƒeƒXƒg
+'â—†ãƒ†ã‚¹ãƒˆ
 '----------------------------------------
 Call test
 
@@ -70,19 +70,19 @@ Public Sub test
 End Sub
 
 '----------------------------------------
-'ŸğŒ”»’f
+'â—†æ¡ä»¶åˆ¤æ–­
 '----------------------------------------
 
 '--------------------
-'EAssert
+'ãƒ»Assert
 '--------------------
-'Assert = å’£‚·‚é
-'Err”Ô† vbObjectError + 1 ‚Í
-'ƒ†[ƒU[’è‹`ƒGƒ‰[”Ô†‚Ì1
-'“®ì‚³‚¹‚é‚ÆŸ‚Ì‚æ‚¤‚ÉƒGƒ‰[ƒ_ƒCƒAƒƒO‚ª•\¦‚³‚ê‚é
-'   ƒGƒ‰[: Message‚Ì“à—e
-'   ƒR[ƒh: 80040001
-'   ƒ\[ƒX: Sub Assert
+'Assert = ä¸»å¼µã™ã‚‹
+'Errç•ªå· vbObjectError + 1 ã¯
+'ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã‚¨ãƒ©ãƒ¼ç•ªå·ã®1
+'å‹•ä½œã•ã›ã‚‹ã¨æ¬¡ã®ã‚ˆã†ã«ã‚¨ãƒ©ãƒ¼ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãŒè¡¨ç¤ºã•ã‚Œã‚‹
+'   ã‚¨ãƒ©ãƒ¼: Messageã®å†…å®¹
+'   ã‚³ãƒ¼ãƒ‰: 80040001
+'   ã‚½ãƒ¼ã‚¹: Sub Assert
 '--------------------
 Public Sub Assert(ByVal Value, ByVal Message)
     If Value = False Then
@@ -91,14 +91,14 @@ Public Sub Assert(ByVal Value, ByVal Message)
 End Sub
 
 Private Sub testAssert()
-    Call Assert(False, "ƒeƒXƒg")
+    Call Assert(False, "ãƒ†ã‚¹ãƒˆ")
 End Sub
 
 '--------------------
-'ECheck
+'ãƒ»Check
 '--------------------
-'2‚Â‚Ì’l‚ğ”äŠr‚µ‚Äˆê’v‚µ‚È‚¯‚ê‚Î
-'ƒƒbƒZ[ƒW‚ğo‚·ŠÖ”
+'2ã¤ã®å€¤ã‚’æ¯”è¼ƒã—ã¦ä¸€è‡´ã—ãªã‘ã‚Œã°
+'ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡ºã™é–¢æ•°
 '--------------------
 Public Function Check(ByVal A, ByVal B)
     Check = (A = B)
@@ -114,9 +114,9 @@ Private Sub testCheck()
 End Sub
 
 '--------------------
-'EOrValue
+'ãƒ»OrValue
 '--------------------
-'—áFIf OrValue(ValueA, Array(1, 2, 3)) Then
+'ä¾‹ï¼šIf OrValue(ValueA, Array(1, 2, 3)) Then
 '--------------------
 Public Function OrValue(ByVal Value, ByVal Values)
     OrValue = False
@@ -135,11 +135,11 @@ Private Sub testOrValue()
 End Sub
 
 '----------------------------------------
-'Ÿ•¶š—ñˆ—
+'â—†æ–‡å­—åˆ—å‡¦ç†
 '----------------------------------------
 
 '------------------------------
-'First Include/Exclude
+'â—‡First Include/Exclude
 '------------------------------
 Public Function IsFirstStr(ByVal Str , ByVal SubStr)
     Dim Result: Result = False
@@ -196,7 +196,7 @@ Private Sub testExcludeFirstStr()
 End Sub
 
 '------------------------------
-'Last Include/Exclude
+'â—‡Last Include/Exclude
 '------------------------------
 Public Function IsLastStr(ByVal Str, ByVal SubStr)
     Dim Result: Result = False
@@ -253,7 +253,7 @@ Private Sub testExcludeLastStr()
 End Sub
 
 '------------------------------
-'Both
+'â—‡Both
 '------------------------------
 Public Function IncludeBothEndsStr(ByVal Str, ByVal SubStr)
     IncludeBothEndsStr = _
@@ -266,11 +266,11 @@ Public Function ExcludeBothEndsStr(ByVal Str, ByVal SubStr)
 End Function
 
 '------------------------------
-'First/Last Delimiter
+'â—‡First/Last Delimiter
 '------------------------------
 
 '--------------------
-'EFirstStrFirstDelim
+'ãƒ»FirstStrFirstDelim
 '--------------------
 Public Function FirstStrFirstDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -291,7 +291,7 @@ Private Sub testFirstStrFirstDelim
 End Sub
 
 '--------------------
-'EFirstStrLastDelim
+'ãƒ»FirstStrLastDelim
 '--------------------
 Public Function FirstStrLastDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -312,7 +312,7 @@ Private Sub testFirstStrLastDelim
 End Sub
 
 '--------------------
-'ELastStrFirstDelim
+'ãƒ»LastStrFirstDelim
 '--------------------
 Public Function LastStrFirstDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -333,7 +333,7 @@ Private Sub testLastStrFirstDelim
 End Sub
 
 '--------------------
-'ELastStrLastDelim
+'ãƒ»LastStrLastDelim
 '--------------------
 Public Function LastStrLastDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -354,7 +354,7 @@ Private Sub testLastStrLastDelim
 End Sub
 
 '------------------------------
-'Trim
+'â—‡Trim
 '------------------------------
 Public Function TrimFirstStrs(ByVal Str, ByVal TrimStrs)
     Assert IsArray(TrimStrs), "Error:TrimFirstStrs:TrimStrs is not Array."
@@ -400,7 +400,7 @@ Public Function TrimBothEndsStrs(ByVal Str, ByVal TrimStrs)
 End Function
 
 '------------------------------
-'•¶š—ñŒ‹‡
+'â—‡æ–‡å­—åˆ—çµåˆ
 '------------------------------
 Public Function StringCombine(ByVal Delimiter, ByVal Values)
     Assert IsArray(Values), "Error:StringCombine:Values is not Array."
@@ -445,7 +445,7 @@ Private Sub testStringCombine()
 End Sub
 
 '----------------------------------------
-'ŸƒeƒLƒXƒgƒtƒ@ƒCƒ‹“Ç‚İ‘‚«
+'â—†ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿æ›¸ã
 '----------------------------------------
 
 Public Function CheckEncodeName(ByVal EncodeName)
@@ -462,20 +462,20 @@ Public Function CheckEncodeName(ByVal EncodeName)
 End Function
 
 '------------------------------
-'ƒeƒLƒXƒgƒtƒ@ƒCƒ‹“Ç
-'ƒGƒ“ƒR[ƒhw’è‚Í‰º‹L‚Ì’Ê‚è
-'   ƒGƒ“ƒR[ƒh          w’è•¶š
+'â—‡ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«èª­è¾¼
+'ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰æŒ‡å®šã¯ä¸‹è¨˜ã®é€šã‚Š
+'   ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰          æŒ‡å®šæ–‡å­—
 '   ShiftJIS            SHIFT_JIS
-'   UTF-16LE BOM—L/–³   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
-'                       BOM‚Ì—L–³‚ÉŠÖ‚í‚ç‚¸“Ç‰Â”\
-'   UTF-16BE BOM—L‚è    UNICODEFEFF
-'   UTF-16BE BOM–³‚µ    UTF-16BE
-'   UTF-8 BOM—L/–³      UTF-8/UTF-8N
-'                       BOM‚Ì—L–³‚ÉŠÖ‚í‚ç‚¸“Ç‰Â”\
+'   UTF-16LE BOMæœ‰/ç„¡   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
+'                       BOMã®æœ‰ç„¡ã«é–¢ã‚ã‚‰ãšèª­è¾¼å¯èƒ½
+'   UTF-16BE BOMæœ‰ã‚Š    UNICODEFEFF
+'   UTF-16BE BOMç„¡ã—    UTF-16BE
+'   UTF-8 BOMæœ‰/ç„¡      UTF-8/UTF-8N
+'                       BOMã®æœ‰ç„¡ã«é–¢ã‚ã‚‰ãšèª­è¾¼å¯èƒ½
 '   JIS                 ISO-2022-JP
 '   EUC-JP              EUC-JP
 '   UTF-7               UTF-7
-'UTF-16LE‚ÆUTF-8‚ÍABOM‚Ì—L–³‚É‚©‚©‚í‚ç‚¸“Ç‚İ‚ß‚é
+'UTF-16LEã¨UTF-8ã¯ã€BOMã®æœ‰ç„¡ã«ã‹ã‹ã‚ã‚‰ãšèª­ã¿è¾¼ã‚ã‚‹
 '------------------------------
 Const StreamTypeEnum_adTypeBinary = 1
 Const StreamTypeEnum_adTypeText = 2
@@ -506,46 +506,46 @@ ByVal TextFilePath, ByVal EncodeName)
 End Function
 
 Private Sub testLoadTextFile()
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
 
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
 
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
 
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16BEBOM–³‚µ_File.txt", "UTF-16BE"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16BEBOMç„¡ã—_File.txt", "UTF-16BE"))
 
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16BEBOM—L‚è_File.txt", "UNICODEFEFF"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16BEBOMæœ‰ã‚Š_File.txt", "UNICODEFEFF"))
 
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM–³‚µ_File.txt", "UTF-16"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM–³‚µ_File.txt", "UTF-16LE"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM–³‚µ_File.txt", "UNICODE"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM–³‚µ_File.txt", "UNICODEFFFE"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMç„¡ã—_File.txt", "UTF-16"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMç„¡ã—_File.txt", "UTF-16LE"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMç„¡ã—_File.txt", "UNICODE"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMç„¡ã—_File.txt", "UNICODEFFFE"))
 
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM—L‚è_File.txt", "UTF-16"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM—L‚è_File.txt", "UTF-16LE"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM—L‚è_File.txt", "UNICODE"))
-    Call Check("‚ ‚¢‚¤‚¦‚¨", LoadTextFile("TestLoadTextFile\UTF-16LEBOM—L‚è_File.txt", "UNICODEFFFE"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMæœ‰ã‚Š_File.txt", "UTF-16"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMæœ‰ã‚Š_File.txt", "UTF-16LE"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMæœ‰ã‚Š_File.txt", "UNICODE"))
+    Call Check("ã‚ã„ã†ãˆãŠ", LoadTextFile("TestLoadTextFile\UTF-16LEBOMæœ‰ã‚Š_File.txt", "UNICODEFFFE"))
 End Sub
 
 '------------------------------
-'ƒeƒLƒXƒgƒtƒ@ƒCƒ‹•Û‘¶
-'ƒGƒ“ƒR[ƒhw’è‚Í‰º‹L‚Ì’Ê‚è
-'   ƒGƒ“ƒR[ƒh          w’è•¶š
+'â—‡ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ä¿å­˜
+'ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰æŒ‡å®šã¯ä¸‹è¨˜ã®é€šã‚Š
+'   ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰          æŒ‡å®šæ–‡å­—
 '   ShiftJIS            SHIFT_JIS
-'   UTF-16LE BOM—L‚è    UNICODEFFFE/UNICODE/UTF-16
-'   UTF-16LE BOM–³‚µ    UTF-16LE
-'   UTF-16BE BOM—L‚è    UNICODEFEFF
-'   UTF-16BE BOM–³‚µ    UTF-16BE
-'   UTF-8 BOM—L‚è       UTF-8
-'   UTF-8 BOM–³‚µ       UTF-8N
+'   UTF-16LE BOMæœ‰ã‚Š    UNICODEFFFE/UNICODE/UTF-16
+'   UTF-16LE BOMç„¡ã—    UTF-16LE
+'   UTF-16BE BOMæœ‰ã‚Š    UNICODEFEFF
+'   UTF-16BE BOMç„¡ã—    UTF-16BE
+'   UTF-8 BOMæœ‰ã‚Š       UTF-8
+'   UTF-8 BOMç„¡ã—       UTF-8N
 '   JIS                 ISO-2022-JP
 '   EUC-JP              EUC-JP
 '   UTF-7               UTF-7
-'UTF-16LE‚ÆUTF-8‚Í‚»‚Ì‚Ü‚Ü‚¾‚ÆBOM—L‚è‚É‚È‚é‚Ì‚Å
-'BON–³‚µw’è‚Ìê‡‚Í“Áêˆ—‚ğ‚µ‚Ä‚¢‚é
+'UTF-16LEã¨UTF-8ã¯ãã®ã¾ã¾ã ã¨BOMæœ‰ã‚Šã«ãªã‚‹ã®ã§
+'BONç„¡ã—æŒ‡å®šã®å ´åˆã¯ç‰¹æ®Šå‡¦ç†ã‚’ã—ã¦ã„ã‚‹
 '------------------------------
 Public Sub SaveTextFile(ByVal Text, _
 ByVal TextFilePath, ByVal EncodeName)
@@ -589,25 +589,25 @@ ByVal TextFilePath, ByVal EncodeName)
 End Sub
 
 Private Sub testSaveTextFile()
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-7_File.txt", "UTF-7")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-8_File.txt", "UTF-8")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-7_File.txt", "UTF-7")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-8_File.txt", "UTF-8")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
 
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-16BEBOM–³‚µ_File.txt", "UTF-16BE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-16BEBOM—L‚è_File.txt", "UNICODEFEFF")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-16LEBOM–³‚µ_File.txt", "UTF-16LE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-16LEBOM—L‚è1_File.txt", "UNICODEFFFE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-16LEBOM—L‚è2_File.txt", "UNICODE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "TestSaveTextFile\UTF-16LEBOM—L‚è3_File.txt", "UTF-16")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-16BEBOMç„¡ã—_File.txt", "UTF-16BE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-16BEBOMæœ‰ã‚Š_File.txt", "UNICODEFEFF")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-16LEBOMç„¡ã—_File.txt", "UTF-16LE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-16LEBOMæœ‰ã‚Š1_File.txt", "UNICODEFFFE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-16LEBOMæœ‰ã‚Š2_File.txt", "UNICODE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "TestSaveTextFile\UTF-16LEBOMæœ‰ã‚Š3_File.txt", "UTF-16")
 End Sub
 
 '----------------------------------------
-'Ÿ”z—ñˆ—
+'â—†é…åˆ—å‡¦ç†
 '----------------------------------------
 
 '--------------------
-'E”z—ñ‚Ì’·‚³‚ğ‹‚ß‚éŠÖ”
+'ãƒ»é…åˆ—ã®é•·ã•ã‚’æ±‚ã‚ã‚‹é–¢æ•°
 '--------------------
 Function ArrayCount(ByVal ArrayValue)
     Assert IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array."
@@ -615,21 +615,21 @@ Function ArrayCount(ByVal ArrayValue)
 End Function
 
 '--------------------------------------------------
-'¡—š—ğ
-' ver 2015/01/20
-'E ì¬
-'E Assert/Check/OrValue
-'E fso
-'E TestStandardSoftwareLibrary.vbs/Include
-'E LoadTextFile/SaveTextFile
-' ver 2015/01/21
-'E FirstStrFirstDelim/FirstStrLastDelim
+'â– å±¥æ­´
+'â—‡ ver 2015/01/20
+'ãƒ» ä½œæˆ
+'ãƒ» Assert/Check/OrValue
+'ãƒ» fso
+'ãƒ» TestStandardSoftwareLibrary.vbs/Include
+'ãƒ» LoadTextFile/SaveTextFile
+'â—‡ ver 2015/01/21
+'ãƒ» FirstStrFirstDelim/FirstStrLastDelim
 '   /LastStrFirstDelim/LastStrLastDelim
-' ver 2015/01/26
-'E IsFirstStr/IncludeFirstStr/ExcludeFirstStr
+'â—‡ ver 2015/01/26
+'ãƒ» IsFirstStr/IncludeFirstStr/ExcludeFirstStr
 '   /IsLastStr/IncludeLastStr/ExcludeLastStr
-' ver 2015/01/27
-'E ArrayCount
-'E TrimFirstStrs/TrimLastStrs/TrimBothEndsStrs
-'E StringCombine
+'â—‡ ver 2015/01/27
+'ãƒ» ArrayCount
+'ãƒ» TrimFirstStrs/TrimLastStrs/TrimBothEndsStrs
+'ãƒ» StringCombine
 '--------------------------------------------------
