@@ -49,11 +49,11 @@ Call test
 Public Sub test
 '    Call WScript.Echo("test")
 '    Call WScript.Echo(vbObjectError)
-'    Call testAssert
+''    Call testAssert
 '    Call testCheck
 '    Call testOrValue
-'    Call testLoadTextFile
-'    Call testSaveTextFile
+    Call testLoadTextFile
+    Call testSaveTextFile
 '    Call testFirstStrFirstDelim
 '    Call testFirstStrLastDelim
 '    Call testLastStrFirstDelim
@@ -64,9 +64,9 @@ Public Sub test
 '    Call testIsLastStr()
 '    Call testIncludeLastStr()
 '    Call testExcludeLastStr()
-    Call testTrimFirstStrs
-    Call testTrimLastStrs
-    Call testStringCombine
+'    Call testTrimFirstStrs
+'    Call testTrimLastStrs
+'    Call testStringCombine
 End Sub
 
 '----------------------------------------
@@ -468,8 +468,8 @@ End Function
 '   ShiftJIS            SHIFT_JIS
 '   UTF-16LE BOM有/無   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
 '                       BOMの有無に関わらず読込可能
-'   UTF-16BE BOM有り    UNICODEFEFF
-'   UTF-16BE BOM無し    UTF-16BE
+'   UTF-16BE _BOM_ON    UNICODEFEFF
+'   UTF-16BE _BOM_OFF    UTF-16BE
 '   UTF-8 BOM有/無      UTF-8/UTF-8N
 '                       BOMの有無に関わらず読込可能
 '   JIS                 ISO-2022-JP
@@ -506,28 +506,28 @@ ByVal TextFilePath, ByVal EncodeName)
 End Function
 
 Private Sub testLoadTextFile()
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
 
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
 
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
 
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16BEBOM無し_File.txt", "UTF-16BE"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE"))
 
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16BEBOM有り_File.txt", "UNICODEFEFF"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF"))
 
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM無し_File.txt", "UTF-16"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM無し_File.txt", "UTF-16LE"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM無し_File.txt", "UNICODE"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM無し_File.txt", "UNICODEFFFE"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODE"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODEFFFE"))
 
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM有り_File.txt", "UTF-16"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM有り_File.txt", "UTF-16LE"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM有り_File.txt", "UNICODE"))
-    Call Check("あいうえお", LoadTextFile("TestLoadTextFile\UTF-16LEBOM有り_File.txt", "UNICODEFFFE"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16LE"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODE"))
+    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE"))
 End Sub
 
 '------------------------------
@@ -535,16 +535,16 @@ End Sub
 'エンコード指定は下記の通り
 '   エンコード          指定文字
 '   ShiftJIS            SHIFT_JIS
-'   UTF-16LE BOM有り    UNICODEFFFE/UNICODE/UTF-16
-'   UTF-16LE BOM無し    UTF-16LE
-'   UTF-16BE BOM有り    UNICODEFEFF
-'   UTF-16BE BOM無し    UTF-16BE
-'   UTF-8 BOM有り       UTF-8
-'   UTF-8 BOM無し       UTF-8N
+'   UTF-16LE _BOM_ON    UNICODEFFFE/UNICODE/UTF-16
+'   UTF-16LE _BOM_OFF    UTF-16LE
+'   UTF-16BE _BOM_ON    UNICODEFEFF
+'   UTF-16BE _BOM_OFF    UTF-16BE
+'   UTF-8 _BOM_ON       UTF-8
+'   UTF-8 _BOM_OFF       UTF-8N
 '   JIS                 ISO-2022-JP
 '   EUC-JP              EUC-JP
 '   UTF-7               UTF-7
-'UTF-16LEとUTF-8はそのままだとBOM有りになるので
+'UTF-16LEとUTF-8はそのままだと_BOM_ONになるので
 'BON無し指定の場合は特殊処理をしている
 '------------------------------
 Public Sub SaveTextFile(ByVal Text, _
@@ -589,17 +589,17 @@ ByVal TextFilePath, ByVal EncodeName)
 End Sub
 
 Private Sub testSaveTextFile()
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-7_File.txt", "UTF-7")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-8_File.txt", "UTF-8")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-7_File.txt", "UTF-7")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-8_File.txt", "UTF-8")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
 
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-16BEBOM無し_File.txt", "UTF-16BE")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-16BEBOM有り_File.txt", "UNICODEFEFF")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-16LEBOM無し_File.txt", "UTF-16LE")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-16LEBOM有り1_File.txt", "UNICODEFFFE")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-16LEBOM有り2_File.txt", "UNICODE")
-    Call SaveTextFile("123ABCあいうえお", "TestSaveTextFile\UTF-16LEBOM有り3_File.txt", "UTF-16")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON2_File.txt", "UNICODE")
+    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON3_File.txt", "UTF-16")
 End Sub
 
 '----------------------------------------
