@@ -25,5 +25,5 @@ Sub Include(ByVal FileName)
 End Sub
 '--------------------------------------------------
 
-Call TestCheck
+Call test
 
