@@ -43,6 +43,8 @@ Sub Main
 
     Dim DestPath: DestPath = _
         AbsoluteFilePath(ScriptFolderPath, Library_Dest_Path)
+        
+    Call ForceCreateFolder(fso.GetParentFolderName(DestPath))
 
     Call fso.CopyFile(SourcePath, DestPath)
     MessageText = SourcePath + vbCrLf + _

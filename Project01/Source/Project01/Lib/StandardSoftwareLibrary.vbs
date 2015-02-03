@@ -3,7 +3,7 @@
 '
 'ModuleName:    StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'version        2015/02/03
+'version        2015/02/04
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -72,10 +72,19 @@ Public Sub test
     Call testStringCombine
 
 '    Call testAbsoluteFilePath
-    Call testPeriodExtName
-    Call testExcludePathExt
-    Call testChangeFileExt
-    Call testPathCombine
+'    Call testPeriodExtName
+'    Call testExcludePathExt
+'    Call testChangeFileExt
+'    Call testPathCombine
+    Call testFileFolderPathList
+
+'    Call testShellCommandRunReturn
+'    Call testEnvironmentalVariables
+'    Call testShellFileOpen
+'    Call testShellCommandRun
+
+    Call testFormatYYYYMMDD
+    Call testFormatHHMMSS
 End Sub
 
 '----------------------------------------
@@ -146,7 +155,7 @@ End Sub
 '--------------------
 '・IIF
 '--------------------
-Function IIF(CompareValue, Result1, Result2)
+Public Function IIF(ByVal CompareValue, ByVal Result1, ByVal Result2)
     If CompareValue Then
         IIF = Result1
     Else
@@ -436,23 +445,27 @@ Public Function StringCombine(ByVal Delimiter, ByVal Values)
         Result = Values(0)
     Else
         Dim I
-        For I = 0 To Count - 2
+        For I = 0 To Count - 1
         Do
             If Values(I) = "" Then Exit Do
-            If IsFirstStr(Values(I + 1), Delimiter) Then
-                Result = Result + ExcludeLastStr(Values(I), Delimiter)
+            If Result = "" Then
+                Result = Values(I)
             Else
-                Result = Result + IncludeLastStr(Values(I), Delimiter)
+                Result = _
+                    ExcludeLastStr(Result, Delimiter) + _
+                    Delimiter + _
+                    ExcludeFirstStr(Values(I), Delimiter)
             End If
+
         Loop While False
         Next
-        Result = Result + Values(Count - 1)
     End If
     StringCombine = Result
 End Function
 
 Private Sub testStringCombine()
     Call Check("1.2.3.4", StringCombine(".", Array("1", "2", "3", "4")))
+
     Call Check("1.2", StringCombine(".", Array("1.", "2")))
     Call Check("1.2", StringCombine(".", Array("1.", ".2")))
     Call Check("1..2", StringCombine(".", Array("1..", "2")))
@@ -470,17 +483,118 @@ Private Sub testStringCombine()
     Call Check("1.2.3..4", StringCombine(".", Array("1.", ".2", "3", "..4")))
     Call Check("1..2.3..4", StringCombine(".", Array("1..", ".2", "3.", "..4")))
     Call Check(".1..2.3..4..", StringCombine(".", Array(".1..", ".2", "3.", "..4..")))
+
+    Call Check("", StringCombine(vbCrLf, Array("", "")))
+    Call Check("", StringCombine(vbCrLf, Array("", "", "")))
+    Call Check("A", StringCombine(vbCrLf, Array("A", "")))
+    Call Check("A", StringCombine(vbCrLf, Array("A", "", "")))
+    Call Check("A", StringCombine(vbCrLf, Array("", "A")))
+    Call Check("A", StringCombine(vbCrLf, Array("", "", "A")))
+    Call Check("A", StringCombine(vbCrLf, Array("", "A", "")))
+
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("A", "B", "")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("A", "B", "", "")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "A", "B")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "", "A", "B")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "A", "B", "")))
+
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("A", "", "B")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "A", "", "B")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("A", "", "B", "")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "A", "", "B", "")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("A", "", "", "B")))
+    Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "", "A", "", "", "B", "", "")))
 End Sub
 
 '----------------------------------------
-'◆ファイルフォルダパス
+'◆配列処理
+'----------------------------------------
+
+'--------------------
+'・配列の長さを求める関数
+'--------------------
+Public Function ArrayCount(ByVal ArrayValue)
+    Assert IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array."
+    ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
+End Function
+
+'----------------------------------------
+'◆日付時刻処理
+'----------------------------------------
+
+'--------------------
+'・日付書式
+'--------------------
+Public Function FormatYYYYMMDD(ByVal DateValue)
+    FormatYYYYMMDD = FormatYYYY_MM_DD(DateValue, "")
+End Function
+
+Sub testFormatYYYYMMDD
+    Dim Value: Value = CDate("2015/02/03")
+    Call Check("20150203", FormatYYYYMMDD(Value))
+End Sub
+
+Public Function FormatYYYY_MM_DD(ByVal DateValue, ByVal Delimiter)
+    Dim Result: Result = ""
+    Do
+        If IsDate(DateValue) = False Then Exit Do
+
+        Result = _
+            Year(DateValue) & _
+            Delimiter & _
+            Right("0" & Month(DateValue), 2) & _
+            Delimiter & _
+            Right("0" & Day(DateValue), 2)
+    Loop While False
+    FormatYYYY_MM_DD = Result
+End Function
+
+'--------------------
+'・時刻書式
+'--------------------
+Public Function FormatHHMMSS(ByVal TimeValue)
+    FormatHHMMSS = FormatHH_MM_SS(TimeValue, "")
+End Function
+
+Sub testFormatHHMMSS
+    Dim Value: Value = CDate("2015/02/03 05:05")
+    Call Check("05:05:00", FormatHH_MM_SS(Value, ":"))
+End Sub
+
+Public Function FormatHH_MM_SS(ByVal TimeValue, ByVal Delimiter)
+    Dim Result: Result = ""
+    Do
+        If IsDate(TimeValue) = False Then Exit Do 
+
+        Result = _
+            Right("0" & Hour(TimeValue) , 2) & _
+            Delimiter & _
+            Right("0" & Minute(TimeValue) , 2) & _
+            Delimiter & _
+            Right("0" & Second(TimeValue) , 2)
+    Loop While False
+    FormatHH_MM_SS = Result
+End Function
+
+'--------------------
+'・日付時刻書式
+'--------------------
+Public Function FormatYYYYMMDDHHMMSS(ByVal DateTimeValue)
+    FormatYYYYMMDDHHMMSS = _
+        FormatYYYYMMDD(DateTimeValue) + _
+        FormatHHMMSS(DateTimeValue)
+End Function
+
+
+'----------------------------------------
+'◆ファイルフォルダパス処理
 '----------------------------------------
 
 '--------------------
 '・絶対パスを取得する関数
 'カレントディレクトリパスと相対パスを指定する
 '--------------------
-Function AbsoluteFilePath(BasePath, RelativePath)
+Public Function AbsoluteFilePath(ByVal BasePath, ByVal RelativePath)
     Dim Result
     Do
         If fso.FolderExists(BasePath) = False Then
@@ -534,6 +648,11 @@ Sub testAbsoluteFilePath()
     'ネットワークパス指定
     Call Check(LCase("\\127.0.0.1\C$"), LCase(AbsoluteFilePath("C:\Windows", "\\127.0.0.1\C$")))
 
+    Call Check(AbsoluteFilePath(fso.GetParentFolderName(WScript.ScriptFullName), ".\Test\TestFileFolderPathList"), _
+        fso.GetParentFolderName(WScript.ScriptFullName) + "\Test\TestFileFolderPathList")
+    Call Check(AbsoluteFilePath(fso.GetParentFolderName(WScript.ScriptFullName), "..\Test\TestFileFolderPathList"), _
+        fso.GetParentFolderName(fso.GetParentFolderName(WScript.ScriptFullName)) + "\Test\TestFileFolderPathList")
+
     MsgBox "Test OK"
 End Sub
 
@@ -541,7 +660,7 @@ End Sub
 '・ドライブパスが含まれているかどうか確認する関数
 '[:]が2文字目以降にあるかどうかで判定
 '--------------------
-Function IsIncludeDrivePath(Path)
+Public Function IsIncludeDrivePath(ByVal Path)
     Dim Result
     Result = (2 <= InStr(Path, ":"))
     IsIncludeDrivePath = Result
@@ -550,7 +669,7 @@ End Function
 '--------------------
 '・ネットワークドライブかどうか確認する関数
 '--------------------
-Function IsNetworkPath(Path)
+Public Function IsNetworkPath(ByVal Path)
     Dim Result: Result = False
     If IsFirstStr(Path, "\\") Then
         If 3 <= Len(Path) Then
@@ -563,9 +682,9 @@ End Function
 '--------------------
 '・ドライブパス"C:"を取り出す関数
 '--------------------
-Function GetDrivePath(Path)
+Public Function GetDrivePath(ByVal Path)
     Dim Result: Result = ""
-    If (2 <= InStr(Path, ":")) Then
+    If IsIncludeDrivePath(Path) Then
         Result = FirstStrFirstDelim(Path, ":")
         Result = IncludeLastStr(Result, ":")
     End If
@@ -575,7 +694,7 @@ End Function
 '--------------------
 '・終端にパス区切りを追加する関数
 '--------------------
-Function IncludeLastPathDelim(Path)
+Public Function IncludeLastPathDelim(ByVal Path)
     Dim Result: Result = ""
     If Path <> "" Then
         Result = IncludeLastStr(Path, "\")
@@ -586,7 +705,7 @@ End Function
 '--------------------
 '・終端からパス区切りを削除する関数
 '--------------------
-Function ExcludeLastPathDelim(Path)
+Public Function ExcludeLastPathDelim(ByVal Path)
     Dim Result: Result = ""
     If Path <> "" Then
         Result = ExcludeLastStr(Path, "\")
@@ -595,12 +714,12 @@ Function ExcludeLastPathDelim(Path)
 End Function
 
 '--------------------
-'・ピリオドを含む拡張子を取得する
+'・ピリオドを含む拡張子を取得する関数
 'ピリオドのないファイル名の場合は空文字を返す
 'fso.GetExtensionName ではピリオドで終わるファイル名を
 '判断できないために作成した。
 '--------------------
-Function PeriodExtName(Path)
+Public Function PeriodExtName(ByVal Path)
     Dim Result: Result = ""
     Result = fso.GetExtensionName(Path)
     If IsLastStr(Path, "." + Result) Then
@@ -619,7 +738,7 @@ End Sub
 '--------------------
 '・ファイル名から拡張子を取り除く関数
 '--------------------
-Function ExcludePathExt(Path)
+Public Function ExcludePathExt(ByVal Path)
     Dim Result: Result = ""
     If Path <> "" Then
         Result = ExcludeLastStr(Path, PeriodExtName(Path))
@@ -635,9 +754,9 @@ Sub testExcludePathExt
 End Sub
 
 '--------------------
-'・ファイルパスの拡張子を新しいものにする
+'・ファイルパスの拡張子を変更する関数
 '--------------------
-Function ChangeFileExt(Path, NewExt)
+Public Function ChangeFileExt(ByVal Path, ByVal NewExt)
     Dim Result: Result = ""
     If Path <> "" Then
         NewExt = IIF(NewExt = "", "", IncludeFirstStr(NewExt, "."))
@@ -648,16 +767,16 @@ End Function
 
 Sub testChangeFileExt
     Call Check("C:\temp\test.zip",      ChangeFileExt("C:\temp\test.txt", "zip"))
-    Call Check("C:\temp\test.7z.tmp",      ChangeFileExt("C:\temp\test.txt", ".7z.tmp"))
+    Call Check("C:\temp\test.7z.tmp",   ChangeFileExt("C:\temp\test.txt", ".7z.tmp"))
     Call Check("C:\temp\test.tmp.7z",   ChangeFileExt("C:\temp\test.tmp.zip", "7z"))
     Call Check("C:\temp\test.",         ChangeFileExt("C:\temp\test", "."))
     Call Check("C:\temp\test",          ChangeFileExt("C:\temp\test.", ""))
 End Sub
 
 '--------------------
-'・ファイルパスを結合する
+'・ファイルパスを結合する関数
 '--------------------
-Function PathCombine(Values)
+Public Function PathCombine(ByVal Values)
     Call Assert(IsArray(Values), "Error:PathCombine")
     PathCombine = StringCombine("\", Values)
 End Function
@@ -680,22 +799,198 @@ Sub testPathCombine()
 
 End Sub
 
+'----------------------------------------
+'◆ファイルフォルダパス取得
+'----------------------------------------
 
 '--------------------
 '・カレントディレクトリの取得
 '--------------------
-Function CurrentDirectory
+Public Function CurrentDirectory
     GetCurrentDirectory = Shell.CurrentDirectory
 End Function
 
 '--------------------
 '・スクリプトフォルダの取得
 '--------------------
-Function ScriptFolderPath
+Public Function ScriptFolderPath
     ScriptFolderPath = _
         fso.GetParentFolderName(WScript.ScriptFullName)
 End Function
 
+'----------------------------------------
+'◆ファイルフォルダ列挙
+'----------------------------------------
+
+Sub testFileFolderPathList()
+    Dim Path: Path = AbsoluteFilePath(ScriptFolderPath, ".\Test\TestFileFolderPathList")
+    Dim PathList
+
+    PathList = Replace(UCase(FolderPathListTopFolder(Path)), UCase(Path), "")
+'    Call MsgBox(PathList)
+    Call Check(PathList, _
+        StringCombine(vbCrLf, Array( _
+            "\AAA", _
+            "\BBB" _
+        )))
+
+    PathList = Replace(UCase(FolderPathListSubFolder(Path)), UCase(Path), "")
+'    Call MsgBox(PathList)
+    Call Check(PathList, _
+        StringCombine(vbCrLf, Array( _
+            "\AAA", _
+            "\AAA\AAA-1", _
+            "\AAA\AAA-2", _
+            "\AAA\AAA-2\AAA-2-1", _
+            "\AAA\AAA-2\AAA-2-2", _
+            "\AAA\AAA-2\AAA-2-2\AAA-2-2-1", _
+            "\BBB", _
+            "\BBB\BBB-1", _
+            "\BBB\BBB-1\BBB-1-1", _
+            "\BBB\BBB-1\BBB-1-1\BBB-1-1-1", _
+            "\BBB\BBB-1\BBB-1-2", _
+            "\BBB\BBB-2", "" _
+        )))
+
+    PathList = Replace(UCase(FilePathListTopFolder(Path)), UCase(Path), "")
+'    Call MsgBox(PathList)
+    Call Check(PathList, _
+        StringCombine(vbCrLf, Array( _
+            "\AAA.TXT", _
+            "\BBB.TXT" _
+        )))
+
+    PathList = Replace(UCase(FilePathListSubFolder(Path)), UCase(Path), "")
+'    Call MsgBox(PathList)
+    Call Check(PathList, _
+        StringCombine(vbCrLf, Array( _
+            "\AAA\AAA-1.TXT", _
+            "\AAA\AAA-2.TXT", _
+            "\AAA\AAA-2\AAA-2-1.TXT", _
+            "\AAA\AAA-2\AAA-2-2.TXT", _
+            "\AAA\AAA-2\AAA-2-2\AAA-2-2-1.TXT", _
+            "\BBB\BBB-1.TXT", _
+            "\BBB\BBB-2.TXT", _
+            "\BBB\BBB-1\BBB-1-1.TXT", _
+            "\BBB\BBB-1\BBB-1-2.TXT", _
+            "\BBB\BBB-1\BBB-1-1\BBB-1-1-1.TXT", _
+            "\AAA.TXT", _
+            "\BBB.TXT" _
+        )))
+End Sub
+
+'------------------------------
+'◇フォルダ
+'------------------------------
+
+'--------------------
+'・トップレベルのフォルダリストを取得
+'存在しなければ空文字を返す。
+'パスは改行コードで区切られている
+'--------------------
+Public Function FolderPathListTopFolder(ByVal FolderPath)
+    Dim Result: Result = ""
+    Dim SubFolder
+    For Each SubFolder In fso.GetFolder(FolderPath).SubFolders
+        Result = StringCombine(vbCrLf, Array(Result, SubFolder.Path))
+    Next
+    FolderPathListTopFolder = Result
+End Function
+
+'--------------------
+'・サブフォルダのフォルダリストを取得
+'存在しなければ空文字を返す。
+'パスは改行コードで区切られている
+'--------------------
+Public Function FolderPathListSubFolder(ByVal FolderPath)
+    Dim Result: Result = ""
+    Dim SubFolder 
+    For Each SubFolder In fso.GetFolder(FolderPath).SubFolders
+        Result = StringCombine(vbCrLf, _
+            Array(Result, SubFolder.Path, FolderPathListSubFolder(SubFolder.Path)))
+    Next
+    FolderPathListSubFolder = Result
+End Function
+
+'------------------------------
+'◇ファイル
+'------------------------------
+
+'--------------------
+'・トップレベルのファイルリストを取得
+'存在しなければ空文字を返す。
+'パスは改行コードで区切られている
+'--------------------
+Public Function FilePathListTopFolder(ByVal FolderPath)
+    Dim Result: Result = ""
+    Dim File 
+    For Each File In fso.GetFolder(FolderPath).Files
+        Result = StringCombine(vbCrLf, Array(Result, File.Path))
+    Next
+    FilePathListTopFolder = ExcludeLastStr(Result, vbCrLf)
+End Function
+
+'--------------------
+'・サブフォルダのファイルリストを取得
+'存在しなければ空文字を返す。
+'パスは改行コードで区切られている
+'--------------------
+Public Function FilePathListSubFolder(ByVal FolderPath)
+    Dim Result: Result = ""
+    Dim FolderPathList
+    FolderPathList = Split( _
+        FolderPathListSubFolder(FolderPath) + vbCrLf + FolderPath, vbCrLf)
+    Dim I 
+    For I = 0 To ArrayCount(FolderPathList) - 1
+        'MsgBox FolderPathList(I)
+        Result = StringCombine(vbCrLf, _
+            Array(Result, FilePathListTopFolder(FolderPathList(I))))
+    Next
+    FilePathListSubFolder = ExcludeLastStr(Result, vbCrLf)
+End Function
+
+
+'----------------------------------------
+'◆ファイルフォルダ処理
+'----------------------------------------
+
+'--------------------
+'・深い階層のフォルダでも一気に作成する関数
+'--------------------
+Public Sub ForceCreateFolder(ByVal FolderPath)
+    If not fso.FolderExists(FolderPath) Then
+        If not fso.FolderExists(fso.GetParentFolderName(FolderPath)) Then
+            Call ForceCreateFolder(fso.GetParentFolderName(FolderPath))
+        End If
+        Call fso.CreateFolder(FolderPath)
+    End If
+End Sub
+
+'--------------------
+'・フォルダを再生成してコピーする関数
+'フォルダの日付が最新になる
+'--------------------
+Public Sub ReCreateCopyFolder( _
+ByVal SourceFolderPath, ByVal DestFolderPath)
+
+    Call Assert(fso.FolderExists(SourceFolderPath) = True, _
+        "Error:ReCreateCopyFolder:Copy SourceFolder is not exists")
+
+    If fso.FolderExists(DestFolderPath) Then
+        Call fso.DeleteFolder(DestFolderPath)
+    End If
+
+    'フォルダが消えるまでループ
+    Do: Loop While fso.FolderExists(DestFolderPath)
+
+    On Error Resume Next
+    Do
+        Call ForceCreateFolder(fso.GetParentFolderName(DestFolderPath))
+        Call fso.CopyFolder( _
+            SourceFolderPath, DestFolderPath, True)
+    Loop Until fso.FolderExists(DestFolderPath)
+    'フォルダが作成できるまでループ
+End Sub
 
 '----------------------------------------
 '◆テキストファイル読み書き
@@ -855,17 +1150,114 @@ Private Sub testSaveTextFile()
     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON3_File.txt", "UTF-16")
 End Sub
 
+
 '----------------------------------------
-'◆配列処理
+'◆シェル
 '----------------------------------------
 
+'------------------------------
+'◇シェル起動定数
+'------------------------------
+Const vbHide = 0             'ウィンドウ非表示
+Const vbNormalFocus = 1      '通常表示起動
+Const vbMinimizedFocus = 2   '最小化起動
+Const vbMaximizedFocus = 3   '最大化起動
+Const vbNormalNoFocus = 4    '通常表示起動、フォーカスなし
+Const vbMinimizedNoFocus = 6 '最小化起動、フォーカスなし
+
 '--------------------
-'・配列の長さを求める関数
+'・ファイル指定したシェル起動
 '--------------------
-Function ArrayCount(ByVal ArrayValue)
-    Assert IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array."
-    ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
+Public Sub ShellFileOpen( _
+ByVal FilePath, ByVal Focus)
+    Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellFileOpen")
+
+    Call Shell.Run( _
+        "rundll32.exe url.dll" & _
+        ",FileProtocolHandler " + FilePath _
+        , Focus, False)
+    'ファイル起動の場合
+    '第三引数のWaitはTrueにしても無視される様子
+End Sub
+
+Private Sub testShellFileOpen
+    Dim Path: Path = PathCombine(Array( _
+            ScriptFolderPath, _
+            "Test\TestShellRun\TestShellRun.txt"))
+    Call ShellFileOpen(Path, vbNormalFocus)
+    Call ShellFileOpen(Path, vbNormalFocus)
+End Sub
+
+'--------------------
+'・コマンド指定したシェル起動
+'   Wait=   Trueならプログラムの終了を待つ
+'           Falseならそのまま実行を続ける
+'--------------------
+Public Sub ShellCommandRun(Command, Focus, Wait)
+    Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
+    Call Assert(OrValue(Wait, Array(True, False)), "Error:ShellCommandRun")
+
+    Call Shell.Run( _
+        Command _
+        , Focus, Wait)
+End Sub
+
+Private Sub testShellCommandRun
+    Dim Path: Path = "notepad.exe"
+    Call ShellCommandRun(Path, vbNormalFocus, True)
+    Call ShellCommandRun(Path, vbNormalFocus, False)
+    Call ShellCommandRun(Path, vbNormalFocus, True)
+End Sub
+
+'--------------------
+'・DOSコマンドの実行。戻り値取得。
+'DOS窓が表示されない
+'--------------------
+Public Function ShellCommandRunReturn(Command, Focus, Wait)
+    Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
+    Call Assert(OrValue(Wait, Array(True, False)), "Error:ShellCommandRun")
+
+    Const TemporaryFolder = 2
+    Dim FileName
+
+    ' リダイレクト先のファイル名を生成。
+    Do: FileName = fso.BuildPath( _
+        fso.GetSpecialFolder(TemporaryFolder).Path, fso.GetTempName)
+    Loop While fso.FileExists(FileName)
+
+    Shell.Run _
+        "%ComSpec% /c " & Command & ">" & FileName & " 2>&1" _
+               , Focus, Wait
+    ' 戻り値を取得
+    If fso.FileExists(FileName) Then
+        ShellCommandRunReturn = _
+            LoadTextFile(FileName, "shift_jis")
+        fso.DeleteFile FileName
+    End If
 End Function
+
+Sub testShellCommandRunReturn()
+    MsgBox ShellCommandRunReturn("tree ""C:\Software""", vbHide, True)
+    MsgBox ShellCommandRunReturn("dir C:\", vbHide, True)
+End Sub
+
+'------------------------------
+'◇環境変数の取得
+'------------------------------
+Public Function EnvironmentalVariables(ByVal Name)
+On Error Resume Next
+    Dim Result: Result = ""
+    Result = Shell.ExpandEnvironmentStrings( _
+        IncludeBothEndsStr(Name, "%"))
+    EnvironmentalVariables = Result
+End Function
+
+Private Sub testEnvironmentalVariables
+    MsgBox EnvironmentalVariables("%TEMP%")
+    MsgBox EnvironmentalVariables("%username%")
+    MsgBox EnvironmentalVariables("appdata")
+End Sub
+
 
 '--------------------------------------------------
 '■履歴
@@ -889,9 +1281,17 @@ End Function
 '・ Shellオブジェクト
 '・ CurrentDirectory/ScriptFolderPath
 '・ AbsoluteFilePath
-'   IsNetworkPath/GetDrivePath
-'   IsIncludeDrivePath/IncludeLastPathDelim/ExcludeLastPathDelim
+'   /IsNetworkPath/GetDrivePath
+'   /IsIncludeDrivePath/IncludeLastPathDelim/ExcludeLastPathDelim
 '   /PeriodExtName/ExcludePathExt/ChangeFileExt
 '   /PathCombine
 '・ IIF
+'◇ ver 2015/02/04
+'・ StringCombine修正
+'・ FolderPathListTopFolder/FolderPathListSubFolder
+'   /FilePathListTopFolder/FilePathListSubFolder
+'・ ForceCreateFolder/ReCreateCopyFolder
+'・ ShellFileOpen/ShellCommandRun/ShellCommandRunReturn
+'・ EnvironmentalVariables
+'・ FormatYYYY_MM_DD/FormatHH_MM_SS
 '--------------------------------------------------
