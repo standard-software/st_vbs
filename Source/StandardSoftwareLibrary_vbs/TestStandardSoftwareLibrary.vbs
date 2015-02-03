@@ -3,7 +3,7 @@
 '
 'ModuleName:    TestStandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'バージョン     2015/01/21
+'version        2015/01/21
 '--------------------------------------------------
 Option Explicit
 
@@ -12,8 +12,8 @@ Option Explicit
 '--------------------------------------------------
 'FileNameには相対アドレスも指定可能
 '--------------------------------------------------
-'Include ".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs"  
-Include ".\StandardSoftwareLibrary.vbs"  
+'Call Include(".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs")
+Call Include(".\StandardSoftwareLibrary.vbs")
 
 Sub Include(ByVal FileName)
     Dim fso: Set fso = WScript.CreateObject("Scripting.FileSystemObject") 
