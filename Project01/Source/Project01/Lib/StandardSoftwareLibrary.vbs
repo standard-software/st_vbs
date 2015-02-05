@@ -3,7 +3,7 @@
 '
 'ModuleName:    StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'version        2015/02/04
+'version        2015/02/05
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -49,6 +49,7 @@ Public Shell: Set Shell = WScript.CreateObject("WScript.Shell")
 '----------------------------------------
 '◆テスト
 '----------------------------------------
+'Call test
 Public Sub test
 '    Call WScript.Echo("test")
 '    Call WScript.Echo(vbObjectError)
@@ -69,22 +70,23 @@ Public Sub test
 '    Call testExcludeLastStr()
 '    Call testTrimFirstStrs
 '    Call testTrimLastStrs
-    Call testStringCombine
+'    Call testStringCombine
 
 '    Call testAbsoluteFilePath
 '    Call testPeriodExtName
 '    Call testExcludePathExt
 '    Call testChangeFileExt
 '    Call testPathCombine
-    Call testFileFolderPathList
+'    Call testFileFolderPathList
 
 '    Call testShellCommandRunReturn
 '    Call testEnvironmentalVariables
 '    Call testShellFileOpen
 '    Call testShellCommandRun
 
-    Call testFormatYYYYMMDD
-    Call testFormatHHMMSS
+'    Call testFormatYYYYMMDD
+'    Call testFormatHHMMSS
+    Call testIniFile
 End Sub
 
 '----------------------------------------
@@ -714,7 +716,22 @@ Public Function ExcludeLastPathDelim(ByVal Path)
 End Function
 
 '--------------------
+'・スペースの含まれた値をダブルクウォートで囲う
+'--------------------
+Function InSpacePlusDoubleQuote(ByVal Value)
+    Dim Result: Result = ""
+    If 0 < InStr(Value, " ") Then
+        Result = IncludeBothStr(Value, """")
+    Else
+        Result = Value
+    End If
+    InSpacePlusDoubleQuote = Result
+End Function
+
+
+'--------------------
 '・ピリオドを含む拡張子を取得する関数
+'--------------------
 'ピリオドのないファイル名の場合は空文字を返す
 'fso.GetExtensionName ではピリオドで終わるファイル名を
 '判断できないために作成した。
@@ -967,6 +984,36 @@ Public Sub ForceCreateFolder(ByVal FolderPath)
 End Sub
 
 '--------------------
+'・フォルダ削除を確認するまでDeleteFolderする関数
+'--------------------
+Public Sub ForceDeleteFolder(ByVal FolderPath)
+    If fso.FolderExists(FolderPath) Then
+        Call fso.DeleteFolder(FolderPath)
+    End If
+
+    Dim I: I = 1
+    'フォルダが消えるまでループ
+    Do While fso.FolderExists(FolderPath)
+        Call Assert(I < 100, "Error:ForceDeleteFolder:Fail DeleteFolder")
+        I = I + 1
+    Loop
+End Sub
+'--------------------
+'・フォルダを再生成する関数
+'--------------------
+Public Sub ReCreateFolder(ByVal FolderPath)
+
+    Call ForceDeleteFolder(FolderPath)
+
+    On Error Resume Next
+    Do
+        Call ForceCreateFolder(FolderPath)
+    Loop Until fso.FolderExists(FolderPath)
+    'フォルダが作成できるまでループ
+End Sub
+
+
+'--------------------
 '・フォルダを再生成してコピーする関数
 'フォルダの日付が最新になる
 '--------------------
@@ -976,12 +1023,7 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
     Call Assert(fso.FolderExists(SourceFolderPath) = True, _
         "Error:ReCreateCopyFolder:Copy SourceFolder is not exists")
 
-    If fso.FolderExists(DestFolderPath) Then
-        Call fso.DeleteFolder(DestFolderPath)
-    End If
-
-    'フォルダが消えるまでループ
-    Do: Loop While fso.FolderExists(DestFolderPath)
+    Call ForceDeleteFolder(DestFolderPath)
 
     On Error Resume Next
     Do
@@ -1150,6 +1192,162 @@ Private Sub testSaveTextFile()
     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON3_File.txt", "UTF-16")
 End Sub
 
+'----------------------------------------
+'◆Iniファイル操作クラス
+'----------------------------------------
+
+Class IniFile
+    Private IniDic
+    Private Path
+    Private UpdateFlag
+
+    Private Sub Class_Initialize
+        Set IniDic = WScript.CreateObject("Scripting.Dictionary")
+        Path = ""
+        UpdateFlag = False
+    End Sub
+
+    Private Sub Class_Terminate
+        Set IniDic = Nothing
+    End Sub
+
+    Public Sub Initialize(ByVal IniFilePath)
+        Call Assert(fso.FolderExists(fso.GetParentFolderName(IniFilePath)), _
+            "Error:IniFile.Initialize:IniFile Folder not found")
+        IniDic.RemoveAll
+        If fso.FileExists(IniFilePath) Then
+            Dim IniFileText
+            IniFileText = LoadTextFile(IniFilePath, "SHIFT_JIS")
+
+            Dim IniFileLines: IniFileLines = _
+                Split(IniFileText, vbCrLf)
+            Dim Section: Section = ""
+            Dim Ident: Ident = ""
+            Dim I
+            For I = 0 To ArrayCount(IniFileLines) - 1
+            Do
+                Dim Line: Line = Trim(IniFileLines(I))
+                If IsFirstStr(Line, "[") And IsLastStr(Line, "]") Then
+                    Section = Line
+                    Exit Do
+                End If
+                If Section = "" Then Exit Do
+                Ident = FirstStrFirstDelim(Line, "=")
+                If Ident <> "" Then
+                    Call IniDic.Add(Section+Ident, LastStrFirstDelim(Line, "="))
+                End If
+            Loop While False
+            Next
+        End If
+        Path = IniFilePath
+        UpdateFlag = False
+    End Sub
+
+    Public Function ReadString( _
+    ByVal Section, ByVal Ident, ByVal DefaultValue)
+        Dim Result
+        Dim Key: Key = "[" + Section + "]" + Ident
+
+        If IniDic.Exists(Key) Then
+            Result = IniDic(Key)
+        Else
+            Result = DefaultValue
+        End If
+        ReadString = Result
+    End Function
+
+    Public Sub WriteString( _
+    ByVal Section, ByVal Ident, ByVal Value)
+        Dim Key: Key = "[" + Section + "]" + Ident
+        If IniDic.Exists(Key) Then
+            IniDic(Key) = Value
+        Else
+            IniDic.Add Key, Value
+        End If
+        UpdateFlag = True
+    End Sub
+
+    Public Sub Update
+        If UpdateFlag = False Then Exit Sub
+        'WriteStringを実行したときだけ
+        'Updateメソッドが動作する
+
+        Dim IniSectionDic: Set IniSectionDic = WScript.CreateObject("Scripting.Dictionary")
+        Dim Keys1: Keys1 = IniDic.Keys
+
+        Dim Section: Section = ""
+        Dim I
+        For I = 0 To ArrayCount(Keys1) - 1
+            Section = FirstStrFirstDelim(Keys1(I), "]") + "]"
+            If IniSectionDic.Exists(Section) = False Then
+                IniSectionDic.Add Section, ""
+            End If
+        Next
+
+        Dim IniFileText: IniFileText = ""
+        Dim Keys2: Keys2 = IniSectionDic.Keys
+        Dim J
+        For J = 0 To ArrayCount(Keys2) - 1
+            IniFileText = IniFileText + _
+                Keys2(J) + vbCrLf
+            For I = 0 To ArrayCount(Keys1) - 1
+                If IsFirstStr(Keys1(I), Keys2(J)) Then
+                    IniFileText = IniFileText + _
+                        ExcludeFirstStr(Keys1(I), Keys2(J)) + _
+                        "=" + IniDic(Keys1(I)) + vbCrLf 
+                End If
+            Next 
+        Next
+        Set IniSectionDic = Nothing
+
+        Call SaveTextFile(IniFileText, Path, "SHIFT_JIS")
+    End Sub
+End Class
+
+Sub testIniFile
+    Dim IniFilePath: IniFilePath = _
+        ScriptFolderPath + "\Test\TestIniFile\" + _
+        fso.GetBaseName(WScript.ScriptFullName) + ".ini"
+
+    Call ForceCreateFolder(fso.GetParentFolderName(IniFilePath))
+
+    Dim IniFile: Set IniFile = New IniFile
+    Call IniFile.Initialize(IniFilePath)
+
+    Call IniFile.WriteString( _
+        "Option1", "Test01", "ValueA")
+    Call IniFile.WriteString( _
+        "Option2", "Test01", "ValueB")
+    Call IniFile.WriteString( _
+        "Option1", "Test01", "ValueC")
+
+    IniFile.Update
+
+    Call Check("ValueC", IniFile.ReadString("Option1", "Test01", ""))
+    Call Check("ValueB", IniFile.ReadString("Option2", "Test01", ""))
+
+    Set IniFile = Nothing
+End Sub
+
+
+'----------------------------------------
+'◆システム
+'----------------------------------------
+
+'------------------------------
+'◇実行時GUI/CUI確認
+'------------------------------
+
+Function IsCUI
+    IsCui = _
+        IsFirstStr(LCase(WScript.FullName), "cscript.exe")
+End Function
+
+Function IsGUI
+    IsCui = _
+        IsFirstStr(LCase(WScript.FullName), "wscript.exe")
+
+End Function
 
 '----------------------------------------
 '◆シェル
@@ -1294,4 +1492,8 @@ End Sub
 '・ ShellFileOpen/ShellCommandRun/ShellCommandRunReturn
 '・ EnvironmentalVariables
 '・ FormatYYYY_MM_DD/FormatHH_MM_SS
+'◇ ver 2015/02/05
+'・ ForceDeleteFolder/ReCreateFolder
+'・ IniFile読み書きクラス作成
+'・ IsCUI/IsGUI
 '--------------------------------------------------
