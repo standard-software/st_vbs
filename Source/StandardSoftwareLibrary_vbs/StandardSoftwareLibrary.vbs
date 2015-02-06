@@ -3,7 +3,7 @@
 '
 'ModuleName:    StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'version        2015/02/05
+'version        2015/02/06
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -86,7 +86,8 @@ Public Sub test
 
 '    Call testFormatYYYYMMDD
 '    Call testFormatHHMMSS
-    Call testIniFile
+'    Call testIniFile
+    Call testMatchText
 End Sub
 
 '----------------------------------------
@@ -509,16 +510,102 @@ Private Sub testStringCombine()
 End Sub
 
 '----------------------------------------
+'◆文字列比較
+'----------------------------------------
+
+'--------------------
+'・ワイルドカード検索
+'--------------------
+'   ・  VBのLike演算子と似た文字列比較
+'   ・  厳密には正規表現を利用しているので
+'       正規表現文字が含まれていると誤動作する
+'--------------------
+Public Function LikeCompare(ByVal TargetText, ByVal WildCard)
+    Dim Result: Result = False
+    Dim Reg
+    Set Reg = CreateObject("VBScript.RegExp")
+    WildCard = Replace(WildCard, "*", ".*")
+    WildCard = Replace(WildCard, "?", ".")
+    Reg.Pattern = IncludeFirstStr(IncludeLastStr(WildCard, "$"), "^")
+    Result = Reg.Test(TargetText)
+    LikeCompare = Result
+End Function
+
+'--------------------
+'・文字列一致を確認する関数
+'--------------------
+'   ・ 部分文字列(キーワード)かワイルドカードで一致確認する
+'   ・ ワイルドカード指定かどうかは[*]か[?]が
+'       含まれているかどうかで判定する
+'--------------------
+Public Function MatchText(ByVal TargetText, ByVal SearchStrArray)
+    Assert IsArray(SearchStrArray), "Error:MatchText:SearchStrArray is not Array."
+    Dim Result: Result = False
+    Dim I
+    For I = 0 To ArrayCount(SearchStrArray) - 1
+        If (1 <= InStr(SearchStrArray(I), "*")) _
+        Or (1 <= InStr(SearchStrArray(I), "?"))  Then
+            'ワイルドカードマッチ
+            If (LikeCompare(TargetText, SearchStrArray(I))) Then
+                Result = True
+                Exit For
+            End If
+        Else
+            'キーワードマッチ
+            If (1 <= InStr(TargetText, SearchStrArray(I))) Then
+                Result = True
+                Exit For
+            End If
+        End If
+    Next
+    MatchText = Result
+End Function
+
+Private Sub testMatchText
+    Call Check(True, MatchText("aaa.ini", Array(".ini")))
+    Call Check(False, MatchText("aaa.ini", Array("ab")))
+    Call Check(False, MatchText("aaa.ini", Array("ab", "bc")))
+    Call Check(True, MatchText("aaa.ini", Array("ab", "bc", "a.i")))
+    Call Check(True, MatchText("aaa.ini", Array("*.ini")))
+    Call Check(False, MatchText("aaa.ini", Array("*.txt")))
+    Call Check(False, MatchText("aaa.ini", Array("*.txt", "123")))
+    Call Check(True, MatchText("aaa.ini", Array("*.txt", "123", "*.ini")))
+    Call Check(True, MatchText("aaa.ini", Array("*.txt", "123", "a.i")))
+End Sub
+
+'----------------------------------------
 '◆配列処理
 '----------------------------------------
 
 '--------------------
 '・配列の長さを求める関数
 '--------------------
+'LBound=0の配列のみを対象とする。
+'--------------------
 Public Function ArrayCount(ByVal ArrayValue)
-    Assert IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array."
+    Call Assert(IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array.")
+    Call Assert(LBound(ArrayValue) = 0, "Error:ArrayCount:ArrayValue is LBound != 0.")
     ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
 End Function
+
+'--------------------
+'・配列をスペースでつなげて文字列にする
+'--------------------
+Function ArrayText(ByVal ArrayValue)
+    Call Assert(IsArray(ArrayValue), _
+        "Error:Function ArrayText:ArgsArray is not array")
+
+    Dim Result: Result = ""
+    Dim I 
+    For I = 0 To ArrayCount(ArrayValue) - 1
+        ArrayValue(I) = InSpacePlusDoubleQuote(ArrayValue(I))
+    Next
+    Result = StringCombine(" ", ArrayValue)
+
+    ArrayText = Result
+End Function
+
+
 
 '----------------------------------------
 '◆日付時刻処理
@@ -975,11 +1062,14 @@ End Function
 '・深い階層のフォルダでも一気に作成する関数
 '--------------------
 Public Sub ForceCreateFolder(ByVal FolderPath)
-    If not fso.FolderExists(FolderPath) Then
-        If not fso.FolderExists(fso.GetParentFolderName(FolderPath)) Then
-            Call ForceCreateFolder(fso.GetParentFolderName(FolderPath))
+    Dim ParentFolderPath As String
+    ParentFolderPath = fso.GetParentFolderName(FolderPath)
+    If fso.FolderExists(ParentFolderPath) = False Then
+        Call ForceCreateFolder(ParentFolderPath)
+    Else
+        If fso.FolderExists(FolderPath) = False Then
+            Call fso.CreateFolder(FolderPath)
         End If
-        Call fso.CreateFolder(FolderPath)
     End If
 End Sub
 
@@ -1033,6 +1123,16 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
     Loop Until fso.FolderExists(DestFolderPath)
     'フォルダが作成できるまでループ
 End Sub
+
+'----------------------------------------
+'◆ショートカットファイル操作
+'----------------------------------------
+Public Function ShortcutFileLinkPath(ByVal ShortcutFilePath)
+    Dim Result: Result = ""
+    Dim file: Set file = Shell.CreateShortcut(ShortcutFilePath)
+    Result = file.TargetPath
+    ShortcutFileLinkPath = Result
+End Function
 
 '----------------------------------------
 '◆テキストファイル読み書き
@@ -1496,4 +1596,9 @@ End Sub
 '・ ForceDeleteFolder/ReCreateFolder
 '・ IniFile読み書きクラス作成
 '・ IsCUI/IsGUI
+'◇ ver 2015/02/06
+'・	ArrayText
+'・ LikeCompare/MatchText
+'・ ShortcutFileLinkPath
+'・ ForceCreateFolder修正
 '--------------------------------------------------

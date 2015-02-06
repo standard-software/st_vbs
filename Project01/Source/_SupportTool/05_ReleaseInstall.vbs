@@ -55,7 +55,8 @@ Sub Main
     Do
         OverWrite = True
         '除外ファイル
-        If LCase(PeriodExtName(FileList(I))) = ".ini" Then OverWrite = False
+        Dim IgnoreFiles: IgnoreFiles = "*.ini"
+        If MatchText(LCase(FileList(I)), Split(LCase(IgnoreFiles), ",")) Then OverWrite = False
 
         CopyDestFilePath = _
             IncludeFirstStr( _
@@ -68,6 +69,7 @@ Sub Main
             End If
         End If
 
+        Call ForceCreateFolder(fso.GetParentFolderName(CopyDestFilePath))
         Call fso.CopyFile( _
             FileList(I), CopyDestFilePath, True)
     Loop While False
