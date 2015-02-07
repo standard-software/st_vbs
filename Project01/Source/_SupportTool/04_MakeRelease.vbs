@@ -1,8 +1,5 @@
 Option Explicit
 
-Dim ProjectFolderName: ProjectFolderName = _
-    "Project01"
-
 '--------------------------------------------------
 'Å°Include Standard Software Library
 '--------------------------------------------------
@@ -21,21 +18,40 @@ Sub Include(ByVal FileName)
 End Sub
 '--------------------------------------------------
 
+'------------------------------
+'ÅûÉÅÉCÉìèàóù
+'------------------------------
 Call Main
 
 Sub Main
     Dim MessageText: MessageText = ""
+
+    Dim IniFilePath: IniFilePath = _
+        PathCombine(Array(ScriptFolderPath, "SupportTool.ini"))
+
+    Dim IniFile: Set IniFile = New IniFile
+    Call IniFile.Initialize(IniFilePath)
+
+    '--------------------
+    'ÅEê›íËì«çû
+    '--------------------
+    Dim Library_Source_Path: Library_Source_Path = _
+        IniFile.ReadString("Option", "LibrarySourcePath", "")
+
+    Dim ProjectName: ProjectName = _
+        IniFile.ReadString("Option", "ProjectName", "")
+    '--------------------
 
     Dim NowValue: NowValue = Now
     Dim ReleaseFolderPath: ReleaseFolderPath = _
         PathCombine(Array( _
             "..\..\\Release", _
             "Recent", _
-            ProjectFolderName))
+            ProjectName))
 
     Dim SourceFolderPath: SourceFolderPath = _
         "..\..\Source\" + _
-        ProjectFolderName
+        ProjectName
     SourceFolderPath = _
         AbsoluteFilePath(ScriptFolderPath, SourceFolderPath)
 
