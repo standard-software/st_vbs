@@ -87,7 +87,8 @@ Public Sub test
 '    Call testFormatYYYYMMDD
 '    Call testFormatHHMMSS
 '    Call testIniFile
-    Call testMatchText
+'    Call testMatchText
+    Call testForceCreateFolder
 End Sub
 
 '----------------------------------------
@@ -1064,42 +1065,51 @@ End Function
 Public Sub ForceCreateFolder(ByVal FolderPath)
     Dim ParentFolderPath
     ParentFolderPath = fso.GetParentFolderName(FolderPath)
+
     If fso.FolderExists(ParentFolderPath) = False Then
         Call ForceCreateFolder(ParentFolderPath)
-    Else
-        If fso.FolderExists(FolderPath) = False Then
-            Call fso.CreateFolder(FolderPath)
-        End If
     End If
+
+    'フォルダが出来るまで繰り返す。
+    '100回繰り返して無理ならエラー
+    Dim I: I = 1
+    On Error Resume Next
+    Do Until fso.FolderExists(FolderPath)
+        Call fso.CreateFolder(FolderPath)
+        Call Assert(I < 100, "Error:ForceCreateFolder:Fail CreateFolder")
+        I = I + 1
+    Loop
+End Sub
+
+Private Sub testForceCreateFolder
+    Call ForceDeleteFolder(AbsoluteFilePath(ScriptFolderPath, _
+        ".\Test\TestForceCreateFolder"))
+    Call ForceCreateFolder(AbsoluteFilePath(ScriptFolderPath, _
+        ".\Test\TestForceCreateFolder\Test\Test"))
+    Call MsgBox("OK")
 End Sub
 
 '--------------------
 '・フォルダ削除を確認するまでDeleteFolderする関数
 '--------------------
 Public Sub ForceDeleteFolder(ByVal FolderPath)
-    If fso.FolderExists(FolderPath) Then
-        Call fso.DeleteFolder(FolderPath)
-    End If
-
+    'フォルダがある間繰り返す。
+    '100回繰り返して無理ならエラー
     Dim I: I = 1
-    'フォルダが消えるまでループ
+    On Error Resume Next
     Do While fso.FolderExists(FolderPath)
+        Call fso.DeleteFolder(FolderPath)
         Call Assert(I < 100, "Error:ForceDeleteFolder:Fail DeleteFolder")
         I = I + 1
     Loop
 End Sub
+
 '--------------------
 '・フォルダを再生成する関数
 '--------------------
 Public Sub ReCreateFolder(ByVal FolderPath)
-
     Call ForceDeleteFolder(FolderPath)
-
-    On Error Resume Next
-    Do
-        Call ForceCreateFolder(FolderPath)
-    Loop Until fso.FolderExists(FolderPath)
-    'フォルダが作成できるまでループ
+    Call ForceCreateFolder(FolderPath)
 End Sub
 
 
