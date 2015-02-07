@@ -1062,7 +1062,7 @@ End Function
 '・深い階層のフォルダでも一気に作成する関数
 '--------------------
 Public Sub ForceCreateFolder(ByVal FolderPath)
-    Dim ParentFolderPath As String
+    Dim ParentFolderPath
     ParentFolderPath = fso.GetParentFolderName(FolderPath)
     If fso.FolderExists(ParentFolderPath) = False Then
         Call ForceCreateFolder(ParentFolderPath)
