@@ -3,7 +3,7 @@
 '
 'ModuleName:    StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'version        2015/02/06
+'version        2015/02/08
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -1112,9 +1112,9 @@ Public Sub ReCreateFolder(ByVal FolderPath)
     Call ForceCreateFolder(FolderPath)
 End Sub
 
-
 '--------------------
 '・フォルダを再生成してコピーする関数
+'--------------------
 'フォルダの日付が最新になる
 '--------------------
 Public Sub ReCreateCopyFolder( _
@@ -1133,6 +1133,52 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
     Loop Until fso.FolderExists(DestFolderPath)
     'フォルダが作成できるまでループ
 End Sub
+
+'--------------------
+'・除外ファイルを指定したフォルダ内ファイルのコピー関数
+'--------------------
+'   ・インストール時などにiniファイルを除外して
+'     上書きインストールするときに使用する
+'   ・指定例：
+'     OverWriteIgnore = "*.ini"
+'     OverWriteIgnore = "*.ini,setting.txt"
+'--------------------
+Public Sub CopyFolderOverWriteIgnoreFile( _
+ByVal SourceFolderPath, ByVal DestFolderPath, _
+ByVal OverWriteIgnoreFiles)
+
+    'フォルダ内ファイルのコピー
+    Dim FileList: FileList = _
+        Split( _
+            FilePathListSubFolder(SourceFolderPath), vbCrLf)
+
+    Dim OverWrite
+    Dim CopyDestFilePath
+    Dim I
+    For I = 0 To ArrayCount(FileList) - 1
+    Do
+        OverWrite = True
+        '除外ファイル
+        If MatchText(LCase(FileList(I)), Split(LCase(OverWriteIgnoreFiles), ",")) Then OverWrite = False
+
+        CopyDestFilePath = _
+            IncludeFirstStr( _
+                ExcludeFirstStr(FileList(I), SourceFolderPath), _
+                DestFolderPath)
+        '上書き禁止ならファイルがあったらコピーしない
+        If OverWrite = False Then
+            If fso.FileExists(CopyDestFilePath) then
+                Exit Do
+            End If
+        End If
+
+        Call ForceCreateFolder(fso.GetParentFolderName(CopyDestFilePath))
+        Call fso.CopyFile( _
+            FileList(I), CopyDestFilePath, True)
+    Loop While False
+    Next
+End Sub
+
 
 '----------------------------------------
 '◆ショートカットファイル操作
@@ -1611,4 +1657,7 @@ End Sub
 '・ LikeCompare/MatchText
 '・ ShortcutFileLinkPath
 '・ ForceCreateFolder修正
+'◇ ver 2015/02/08
+'・ ForceCreateFolder/ForceDeleteFolder修正
+'・ CopyFolderOverWriteIgnoreFile作成
 '--------------------------------------------------
