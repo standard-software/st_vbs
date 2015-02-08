@@ -1147,7 +1147,6 @@ Public Sub CopyFolderOverWriteIgnoreFile( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
 ByVal OverWriteIgnoreFiles)
 
-    'フォルダ内ファイルのコピー
     Dim FileList: FileList = _
         Split( _
             FilePathListSubFolder(SourceFolderPath), vbCrLf)
