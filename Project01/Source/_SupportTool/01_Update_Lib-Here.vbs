@@ -36,7 +36,7 @@ Sub Main
     'ÅEê›íËì«çû
 	'--------------------
     Dim Library_Source_Path: Library_Source_Path = _
-        IniFile.ReadString("Option", "LibrarySourcePath", "")
+        IniFile.ReadString("Option", "LibrarySourcePath01", "")
         
 	Dim Library_Dest_Path: Library_Dest_Path = _
     	".\Lib\StandardSoftwareLibrary.vbs"
