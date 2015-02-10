@@ -3,7 +3,7 @@
 '
 'ModuleName:    StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'version        2015/02/08
+'version        2015/02/10
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -79,7 +79,7 @@ Public Sub test
 '    Call testPathCombine
 '    Call testFileFolderPathList
 
-'    Call testShellCommandRunReturn
+    Call testShellCommandRunReturn
 '    Call testEnvironmentalVariables
 '    Call testShellFileOpen
 '    Call testShellCommandRun
@@ -88,7 +88,12 @@ Public Sub test
 '    Call testFormatHHMMSS
 '    Call testIniFile
 '    Call testMatchText
-    Call testForceCreateFolder
+'    Call testForceCreateFolder
+    Call testMaxValue
+    Call testMinValue
+    Call testIsLong
+    Call testLongToStrDigitZero
+    Call testStrToLongDefault
 End Sub
 
 '----------------------------------------
@@ -141,6 +146,8 @@ End Sub
 '例：If OrValue(ValueA, Array(1, 2, 3)) Then
 '--------------------
 Public Function OrValue(ByVal Value, ByVal Values)
+    Call Assert(IsArray(Values), "Error:OrValue:Values is not Array.")
+
     OrValue = False
     Dim I
     For I = LBound(Values) To UBound(Values)
@@ -166,6 +173,105 @@ Public Function IIF(ByVal CompareValue, ByVal Result1, ByVal Result2)
         IIf = Result2
     End If
 End Function
+
+'----------------------------------------
+'◆型、型変換
+'----------------------------------------
+
+'------------------------------
+'◇Long
+'------------------------------
+Public Function IsLong(ByVal Value)
+    Dim Result: Result = False
+    If IsNumeric(Value) Then
+        If CInt(Value) = CDbl(Value) Then
+            Result = True
+        End If
+    End If
+    IsLong = Result
+End Function
+
+Private Sub testIsLong()
+    Call Check(True, IsLong("123"))
+    Call Check(False, IsLong("12a"))
+    Call Check(False, IsLong("123.4"))
+End Sub
+
+Public Function LongToStrDigitZero(ByVal Value, ByVal Digit)
+    Dim Result: Result = ""
+    If 0 <= Value Then
+        Result = String(MaxValue(Array(0, Digit - Len(CStr(Value)))), "0") + CStr(Value)
+    Else
+        Result = "-" + String(Digit - Len(CStr(Abs(Value))), "0") + CStr(Abs(Value))
+    End If
+    LongToStrDigitZero = Result
+End Function
+
+Private Sub testLongToStrDigitZero()
+    Call Check("003", LongToStrDigitZero(3, 3))
+    Call Check("000", LongToStrDigitZero(0, 3))
+    Call Check("1000", LongToStrDigitZero(1000, 3))
+    Call Check("-050", LongToStrDigitZero(-50, 3))
+End Sub
+
+Public Function StrToLongDefault(ByVal S, ByVal Default)
+On Error Resume Next
+    Dim Result
+    Result = Default
+    Result = CLng(S)
+    StrToLongDefault = Result
+End Function
+
+Private Sub testStrToLongDefault()
+    Call Check(123, StrToLongDefault("123", 0))
+    Call Check(123, StrToLongDefault(" 123 ", 0))
+    Call Check(0, StrToLongDefault(" A123 ", 0))
+    Call Check(123, StrToLongDefault("BBB", 123))
+End Sub
+
+'----------------------------------------
+'◆数値処理
+'----------------------------------------
+
+'------------------------------
+'◇最大値最小値
+'------------------------------
+'例：MsgBox MaxValue(Array(1, 2, 3))
+'------------------------------
+Public Function MaxValue(ByVal Values)
+    Call Assert(IsArray(Values), "Error:OrValue:Values is not Array.")
+    Dim Result: Result = Empty
+    Dim Value
+    For Each Value In Values
+        If IsEmpty(Result) Then
+            Result = Value
+        ElseIf Result < Value Then
+            Result = Value
+        End If
+    Next
+    MaxValue = Result
+End Function
+
+Private Sub testMaxValue()
+    Call Check(100, MaxValue(Array(50, 20, 30, 100, 9)))
+End Sub
+
+Public Function MinValue(ByVal Values)
+    Dim Result: Result = Empty
+    Dim Value
+    For Each Value In Values
+        If Result = Empty Then
+            Result = Value
+        ElseIf Result > Value Then
+            Result = Value
+        End If
+    Next
+    MinValue = Result
+End Function
+
+Private Sub testMinValue()
+    Call Check(9, MinValue(Array(50, 20, 30, 100, 9)))
+End Sub
 
 
 '----------------------------------------
@@ -287,7 +393,7 @@ Private Sub testExcludeLastStr()
 End Sub
 
 '------------------------------
-'◇Both
+'◇Both  Include/Exclude
 '------------------------------
 Public Function IncludeBothEndsStr(ByVal Str, ByVal SubStr)
     IncludeBothEndsStr = _
@@ -391,7 +497,7 @@ End Sub
 '◇Trim
 '------------------------------
 Public Function TrimFirstStrs(ByVal Str, ByVal TrimStrs)
-    Assert IsArray(TrimStrs), "Error:TrimFirstStrs:TrimStrs is not Array."
+    Call Assert(IsArray(TrimStrs), "Error:TrimFirstStrs:TrimStrs is not Array.")
     Dim Result: Result = Str
     Do
         Str = Result
@@ -410,7 +516,7 @@ Private Sub testTrimFirstStrs
 End Sub
 
 Public Function TrimLastStrs(ByVal Str, ByVal TrimStrs)
-    Assert IsArray(TrimStrs), "Error:TrimLastStrs:TrimStrs is not Array."
+    Call Assert(IsArray(TrimStrs), "Error:TrimLastStrs:TrimStrs is not Array.")
     Dim Result: Result = Str
     Do
         Str = Result
@@ -440,7 +546,7 @@ End Function
 '2連続で結合の両端にある場合は1つが削除される(テストでの動作参照)
 '------------------------------
 Public Function StringCombine(ByVal Delimiter, ByVal Values)
-    Assert IsArray(Values), "Error:StringCombine:Values is not Array."
+    Call Assert(IsArray(Values), "Error:StringCombine:Values is not Array.")
     Dim Result: Result = ""
     Dim Count: Count = ArrayCount(Values)
     If Count = 0 Then
@@ -540,7 +646,7 @@ End Function
 '       含まれているかどうかで判定する
 '--------------------
 Public Function MatchText(ByVal TargetText, ByVal SearchStrArray)
-    Assert IsArray(SearchStrArray), "Error:MatchText:SearchStrArray is not Array."
+    Call Assert(IsArray(SearchStrArray), "Error:MatchText:SearchStrArray is not Array.")
     Dim Result: Result = False
     Dim I
     For I = 0 To ArrayCount(SearchStrArray) - 1
@@ -809,7 +915,7 @@ End Function
 Function InSpacePlusDoubleQuote(ByVal Value)
     Dim Result: Result = ""
     If 0 < InStr(Value, " ") Then
-        Result = IncludeBothStr(Value, """")
+        Result = IncludeBothEndsStr(Value, """")
     Else
         Result = Value
     End If
@@ -921,6 +1027,22 @@ End Function
 Public Function ScriptFolderPath
     ScriptFolderPath = _
         fso.GetParentFolderName(WScript.ScriptFullName)
+End Function
+
+'--------------------
+'・一時ファイルの取得
+'--------------------
+Public Function TemporaryFilePath
+    Dim Result
+    Const TemporaryFolder = 2
+
+    ' リダイレクト先のファイル名を生成。
+    Do
+        Result = fso.BuildPath( _
+            fso.GetSpecialFolder(TemporaryFolder).Path, _
+            fso.GetTempName)
+    Loop While fso.FileExists(Result)
+    TemporaryFilePath = Result
 End Function
 
 '----------------------------------------
@@ -1100,6 +1222,22 @@ Public Sub ForceDeleteFolder(ByVal FolderPath)
     Do While fso.FolderExists(FolderPath)
         Call fso.DeleteFolder(FolderPath)
         Call Assert(I < 100, "Error:ForceDeleteFolder:Fail DeleteFolder")
+        I = I + 1
+    Loop
+End Sub
+
+
+'--------------------
+'・ファイル削除を確認するまでDeleteFileする関数
+'--------------------
+Public Sub ForceDeleteFile(ByVal FilePath)
+    'ファイルがある間繰り返す。
+    '100回繰り返して無理ならエラー
+    Dim I: I = 1
+    On Error Resume Next
+    Do While fso.FileExists(FolderPath)
+        Call fso.DeleteFile(FolderPath, True)
+        Call Assert(I < 100, "Error:ForceDeleteFile:Fail DeleteFile")
         I = I + 1
     Loop
 End Sub
@@ -1398,11 +1536,21 @@ Class IniFile
         UpdateFlag = False
     End Sub
 
+    Private Function DictionaryKey( _
+    ByVal Section, ByVal Ident)
+        DictionaryKey = IncludeLastStr(IncludeFirstStr(Section, "["), "]") + Ident
+    End Function
+
+    Public Function SectionIdentExists( _
+    ByVal Section, ByVal Ident)
+        SectionIdentExists = _
+            IniDic.Exists(DictionaryKey(Section, Ident)) 
+    End Function
+
     Public Function ReadString( _
     ByVal Section, ByVal Ident, ByVal DefaultValue)
         Dim Result
-        Dim Key: Key = "[" + Section + "]" + Ident
-
+        Dim Key: Key = DictionaryKey(Section, Ident)
         If IniDic.Exists(Key) Then
             Result = IniDic(Key)
         Else
@@ -1413,7 +1561,7 @@ Class IniFile
 
     Public Sub WriteString( _
     ByVal Section, ByVal Ident, ByVal Value)
-        Dim Key: Key = "[" + Section + "]" + Ident
+        Dim Key: Key = DictionaryKey(Section, Ident)
         If IniDic.Exists(Key) Then
             IniDic(Key) = Value
         Else
@@ -1462,7 +1610,7 @@ End Class
 Sub testIniFile
     Dim IniFilePath: IniFilePath = _
         ScriptFolderPath + "\Test\TestIniFile\" + _
-        fso.GetBaseName(WScript.ScriptFullName) + ".ini"
+        "testIniFile.ini"
 
     Call ForceCreateFolder(fso.GetParentFolderName(IniFilePath))
 
@@ -1503,6 +1651,41 @@ Function IsGUI
         IsFirstStr(LCase(WScript.FullName), "wscript.exe")
 
 End Function
+
+
+'----------------------------------------
+'◆クリップボード
+'----------------------------------------
+
+'--------------------
+'・テキストデータ取得
+'--------------------
+Public Function GetClipbordText
+    Dim HtmlFile
+    Set HtmlFile = WScript.CreateObject("HtmlFile")
+    GetClipbordText = HtmlFile.ParentWindow.ClipboardData.GetData("text")
+End Function
+
+'--------------------
+'・テキストデータ設定
+'--------------------
+'   ・  IEオブジェクト利用のクリップボード設定方法などは
+'       セキュリティの関係で安定して動作しないようなので
+'       一時ファイルとClipコマンドを使用した
+'--------------------
+Public Sub SetClipbordText(ByVal ClipboardToText)
+    Dim TempFileName: TempFileName = TemporaryFilePath
+
+    Call SaveTextFile(ClipboardToText, TempFileName, "Shift_JIS")
+
+    Call Shell.Run( _
+        "%ComSpec% /c clip < " + _
+        InSpacePlusDoubleQuote(TempFileName), _
+        0, True)
+
+    Call ForceDeleteFile(TempFileName)
+End Sub
+
 
 '----------------------------------------
 '◆シェル
@@ -1570,22 +1753,16 @@ Public Function ShellCommandRunReturn(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
     Call Assert(OrValue(Wait, Array(True, False)), "Error:ShellCommandRun")
 
-    Const TemporaryFolder = 2
-    Dim FileName
-
-    ' リダイレクト先のファイル名を生成。
-    Do: FileName = fso.BuildPath( _
-        fso.GetSpecialFolder(TemporaryFolder).Path, fso.GetTempName)
-    Loop While fso.FileExists(FileName)
-
-    Shell.Run _
-        "%ComSpec% /c " & Command & ">" & FileName & " 2>&1" _
-               , Focus, Wait
+    Dim FileName: FileName = TemporaryFilePath
+MsgBox ""
+    Call Shell.Run( _
+        "%ComSpec% /c " + Command + ">" + FileName + " 2>&1" _
+               , Focus, Wait)
     ' 戻り値を取得
     If fso.FileExists(FileName) Then
         ShellCommandRunReturn = _
             LoadTextFile(FileName, "shift_jis")
-        fso.DeleteFile FileName
+        Call fso.DeleteFile(FileName)
     End If
 End Function
 
@@ -1610,6 +1787,94 @@ Private Sub testEnvironmentalVariables
     MsgBox EnvironmentalVariables("%username%")
     MsgBox EnvironmentalVariables("appdata")
 End Sub
+
+'----------------------------------------
+'◆キーコード送信
+'----------------------------------------
+
+'------------------------------
+'◇指定ウィンドウにキーを送信する
+'------------------------------
+'・ Shell.AppActivateを実行して成功してから
+'   Shell.SendKeysを送信する関数
+'・ SearchWindowTitle=""と指定すると
+'   Shell.SendKeysだけの処理になる
+'・ キーの文字は小文字で指定すること。
+'   Ctrl+Cキーを指定しようとして[^C]と
+'   大文字で指定するとShiftがロックされて挙動がおかしくなる
+'------------------------------
+Public Function AppActSendKeysLoop( _
+ByVal SearchWindowTitle, _
+ByVal KeyValue, ByVal WaitMilliSec, ByVal LoopCount)
+
+    Dim Result: Result = False
+    If SearchWindowTitle = "" Then
+        Shell.SendKeys KeyValue
+        WScript.Sleep WaitMilliSec
+        Result = True
+    Else
+        Dim I
+        For I = 1 To LoopCount
+            If Shell.AppActivate(SearchWindowTitle, True) Then
+                WScript.Sleep 100
+                Shell.SendKeys KeyValue
+                WScript.Sleep WaitMilliSec
+                Result = True
+                Exit For
+            End If
+            WScript.Sleep WaitMilliSec
+        Next
+    End If
+    AppActSendKeysLoop = Result
+End Function
+
+Public Function AppActSendKeys( _
+ByVal SearchWindowTitle, _
+ByVal KeyValue, ByVal WaitMilliSec)
+    AppActSendKeys = AppActSendKeysLoop( _
+        SearchWindowTitle, _
+        KeyValue, WaitMilliSec, 10)
+End Function
+
+'------------------------------
+'◇指定ウィンドウにキーを送信。
+'  その後別ウィンドウがActive化したかどうか確認する関数
+'------------------------------
+'・ AppActSendKeysLoop後
+'   配列で指定したウィンドウタイトルのどれかをアクティブに
+'   出来たらTrueを返す関数
+'・ 例：    Call AppActSendKeysAfterWindow("test", _
+'               Array("WindowA", "WindowB"), "%te", 1000)
+'------------------------------
+Public Function AppActSendKeysAfterWindowLoop( _
+ByVal SearchWindowTitle, ByVal AfterWindowTitle, _
+ByVal KeyValue, ByVal WaitMilliSec, ByVal LoopCount)
+    Call Assert(IsArray(AfterWindowTitle), _
+        "Error:AppActSendKeysAfterWindow:AfterWindowTitle is not Array.")
+
+    Dim Result: Result = False
+    Dim I: Dim J
+
+    If AppActSendKeysLoop(SearchWindowTitle, KeyValue, WaitMilliSec, LoopCount) Then
+        For J = 0 to ArrayCount(AfterWindowTitle) - 1
+            If Shell.AppActivate(AfterWindowTitle(J), True) Then
+                Result = True
+                Exit For
+            End If
+        Next
+    End If
+
+    AppActSendKeysAfterWindowLoop = Result
+End Function
+
+Public Function AppActSendKeysAfterWindow( _
+ByVal SearchWindowTitle, ByVal AfterWindowTitle, _
+ByVal KeyValue, ByVal WaitMilliSec)
+    AppActSendKeysAfterWindow = _
+        AppActSendKeysAfterWindowLoop(_
+        SearchWindowTitle, AfterWindowTitle, _
+        KeyValue, WaitMilliSec, 10)
+End Function
 
 
 '--------------------------------------------------
@@ -1659,4 +1924,15 @@ End Sub
 '◇ ver 2015/02/08
 '・ ForceCreateFolder/ForceDeleteFolder修正
 '・ CopyFolderOverWriteIgnoreFile作成
+'◇ ver 2015/02/09
+'・ IniFile処理をリファクタリング
+'・ MaxValue/MinValue作成
+'・ IsLong/LongToStrDigitZero/StrToLongDefault追加
+'・ AppActSendKeys/AppActSendKeysAfterWindow等を追加
+'◇ ver 2015/02/10
+'・ InSpacePlusDoubleQuote修正
+'・ ShellCommandRunReturnリファクタリング
+'   TemporaryFilePathの作成
+'・ GetClipbordText/SetClipbordText作成
+'・	ForceDeleteFile作成
 '--------------------------------------------------
