@@ -1,7 +1,10 @@
 '--------------------------------------------------
 'Standard Software Library For VBScript
 '
-'ModuleName:    StandardSoftwareLibrary.vbs
+'ModuleName:    Basic_Module
+'FileName:      StandardSoftwareLibrary.vbs
+'URL:           https://github.com/standard-software/StandardSoftwareLibrary_vbs
+'License:       Dual License GPL or Commercial License
 '--------------------------------------------------
 'version        2015/02/10
 '--------------------------------------------------
