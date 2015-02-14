@@ -1,9 +1,12 @@
 '--------------------------------------------------
 'Standard Software Library For VBScript
 '
-'ModuleName:    StandardSoftwareLibrary.vbs
+'ModuleName:    Basic_Module
+'FileName:      StandardSoftwareLibrary.vbs
+'URL:           https://github.com/standard-software/StandardSoftwareLibrary_vbs
+'License:       Dual License(GPL or Commercial License)
 '--------------------------------------------------
-'version        2015/02/10
+'version        2015/02/12
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -79,7 +82,7 @@ Public Sub test
 '    Call testPathCombine
 '    Call testFileFolderPathList
 
-    Call testShellCommandRunReturn
+'    Call testShellCommandRunReturn
 '    Call testEnvironmentalVariables
 '    Call testShellFileOpen
 '    Call testShellCommandRun
@@ -1112,8 +1115,9 @@ End Sub
 
 '--------------------
 '・トップレベルのフォルダリストを取得
-'存在しなければ空文字を返す。
-'パスは改行コードで区切られている
+'--------------------
+'   ・  存在しなければ空文字を返す。
+'   ・  パスは改行コードで区切られている
 '--------------------
 Public Function FolderPathListTopFolder(ByVal FolderPath)
     Dim Result: Result = ""
@@ -1126,8 +1130,9 @@ End Function
 
 '--------------------
 '・サブフォルダのフォルダリストを取得
-'存在しなければ空文字を返す。
-'パスは改行コードで区切られている
+'--------------------
+'   ・  存在しなければ空文字を返す。
+'   ・  パスは改行コードで区切られている
 '--------------------
 Public Function FolderPathListSubFolder(ByVal FolderPath)
     Dim Result: Result = ""
@@ -1145,8 +1150,9 @@ End Function
 
 '--------------------
 '・トップレベルのファイルリストを取得
-'存在しなければ空文字を返す。
-'パスは改行コードで区切られている
+'--------------------
+'   ・  存在しなければ空文字を返す。
+'   ・  パスは改行コードで区切られている
 '--------------------
 Public Function FilePathListTopFolder(ByVal FolderPath)
     Dim Result: Result = ""
@@ -1159,8 +1165,9 @@ End Function
 
 '--------------------
 '・サブフォルダのファイルリストを取得
-'存在しなければ空文字を返す。
-'パスは改行コードで区切られている
+'--------------------
+'   ・  存在しなければ空文字を返す。
+'   ・  パスは改行コードで区切られている
 '--------------------
 Public Function FilePathListSubFolder(ByVal FolderPath)
     Dim Result: Result = ""
@@ -1169,9 +1176,10 @@ Public Function FilePathListSubFolder(ByVal FolderPath)
         FolderPathListSubFolder(FolderPath) + vbCrLf + FolderPath, vbCrLf)
     Dim I 
     For I = 0 To ArrayCount(FolderPathList) - 1
-        'MsgBox FolderPathList(I)
-        Result = StringCombine(vbCrLf, _
-            Array(Result, FilePathListTopFolder(FolderPathList(I))))
+        If fso.FolderExists(FolderPathList(I)) Then
+            Result = StringCombine(vbCrLf, _
+                Array(Result, FilePathListTopFolder(FolderPathList(I))))
+        End If
     Next
     FilePathListSubFolder = ExcludeLastStr(Result, vbCrLf)
 End Function
@@ -1753,17 +1761,16 @@ Public Function ShellCommandRunReturn(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
     Call Assert(OrValue(Wait, Array(True, False)), "Error:ShellCommandRun")
 
-    Dim FileName: FileName = TemporaryFilePath
-MsgBox ""
+    Dim TempFileName: TempFileName = TemporaryFilePath
+
     Call Shell.Run( _
-        "%ComSpec% /c " + Command + ">" + FileName + " 2>&1" _
+        "%ComSpec% /c " + Command + ">" + TempFileName + " 2>&1" _
                , Focus, Wait)
     ' 戻り値を取得
-    If fso.FileExists(FileName) Then
-        ShellCommandRunReturn = _
-            LoadTextFile(FileName, "shift_jis")
-        Call fso.DeleteFile(FileName)
-    End If
+    ShellCommandRunReturn = _
+        LoadTextFile(TempFileName, "shift_jis")
+    
+    Call ForceDeleteFile(TempFileName)
 End Function
 
 Sub testShellCommandRunReturn()
@@ -1793,16 +1800,20 @@ End Sub
 '----------------------------------------
 
 '------------------------------
-'◇指定ウィンドウにキーを送信する
+'◇キーを送信
 '------------------------------
-'・ Shell.AppActivateを実行して成功してから
-'   Shell.SendKeysを送信する関数
-'・ SearchWindowTitle=""と指定すると
-'   Shell.SendKeysだけの処理になる
-'・ キーの文字は小文字で指定すること。
-'   Ctrl+Cキーを指定しようとして[^C]と
-'   大文字で指定するとShiftがロックされて挙動がおかしくなる
-'------------------------------
+
+'--------------------
+'・ウィンドウタイトルを指定してキー送信
+'--------------------
+'   ・  Shell.AppActivateを実行して成功してから
+'       Shell.SendKeysを送信する関数
+'   ・  SearchWindowTitle=""と指定すると
+'       Shell.SendKeysだけの処理になる
+'   ・  キーの文字は小文字で指定すること。
+'       Ctrl+Cキーを指定しようとして[^C]と
+'       大文字で指定するとShiftがロックされて挙動がおかしくなる
+'--------------------
 Public Function AppActSendKeysLoop( _
 ByVal SearchWindowTitle, _
 ByVal KeyValue, ByVal WaitMilliSec, ByVal LoopCount)
@@ -1836,16 +1847,15 @@ ByVal KeyValue, ByVal WaitMilliSec)
         KeyValue, WaitMilliSec, 10)
 End Function
 
-'------------------------------
-'◇指定ウィンドウにキーを送信。
-'  その後別ウィンドウがActive化したかどうか確認する関数
-'------------------------------
-'・ AppActSendKeysLoop後
-'   配列で指定したウィンドウタイトルのどれかをアクティブに
-'   出来たらTrueを返す関数
-'・ 例：    Call AppActSendKeysAfterWindow("test", _
-'               Array("WindowA", "WindowB"), "%te", 1000)
-'------------------------------
+'--------------------
+'・キー送信後、指定ウィンドウタイトルのアクティブ化確認
+'--------------------
+'   ・  AppActSendKeysLoop後
+'       配列で指定したウィンドウタイトルのどれかをアクティブに
+'       出来たらTrueを返す関数
+'   ・  例：    Call AppActSendKeysAfterWindow("test", _
+'                   Array("WindowA", "WindowB"), "%te", 1000)
+'--------------------
 Public Function AppActSendKeysAfterWindowLoop( _
 ByVal SearchWindowTitle, ByVal AfterWindowTitle, _
 ByVal KeyValue, ByVal WaitMilliSec, ByVal LoopCount)
@@ -1935,4 +1945,6 @@ End Function
 '   TemporaryFilePathの作成
 '・ GetClipbordText/SetClipbordText作成
 '・	ForceDeleteFile作成
+'◇ ver 2015/02/12
+'・ FilePathListSubFolderの修正
 '--------------------------------------------------
