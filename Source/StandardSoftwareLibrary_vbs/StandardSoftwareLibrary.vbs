@@ -3,10 +3,15 @@
 '
 'ModuleName:    Basic_Module
 'FileName:      StandardSoftwareLibrary.vbs
-'URL:           https://github.com/standard-software/StandardSoftwareLibrary_vbs
-'License:       Dual License(GPL or Commercial License)
 '--------------------------------------------------
-'version        2015/02/12
+'OpenSource     https://github.com/standard-software/StandardSoftwareLibrary_vbs
+'License:       Dual License(GPL or Commercial License)
+'               https://github.com/standard-software/StandardSoftwareLibrary_vbs/blob/master/Document/Readme.txt
+'All Right Reserved:
+'   Name:       Standard Software
+'   URL:        http://standard-software.net/
+'--------------------------------------------------
+'version        2015/02/17
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -73,7 +78,7 @@ Public Sub test
 '    Call testExcludeLastStr()
 '    Call testTrimFirstStrs
 '    Call testTrimLastStrs
-'    Call testStringCombine
+    Call testStringCombine
 
 '    Call testAbsoluteFilePath
 '    Call testPeriodExtName
@@ -90,7 +95,9 @@ Public Sub test
 '    Call testFormatYYYYMMDD
 '    Call testFormatHHMMSS
 '    Call testIniFile
-'    Call testMatchText
+    Call testMatchText
+    Call testMatchTextWildCard
+    Call testMatchTextKeyWord
 '    Call testForceCreateFolder
     Call testMaxValue
     Call testMinValue
@@ -280,6 +287,14 @@ End Sub
 '----------------------------------------
 '◆文字列処理
 '----------------------------------------
+
+'------------------------------
+'◇Include
+'------------------------------
+Public Function IncludeStr(ByVal Str, ByVal SubStr)
+    IncludeStr = _
+        (1 <= InStr(Str, SubStr))
+End Function
 
 '------------------------------
 '◇First Include/Exclude
@@ -617,6 +632,14 @@ Private Sub testStringCombine()
     Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "A", "", "B", "")))
     Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("A", "", "", "B")))
     Call Check("A" + vbCrLf + "B", StringCombine(vbCrLf, Array("", "", "A", "", "", "B", "", "")))
+
+    Call Check("A,B,C", StringCombine(",", Split("A,B,C", ",")))
+    Call Check("A,B,C", StringCombine(",", Split("A,B,,C", ",")))
+    Call Check("A,B,C", StringCombine(",", Split("A,B,,,C", ",")))
+    Call Check("A,B,C", StringCombine(",", Split("A,B,,,,C", ",")))
+    Call Check("A,B,C", StringCombine(",", Split(",,A,B,,,,C,,", ",")))
+
+    Call Check("\\test\temp\temp\temp\", StringCombine("\", Array("\\test\", "\temp\", "temp", "\temp\")))
 End Sub
 
 '----------------------------------------
@@ -636,6 +659,7 @@ Public Function LikeCompare(ByVal TargetText, ByVal WildCard)
     Set Reg = CreateObject("VBScript.RegExp")
     WildCard = Replace(WildCard, "*", ".*")
     WildCard = Replace(WildCard, "?", ".")
+    WildCard = Replace(WildCard, "\", "\\")
     Reg.Pattern = IncludeFirstStr(IncludeLastStr(WildCard, "$"), "^")
     Result = Reg.Test(TargetText)
     LikeCompare = Result
@@ -653,8 +677,8 @@ Public Function MatchText(ByVal TargetText, ByVal SearchStrArray)
     Dim Result: Result = False
     Dim I
     For I = 0 To ArrayCount(SearchStrArray) - 1
-        If (1 <= InStr(SearchStrArray(I), "*")) _
-        Or (1 <= InStr(SearchStrArray(I), "?"))  Then
+        If IncludeStr(SearchStrArray(I), "*") _
+        Or IncludeStr(SearchStrArray(I), "?")  Then
             'ワイルドカードマッチ
             If (LikeCompare(TargetText, SearchStrArray(I))) Then
                 Result = True
@@ -683,6 +707,60 @@ Private Sub testMatchText
     Call Check(True, MatchText("aaa.ini", Array("*.txt", "123", "a.i")))
 End Sub
 
+Public Function MatchTextWildCard(ByVal TargetText, ByVal SearchStrArray)
+    Call Assert(IsArray(SearchStrArray), "Error:MatchTextWildCard:SearchStrArray is not Array.")
+    Dim Result: Result = False
+    Dim I
+    For I = 0 To ArrayCount(SearchStrArray) - 1
+        'ワイルドカードマッチ
+        If (LikeCompare(TargetText, SearchStrArray(I))) Then
+            Result = True
+            Exit For
+        End If
+    Next
+    MatchTextWildCard = Result
+End Function
+
+Private Sub testMatchTextWildCard
+    Call Check(False, MatchTextWildCard("aaa.ini", Array(".ini")))
+    Call Check(False, MatchTextWildCard("aaa.ini", Array("ab")))
+    Call Check(False, MatchTextWildCard("aaa.ini", Array("ab", "bc")))
+    Call Check(False, MatchTextWildCard("aaa.ini", Array("ab", "bc", "a.i")))
+    Call Check(True, MatchTextWildCard("aaa.ini", Array("*.ini")))
+    Call Check(False, MatchTextWildCard("aaa.ini", Array("*.txt")))
+    Call Check(False, MatchTextWildCard("aaa.ini", Array("*.txt", "123")))
+    Call Check(True, MatchTextWildCard("aaa.ini", Array("*.txt", "123", "*.ini")))
+    Call Check(False, MatchTextWildCard("aaa.ini", Array("*.txt", "123", "a.i")))
+
+    Call Check(True, MatchTextWildCard("aaa.ini", Array("aaa.ini")))
+End Sub
+
+Public Function MatchTextKeyWord(ByVal TargetText, ByVal SearchStrArray)
+    Call Assert(IsArray(SearchStrArray), "Error:MatchTextKeyWord:SearchStrArray is not Array.")
+    Dim Result: Result = False
+    Dim I
+    For I = 0 To ArrayCount(SearchStrArray) - 1
+        'キーワードマッチ
+        If IncludeStr(TargetText, SearchStrArray(I)) Then
+            Result = True
+            Exit For
+        End If
+    Next
+    MatchTextKeyWord = Result
+End Function
+
+Private Sub testMatchTextKeyWord
+    Call Check(True, MatchTextKeyWord("aaa.ini", Array(".ini")))
+    Call Check(False, MatchTextKeyWord("aaa.ini", Array("ab")))
+    Call Check(False, MatchTextKeyWord("aaa.ini", Array("ab", "bc")))
+    Call Check(True, MatchTextKeyWord("aaa.ini", Array("ab", "bc", "a.i")))
+    Call Check(False, MatchTextKeyWord("aaa.ini", Array("*.ini")))
+    Call Check(False, MatchTextKeyWord("aaa.ini", Array("*.txt")))
+    Call Check(False, MatchTextKeyWord("aaa.ini", Array("*.txt", "123")))
+    Call Check(False, MatchTextKeyWord("aaa.ini", Array("*.txt", "123", "*.ini")))
+    Call Check(True, MatchTextKeyWord("aaa.ini", Array("*.txt", "123", "a.i")))
+End Sub
+
 '----------------------------------------
 '◆配列処理
 '----------------------------------------
@@ -697,24 +775,6 @@ Public Function ArrayCount(ByVal ArrayValue)
     Call Assert(LBound(ArrayValue) = 0, "Error:ArrayCount:ArrayValue is LBound != 0.")
     ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
 End Function
-
-'--------------------
-'・配列をスペースでつなげて文字列にする
-'--------------------
-Function ArrayText(ByVal ArrayValue)
-    Call Assert(IsArray(ArrayValue), _
-        "Error:Function ArrayText:ArgsArray is not array")
-
-    Dim Result: Result = ""
-    Dim I 
-    For I = 0 To ArrayCount(ArrayValue) - 1
-        ArrayValue(I) = InSpacePlusDoubleQuote(ArrayValue(I))
-    Next
-    Result = StringCombine(" ", ArrayValue)
-
-    ArrayText = Result
-End Function
-
 
 
 '----------------------------------------
@@ -847,10 +907,10 @@ Sub testAbsoluteFilePath()
     'ネットワークパス指定
     Call Check(LCase("\\127.0.0.1\C$"), LCase(AbsoluteFilePath("C:\Windows", "\\127.0.0.1\C$")))
 
-    Call Check(AbsoluteFilePath(fso.GetParentFolderName(WScript.ScriptFullName), ".\Test\TestFileFolderPathList"), _
-        fso.GetParentFolderName(WScript.ScriptFullName) + "\Test\TestFileFolderPathList")
-    Call Check(AbsoluteFilePath(fso.GetParentFolderName(WScript.ScriptFullName), "..\Test\TestFileFolderPathList"), _
-        fso.GetParentFolderName(fso.GetParentFolderName(WScript.ScriptFullName)) + "\Test\TestFileFolderPathList")
+    Call Check(AbsoluteFilePath(ScriptFolderPath, ".\Test\TestFileFolderPathList"), _
+        ScriptFolderPath + "\Test\TestFileFolderPathList")
+    Call Check(AbsoluteFilePath(ScriptFolderPath, "..\Test\TestFileFolderPathList"), _
+        fso.GetParentFolderName(ScriptFolderPath) + "\Test\TestFileFolderPathList")
 
     MsgBox "Test OK"
 End Sub
@@ -923,6 +983,23 @@ Function InSpacePlusDoubleQuote(ByVal Value)
         Result = Value
     End If
     InSpacePlusDoubleQuote = Result
+End Function
+
+'--------------------
+'・ファイルパス配列をダブルクウォートで囲み指定文字で連結する
+'--------------------
+Function IncludeBothEndsDoubleQuoteCombineArray(ByVal ArrayValue, ByVal Delimiter)
+    Call Assert(IsArray(ArrayValue), _
+        "Error:Function IncludeBothEndsDoubleQuoteCombineArray:ArrayValue is not array")
+
+    Dim Result: Result = ""
+    Dim I 
+    For I = 0 To ArrayCount(ArrayValue) - 1
+        ArrayValue(I) = IncludeBothEndsStr(ArrayValue(I), """")
+    Next
+    Result = StringCombine(Delimiter, ArrayValue)
+
+    IncludeBothEndsDoubleQuoteCombineArray = Result
 End Function
 
 
@@ -1021,7 +1098,7 @@ End Sub
 '・カレントディレクトリの取得
 '--------------------
 Public Function CurrentDirectory
-    GetCurrentDirectory = Shell.CurrentDirectory
+    CurrentDirectory = Shell.CurrentDirectory
 End Function
 
 '--------------------
@@ -1035,7 +1112,7 @@ End Function
 '--------------------
 '・一時ファイルの取得
 '--------------------
-Public Function TemporaryFilePath
+Public Function TemporaryPath
     Dim Result
     Const TemporaryFolder = 2
 
@@ -1045,7 +1122,7 @@ Public Function TemporaryFilePath
             fso.GetSpecialFolder(TemporaryFolder).Path, _
             fso.GetTempName)
     Loop While fso.FileExists(Result)
-    TemporaryFilePath = Result
+    TemporaryPath = Result
 End Function
 
 '----------------------------------------
@@ -1281,17 +1358,17 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
 End Sub
 
 '--------------------
-'・除外ファイルを指定したフォルダ内ファイルのコピー関数
+'・上書き除外ファイルを指定したフォルダ内ファイルのコピー関数
 '--------------------
 '   ・インストール時などにiniファイルを除外して
 '     上書きインストールするときに使用する
 '   ・指定例：
-'     OverWriteIgnore = "*.ini"
-'     OverWriteIgnore = "*.ini,setting.txt"
+'     OverWriteIgnoreFileFolderListStr = "*.ini"
+'     OverWriteIgnoreFileFolderListStr = "*.ini,setting.txt"
 '--------------------
-Public Sub CopyFolderOverWriteIgnoreFile( _
+Public Sub CopyFolderOverWriteIgnore( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
-ByVal OverWriteIgnoreFiles)
+ByVal OverWriteIgnoreFileFolderListStr)
 
     Dim FileList: FileList = _
         Split( _
@@ -1304,7 +1381,8 @@ ByVal OverWriteIgnoreFiles)
     Do
         OverWrite = True
         '除外ファイル
-        If MatchText(LCase(FileList(I)), Split(LCase(OverWriteIgnoreFiles), ",")) Then OverWrite = False
+        If MatchText(LCase(FileList(I)), _
+            Split(LCase(OverWriteIgnoreFileFolderListStr), ",")) Then OverWrite = False
 
         CopyDestFilePath = _
             IncludeFirstStr( _
@@ -1316,6 +1394,43 @@ ByVal OverWriteIgnoreFiles)
                 Exit Do
             End If
         End If
+
+        Call ForceCreateFolder(fso.GetParentFolderName(CopyDestFilePath))
+        Call fso.CopyFile( _
+            FileList(I), CopyDestFilePath, True)
+    Loop While False
+    Next
+End Sub
+
+'--------------------
+'・除外ファイル/フォルダを指定したフォルダ内ファイルのコピー関数
+'--------------------
+'   ・IgnoreFileFolderListStr はカンマ区切りで複数指定可能
+'--------------------
+Public Sub CopyFolderIgnoreFileFolder( _
+ByVal SourceFolderPath, ByVal DestFolderPath, _
+ByVal IgnoreFileFolderListStr)
+
+    Dim FileList: FileList = _
+        Split( _
+            FilePathListSubFolder(SourceFolderPath), vbCrLf)
+
+    Dim IgnoreFlag
+    Dim CopyDestFilePath
+    Dim I
+    For I = 0 To ArrayCount(FileList) - 1
+    Do
+        IgnoreFlag = False
+        '除外ファイル
+        If MatchText(LCase(FileList(I)), _
+            Split(LCase(IgnoreFileFolderListStr), ",")) Then IgnoreFlag = True
+
+        If IgnoreFlag Then Exit Do
+
+        CopyDestFilePath = _
+            IncludeFirstStr( _
+                ExcludeFirstStr(FileList(I), SourceFolderPath), _
+                DestFolderPath)
 
         Call ForceCreateFolder(fso.GetParentFolderName(CopyDestFilePath))
         Call fso.CopyFile( _
@@ -1682,7 +1797,7 @@ End Function
 '       一時ファイルとClipコマンドを使用した
 '--------------------
 Public Sub SetClipbordText(ByVal ClipboardToText)
-    Dim TempFileName: TempFileName = TemporaryFilePath
+    Dim TempFileName: TempFileName = TemporaryPath
 
     Call SaveTextFile(ClipboardToText, TempFileName, "Shift_JIS")
 
@@ -1761,7 +1876,7 @@ Public Function ShellCommandRunReturn(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
     Call Assert(OrValue(Wait, Array(True, False)), "Error:ShellCommandRun")
 
-    Dim TempFileName: TempFileName = TemporaryFilePath
+    Dim TempFileName: TempFileName = TemporaryPath
 
     Call Shell.Run( _
         "%ComSpec% /c " + Command + ">" + TempFileName + " 2>&1" _
@@ -1947,4 +2062,13 @@ End Function
 '・	ForceDeleteFile作成
 '◇ ver 2015/02/12
 '・ FilePathListSubFolderの修正
+'◇ ver 2015/02/16
+'・ IncludeStr追加
+'・ MatchTextWildCard/MatchTextKeyWord追加
+'・ CopyFolderIgnoreFileFolder追加
+'・ ArrayText廃止
+'   IncludeBothEndsDoubleQuoteCombineArray追加
+'◇ ver 2015/02/17
+'・	LikeCompare修正
+'・ TemporaryFilePath>>TemporaryPath名前変更
 '--------------------------------------------------

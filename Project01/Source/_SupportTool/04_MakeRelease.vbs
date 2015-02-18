@@ -40,6 +40,9 @@ Sub Main
 
     Dim ProjectName: ProjectName = _
         IniFile.ReadString("Option", "ProjectName", "")
+
+    Dim IgnoreFileFolderName: IgnoreFileFolderName = _
+        IniFile.ReadString("Option", "ReleaseIgnoreFileFolderName", "")
     '--------------------
 
     Dim NowValue: NowValue = Now
@@ -63,7 +66,11 @@ Sub Main
     End If
 
     'フォルダ再生成コピー
-    Call ReCreateCopyFolder(SourceFolderPath, ReleaseFolderPath)
+    Call ReCreateFolder(fso.GetParentFolderName(ReleaseFolderPath))
+    Call CopyFolderIgnoreFileFolder( _
+        SourceFolderPath, ReleaseFolderPath, _
+        IgnoreFileFolderName)
+
 
     MessageText = MessageText + _
         fso.GetFileName(SourceFolderPath) + vbCrLf

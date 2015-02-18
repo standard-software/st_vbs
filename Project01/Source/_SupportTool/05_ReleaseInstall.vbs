@@ -42,7 +42,7 @@ Sub Main
         IniFile.ReadString("Option", "InstallParentFolderPath", "")
 
     Dim OverWriteIgnoreFiles: OverWriteIgnoreFiles = _
-        IniFile.ReadString("Option", "OverWriteIgnoreFiles", "")
+        IniFile.ReadString("Option", "InstallOverWriteIgnoreFiles", "")
     '--------------------
 
     Dim NowValue: NowValue = Now
@@ -73,7 +73,8 @@ Sub Main
         Exit Sub
     End If
 
-    Call CopyFolderOverWriteIgnoreFile(ReleaseFolderPath, InstallFolderPath, OverWriteIgnoreFiles)
+    Call CopyFolderOverWriteIgnore( _
+        ReleaseFolderPath, InstallFolderPath, OverWriteIgnoreFiles)
 
     MessageText = MessageText + _
         fso.GetFileName(InstallFolderPath) + vbCrLf

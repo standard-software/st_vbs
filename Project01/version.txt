@@ -1,2 +1,5 @@
 2015/02/04    ver 1.0.0
 E  ì¬
+2015/02/16    ver 1.1.0
+E  04_MakeRelease.vbs ‚ğ
+    ReleaseIgnoreFileFolderName‚É‘Î‰‚µ‚½B
