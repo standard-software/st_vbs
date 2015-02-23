@@ -34,30 +34,13 @@ Sub Main
 
     '--------------------
     '・設定読込
+	'--------------------
+    Dim SupportTool_Source_Path: SupportTool_Source_Path = _
+        IniFile.ReadString("Option", "SupportToolSourcePath", "")
     '--------------------
-    Dim Library_Source_Path: Library_Source_Path = _
-        IniFile.ReadString("Option", "LibrarySourcePath", "")
-
-    Dim ProjectName: ProjectName = _
-        IniFile.ReadString("Option", "ProjectName", "")
-
-    Dim IgnoreFileFolderName: IgnoreFileFolderName = _
-        IniFile.ReadString("Option", "ReleaseIgnoreFileFolderName", "")
-    '--------------------
-
-    Dim NowValue: NowValue = Now
-    Dim ReleaseFolderPath: ReleaseFolderPath = _
-        PathCombine(Array( _
-            "..\..\\Release", _
-            "Recent", _
-            ProjectName))
 
     Dim SourceFolderPath: SourceFolderPath = _
-        "..\..\Source\" + _
-        ProjectName
-    SourceFolderPath = _
-        AbsoluteFilePath(ScriptFolderPath, SourceFolderPath)
-
+        AbsoluteFilePath(ScriptFolderPath, SupportTool_Source_Path)
     If not fso.FolderExists(SourceFolderPath) Then
         WScript.Echo _
             "コピー元フォルダが見つかりません" + vbCrLF + _
@@ -65,32 +48,25 @@ Sub Main
         Exit Sub
     End If
 
-    'フォルダ再生成コピー
-    Call ReCreateFolder(fso.GetParentFolderName(ReleaseFolderPath))
-    Call CopyFolderIgnoreFileFolder( _
-        SourceFolderPath, ReleaseFolderPath, _
-        IgnoreFileFolderName)
+    Dim DestFolderPath: DestFolderPath = _
+        ScriptFolderPath
 
+    If LCase(SourceFolderPath) = LCase(DestFolderPath) Then
+        WScript.Echo _
+            "コピー先とコピー元のフォルダが同一です。" + vbCrLF + _
+            SourceFolderPath
+        Exit Sub
+    End If
+
+    Call CopyFolderOverWriteIgnore( _
+        SourceFolderPath, DestFolderPath, "*.ini")
 
     MessageText = MessageText + _
-        fso.GetFileName(SourceFolderPath) + vbCrLf
-
-    'バージョン情報ファイル
-    Dim VersionInfoFilePath: VersionInfoFilePath = _
-        "..\..\version.txt"
-    VersionInfoFilePath = _
-        AbsoluteFilePath(ScriptFolderPath, VersionInfoFilePath)
-    If fso.FileExists(VersionInfoFilePath) Then
-        Call fso.CopyFile( _
-            VersionInfoFilePath, _
-                IncludeLastPathDelim(ReleaseFolderPath) + _
-                fso.GetFileName(VersionInfoFilePath))
-    End If
+        DestFolderPath + vbCrLf
 
     WScript.Echo _
         "Finish " + WScript.ScriptName + vbCrLf + _
         "----------" + vbCrLf + _
         Trim(MessageText)
-
 End Sub
 
