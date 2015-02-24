@@ -34,39 +34,50 @@ Sub Main
 
     '--------------------
     '・設定読込
-	'--------------------
-    Dim SupportTool_Source_Path: SupportTool_Source_Path = _
-        IniFile.ReadString("Option", "SupportToolSourcePath", "")
+    '--------------------
+    Dim ProjectName: ProjectName = _
+        IniFile.ReadString("Option", "ProjectName", "")
+
+    Dim InstallParentFolderPath: InstallParentFolderPath = _
+        IniFile.ReadString("Option", "InstallParentFolderPath", "")
+
+    Dim OverWriteIgnoreFiles: OverWriteIgnoreFiles = _
+        IniFile.ReadString("Option", "InstallOverWriteIgnoreFiles", "")
     '--------------------
 
-    Dim SourceFolderPath: SourceFolderPath = _
-        AbsoluteFilePath(ScriptFolderPath, SupportTool_Source_Path)
-    If not fso.FolderExists(SourceFolderPath) Then
+    Dim NowValue: NowValue = Now
+    Dim ReleaseFolderPath: ReleaseFolderPath = _
+        PathCombine(Array( _
+            "..\..\Release", _
+            "Recent", _
+            ProjectName))
+    ReleaseFolderPath = _
+        AbsoluteFilePath(ScriptFolderPath, ReleaseFolderPath)
+
+    Dim InstallFolderPath: InstallFolderPath = _
+        PathCombine(Array( _
+            InstallParentFolderPath, _
+            ProjectName))
+
+    If not fso.FolderExists(ReleaseFolderPath) Then
         WScript.Echo _
             "コピー元フォルダが見つかりません" + vbCrLF + _
-            SourceFolderPath
+            ReleaseFolderPath
         Exit Sub
     End If
 
-    Dim DestFolderPath: DestFolderPath = _
-        ScriptFolderPath
-
-    If LCase(SourceFolderPath) = LCase(DestFolderPath) Then
+    If not fso.FolderExists(InstallParentFolderPath) Then
         WScript.Echo _
-            "コピー先とコピー元のフォルダが同一です。" + vbCrLF + _
-            SourceFolderPath
+            "インストール先親フォルダが見つかりません" + vbCrLF + _
+            InstallParentFolderPath
         Exit Sub
     End If
 
-'    Call CopyFolderOverWriteIgnore( _
-'        SourceFolderPath, DestFolderPath, "*.ini")
-
-    Call CopyFolderIgnoreFileFolder( _
-        SourceFolderPath, DestFolderPath, "*.ini,Update_Lib-Here.vbs")
-
+    Call CopyFolderOverWriteIgnore( _
+        ReleaseFolderPath, InstallFolderPath, OverWriteIgnoreFiles)
 
     MessageText = MessageText + _
-        DestFolderPath + vbCrLf
+        fso.GetFileName(InstallFolderPath) + vbCrLf
 
     WScript.Echo _
         "Finish " + WScript.ScriptName + vbCrLf + _

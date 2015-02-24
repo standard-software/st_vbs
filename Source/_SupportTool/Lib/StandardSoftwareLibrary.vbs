@@ -11,7 +11,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'version        2015/02/19
+'version        2015/02/23
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -106,6 +106,8 @@ Public Sub test
     Call testStrToLongDefault
 
     Call testArrayFunctions
+
+Call MsgBox("StandardSoftwareLibrary_vbs Test Finish")
 End Sub
 
 '----------------------------------------
@@ -1203,7 +1205,14 @@ End Function
 '------------------------------
 '・一時ファイルの取得
 '------------------------------
+'   ・  このようなパスが取得できる
+'       C:\Users\<UserName>\AppData\Local\Temp\rad92218.tmp
+'------------------------------
 Public Function TemporaryPath
+    TemporaryPath = TemporaryFilePath
+End Function
+
+Public Function TemporaryFilePath
     Dim Result
     Const TemporaryFolder = 2
 
@@ -1214,6 +1223,32 @@ Public Function TemporaryPath
             fso.GetTempName)
     Loop While fso.FileExists(Result)
     TemporaryPath = Result
+End Function
+
+'------------------------------
+'・一時フォルダの取得
+'------------------------------
+'   ・  このようなパスが取得できる
+'       C:\Users\<UserName>\AppData\Local\Temp\rad92218
+'------------------------------
+Public Function TemporaryFolderPath
+    Dim Result
+    Do
+        Result = _
+            ChangeFileExt(TemporaryFilePath, "")
+    Loop While fso.FolderExists(Result)
+    TemporaryFolderPath = Result
+End Function
+
+'------------------------------
+'・一時ファイル/フォルダ名
+'------------------------------
+'   ・  このような名前が取得できる
+'       [rad92218]
+'------------------------------
+Function TemporaryFolderName
+    TemporaryFolderName = _
+        ChangeFileExt(fso.GetTempName, "")
 End Function
 
 '----------------------------------------
@@ -1378,9 +1413,12 @@ Public Sub ForceCreateFolder(ByVal FolderPath)
     On Error Resume Next
     Do Until fso.FolderExists(FolderPath)
         Call fso.CreateFolder(FolderPath)
-        Call Assert(I < 100, "Error:ForceCreateFolder:Fail CreateFolder")
+        If 100 <= I Then Exit Do
         I = I + 1
     Loop
+    On Error GoTo 0
+    Call Assert(fso.FolderExists(FolderPath), _
+        "Error:ForceCreateFolder:Create Folder Fail.")
 End Sub
 
 Private Sub testForceCreateFolder
@@ -1401,9 +1439,12 @@ Public Sub ForceDeleteFolder(ByVal FolderPath)
     On Error Resume Next
     Do While fso.FolderExists(FolderPath)
         Call fso.DeleteFolder(FolderPath)
-        Call Assert(I < 100, "Error:ForceDeleteFolder:Fail DeleteFolder")
+        If 100 <= I Then Exit Do
         I = I + 1
     Loop
+    On Error GoTo 0
+    Call Assert(fso.FolderExists(FolderPath) = False, _
+        "Error:ForceDeleteFolder:Folder Delete Fail.")
 End Sub
 
 
@@ -1415,11 +1456,14 @@ Public Sub ForceDeleteFile(ByVal FilePath)
     '100回繰り返して無理ならエラー
     Dim I: I = 1
     On Error Resume Next
-    Do While fso.FileExists(FolderPath)
-        Call fso.DeleteFile(FolderPath, True)
-        Call Assert(I < 100, "Error:ForceDeleteFile:Fail DeleteFile")
+    Do While fso.FileExists(FilePath)
+        Call fso.DeleteFile(FilePath, True)
+        If 100 <= I Then Exit Do
         I = I + 1
     Loop
+    On Error GoTo 0
+    Call Assert(fso.FileExists(FilePath) = False, _
+        "Error:ForceDeleteFile:File Delete Fail.")
 End Sub
 
 '------------------------------
@@ -1443,13 +1487,19 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
 
     Call ForceDeleteFolder(DestFolderPath)
 
+    Dim I: I = 1
     On Error Resume Next
     Do
         Call ForceCreateFolder(fso.GetParentFolderName(DestFolderPath))
         Call fso.CopyFolder( _
             SourceFolderPath, DestFolderPath, True)
+        If 100 <= I Then Exit Do
+        I = I + 1
     Loop Until fso.FolderExists(DestFolderPath)
     'フォルダが作成できるまでループ
+    On Error GoTo 0
+    Call Assert(fso.FolderExists(DestFolderPath), _
+        "Error:ReCreateCopyFolder:Copy Folder Fail.")
 End Sub
 
 '------------------------------
@@ -1578,9 +1628,9 @@ End Sub
 '       フォルダがない場合にエラーになるので
 '       それを無視するための関数
 '------------------------------
-Sub CopyFolder(ByVal SourceFilePath, ByVal DestFilePath)
+Sub CopyFolder(ByVal SourceFolderPath, ByVal DestFolderPath)
 On Error Resume Next
-    Call fso.CopyFolder(SourceFilePath, DestFilePath, True)
+    Call fso.CopyFolder(SourceFolderPath, DestFolderPath, True)
 End Sub
 
 
@@ -1903,11 +1953,6 @@ End Sub
 '----------------------------------------
 '◆圧縮ファイル処理
 '----------------------------------------
-
-Function TemporaryFolderName
-    TemporaryFolderName = _
-        ChangeFileExt(fso.GetTempName, "")
-End Function
 
 '------------------------------
 '・Zipファイル解凍
@@ -2251,10 +2296,17 @@ End Function
 '◇ ver 2015/02/17
 '・	LikeCompare修正
 '・ TemporaryFilePath>>TemporaryPath名前変更
+'◇ ver 2015/02/18
+'・ TemporaryFolderPath追加
 '◇ ver 2015/02/19
 '・ ArrayAdd/ArrayDelete/ArrayInsert 追加
 '・ CopyFileIgnoreFileFolderを追加
 '   CopyFolderIgnoreFileFolderを修正
 '・ UnZip機能追加
 '・ CopyFile/CopyFolder追加
+'◇ ver 2015/02/23
+'・ TemporaryFilePath/TemporaryFolderName追加
+'・ ForceDeleteFolder/ForceDeleteFile 
+'   /ForceCreateFolder/ReCreateCopyFolder
+'   例外発生時の不具合修正
 '--------------------------------------------------

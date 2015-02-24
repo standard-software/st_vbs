@@ -30,6 +30,6 @@ Call Main
 
 Sub Main
 Do
-    Call testCheck
+    Call test
 Loop While False
 End Sub

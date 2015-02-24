@@ -1,0 +1,21 @@
+◇2015/02/05
+・  作成
+    Lib_Download_Here.vbs
+    Lib_Download_Project-Lib.vbs
+    SourceBackup.vbs
+    MakeRelease.vbs
+    ReleaseInstall.vbs
+◇2015/02/08
+・  Iniファイル対応
+    Lib_Download_Project-Lib.vbs → Update_Lib-Here.vbs
+    Lib_Download_Here.vbs → Update_Project-Lib.vbs
+◇2015/02/10
+・  ライブラリファイルの複数指定対応
+◇2015/02/23    ver 2.0.0
+・  フォルダ構成変更
+    Project01からSource内に移動
+・  Update_SupportTool.vbs 追加
+・  Update_SupportTool.vbs を修正して
+    Update_Lib-Here.vbsをプロジェクトファイルに
+    更新しないようにした
+
