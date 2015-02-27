@@ -61,7 +61,10 @@ Sub Main
 '    Call CopyFolderOverWriteIgnore( _
 '        SourceFolderPath, DestFolderPath, "*.ini")
 
-    Call CopyFolderIgnoreFileFolder( _
+    Call DeleteFileTargetPath( _
+        DestFolderPath, "*.vbs")
+
+    Call CopyFolderIgnorePath( _
         SourceFolderPath, DestFolderPath, "*.ini,Update_Lib-Here.vbs")
 
 

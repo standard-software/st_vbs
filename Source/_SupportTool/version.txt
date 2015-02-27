@@ -18,4 +18,14 @@
 ・  Update_SupportTool.vbs を修正して
     Update_Lib-Here.vbsをプロジェクトファイルに
     更新しないようにした
+◇2015/02/26    ver 2.1.0
+・  ReleaseInstall.vbsを修正
+    インストールフォルダを開く機能追加
+◇2015/02/27    ver 2.1.1
+・  Update_SupportTool.vbsを修正
+    *.vbsファイルを削除してから更新するようにした
+◇2015/02/27    ver 2.2.0
+・  SourceBackup.vbsを修正
+    Iniファイルと複数フォルダへの対応。
+    設定によって日付時刻をフォルダ前後に付属可能な機能追加
 

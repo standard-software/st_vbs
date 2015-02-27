@@ -71,7 +71,7 @@ Sub Main
     'フォルダ再生成コピー
 '    Call ReCreateCopyFolder(SourceFolderPath, ReleaseFolderPath)
     Call ReCreateFolder(fso.GetParentFolderName(ReleaseFolderPath))
-    Call CopyFolderIgnoreFileFolder( _
+    Call CopyFolderIgnorePath( _
         SourceFolderPath, ReleaseFolderPath, _
         IgnoreFileFolderName)
 
