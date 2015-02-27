@@ -11,7 +11,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'version        2015/02/23
+'version        2015/02/26
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -85,7 +85,7 @@ Public Sub test
 '    Call testExcludePathExt
 '    Call testChangeFileExt
 '    Call testPathCombine
-'    Call testFileFolderPathList
+    Call testFileFolderPathList
 
 '    Call testShellCommandRunReturn
 '    Call testEnvironmentalVariables
@@ -98,7 +98,7 @@ Public Sub test
     Call testMatchText
     Call testMatchTextWildCard
     Call testMatchTextKeyWord
-'    Call testForceCreateFolder
+    Call testForceCreateFolder
     Call testMaxValue
     Call testMinValue
     Call testIsLong
@@ -672,8 +672,8 @@ End Function
 '------------------------------
 '・文字列一致を確認する関数
 '------------------------------
-'   ・ 部分文字列(キーワード)かワイルドカードで一致確認する
-'   ・ ワイルドカード指定かどうかは[*]か[?]が
+'   ・  部分文字列(キーワード)かワイルドカードで一致確認する
+'   ・  ワイルドカード指定かどうかは[*]か[?]が
 '       含まれているかどうかで判定する
 '------------------------------
 Public Function MatchText(ByVal TargetText, ByVal SearchStrArray)
@@ -1299,14 +1299,20 @@ Sub testFileFolderPathList()
         StringCombine(vbCrLf, Array( _
             "\AAA\AAA-1.TXT", _
             "\AAA\AAA-2.TXT", _
+            "\AAA\AAA-1\AAA-1-1.TXT", _
             "\AAA\AAA-2\AAA-2-1.TXT", _
             "\AAA\AAA-2\AAA-2-2.TXT", _
+            "\AAA\AAA-2\AAA-2-1\AAA-2-1-1.TXT", _
             "\AAA\AAA-2\AAA-2-2\AAA-2-2-1.TXT", _
+            "\AAA\AAA-2\AAA-2-2\AAA-2-2-1\AAA-2-2-1-1.TXT", _
             "\BBB\BBB-1.TXT", _
             "\BBB\BBB-2.TXT", _
             "\BBB\BBB-1\BBB-1-1.TXT", _
             "\BBB\BBB-1\BBB-1-2.TXT", _
             "\BBB\BBB-1\BBB-1-1\BBB-1-1-1.TXT", _
+            "\BBB\BBB-1\BBB-1-1\BBB-1-1-1\BBB-1-1-1-1.TXT", _
+            "\BBB\BBB-1\BBB-1-2\BBB-1-2-1.TXT", _
+            "\BBB\BBB-2\BBB-2-1.TXT", _
             "\AAA.TXT", _
             "\BBB.TXT" _
         )))
@@ -1424,9 +1430,15 @@ End Sub
 Private Sub testForceCreateFolder
     Call ForceDeleteFolder(AbsoluteFilePath(ScriptFolderPath, _
         ".\Test\TestForceCreateFolder"))
+
     Call ForceCreateFolder(AbsoluteFilePath(ScriptFolderPath, _
         ".\Test\TestForceCreateFolder\Test\Test"))
-    Call MsgBox("OK")
+
+    Call Check(True, fso.FolderExists( AbsoluteFilePath(ScriptFolderPath, _
+        ".\Test\TestForceCreateFolder\Test\Test") ))
+
+    Call ForceDeleteFolder(AbsoluteFilePath(ScriptFolderPath, _
+        ".\Test\TestForceCreateFolder"))
 End Sub
 
 '------------------------------
@@ -1445,6 +1457,7 @@ Public Sub ForceDeleteFolder(ByVal FolderPath)
     On Error GoTo 0
     Call Assert(fso.FolderExists(FolderPath) = False, _
         "Error:ForceDeleteFolder:Folder Delete Fail.")
+    'fso.DeleteFolderはファイルやサブフォルダあってもすべて消してくれる
 End Sub
 
 
@@ -1509,62 +1522,53 @@ End Sub
 '------------------------------
 '・上書き除外ファイルを指定したフォルダ内ファイルのコピー関数
 '------------------------------
-'   ・インストール時などにiniファイルを除外して
-'     上書きインストールするときに使用する
-'   ・指定例：
-'     OverWriteIgnoreFileFolderListStr = "*.ini"
-'     OverWriteIgnoreFileFolderListStr = "*.ini,setting.txt"
+'   ・  インストール時などにiniファイルを除外して
+'       上書きインストールするときに使用する
+'   ・  指定例：
+'       IgnorePathsStr = "*.ini"
+'       IgnorePathsStr = "*.ini,setting.txt"
 '------------------------------
-Public Sub CopyFolderOverWriteIgnore( _
+Public Sub CopyFolderOverWriteIgnorePath( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
-ByVal OverWriteIgnoreFileFolderListStr)
+ByVal IgnorePathsStr)
 
     Dim FileList: FileList = _
         Split( _
             FilePathListSubFolder(SourceFolderPath), vbCrLf)
 
-    Dim OverWrite
     Dim CopyDestFilePath
     Dim I
     For I = 0 To ArrayCount(FileList) - 1
     Do
-        OverWrite = True
-        '除外ファイル
-        If MatchText(LCase(FileList(I)), _
-            Split(LCase(OverWriteIgnoreFileFolderListStr), ",")) Then OverWrite = False
-
         CopyDestFilePath = _
             IncludeFirstStr( _
                 ExcludeFirstStr(FileList(I), SourceFolderPath), _
                 DestFolderPath)
-        '上書き禁止ならファイルがあったらコピーしない
-        If OverWrite = False Then
-            If fso.FileExists(CopyDestFilePath) then
-                Exit Do
-            End If
-        End If
 
-        Call ForceCreateFolder(fso.GetParentFolderName(CopyDestFilePath))
-        Call fso.CopyFile( _
-            FileList(I), CopyDestFilePath, True)
+        Call CopyFileOverWriteIgnorePath( _
+            FileList(I), CopyDestFilePath, _
+            IgnorePathsStr)
     Loop While False
     Next
+End Sub
+
+Private Sub testCopyFolderOverWriteIgnorePath
+    'テスト記述はまだ途中
 End Sub
 
 '------------------------------
 '・除外ファイル/フォルダを指定したフォルダ内ファイルのコピー関数
 '------------------------------
-'   ・IgnoreFileFolderListStr はカンマ区切りで複数指定可能
+'   ・  IgnorePathsStr はカンマ区切りで複数指定可能
 '------------------------------
-Public Sub CopyFolderIgnoreFileFolder( _
+Public Sub CopyFolderIgnorePath( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
-ByVal IgnoreFileFolderListStr)
+ByVal IgnorePathsStr)
 
     Dim FileList: FileList = _
         Split( _
             FilePathListSubFolder(SourceFolderPath), vbCrLf)
 
-    Dim IgnoreFlag
     Dim CopyDestFilePath
     Dim I
     For I = 0 To ArrayCount(FileList) - 1
@@ -1574,8 +1578,9 @@ ByVal IgnoreFileFolderListStr)
                 ExcludeFirstStr(FileList(I), SourceFolderPath), _
                 DestFolderPath)
 
-        Call CopyFileIgnoreFileFolder(FileList(I), CopyDestFilePath, _
-            IgnoreFileFolderListStr)
+        Call CopyFileIgnorePath( _
+            FileList(I), CopyDestFilePath, _
+            IgnorePathsStr)
     Loop While False
     Next
 End Sub
@@ -1583,24 +1588,122 @@ End Sub
 '------------------------------
 '・除外ファイル/フォルダを指定したファイルコピー関数
 '------------------------------
-'   ・IgnoreFileFolderListStr はカンマ区切りで複数指定可能
+'   ・  IgnorePathsStr はカンマ区切りで複数指定可能
+'   ・  該当するファイルはすべて無視するのと
+'       上書きだけ無視するものがある
 '------------------------------
-Public Sub CopyFileIgnoreFileFolder( _
+Public Sub CopyFileIgnorePath( _
 ByVal SourceFilePath, ByVal DestFilePath, _
-ByVal IgnoreFileFolderListStr)
+ByVal IgnorePathsStr)
+    Call CopyFileIgnorePathBase( _
+        SourceFilePath, DestFilePath, IgnorePathsStr, False)
+End Sub
+
+Public Sub CopyFileOverWriteIgnorePath( _
+ByVal SourceFilePath, ByVal DestFilePath, _
+ByVal IgnorePathsStr)
+    Call CopyFileIgnorePathBase( _
+        SourceFilePath, DestFilePath, IgnorePathsStr, True)
+End Sub
+
+Private Sub CopyFileIgnorePathBase( _
+ByVal SourceFilePath, ByVal DestFilePath, _
+ByVal IgnorePathsStr, _
+ByVal OverWriteIgnoreMode)
 
     Call Assert(fso.FileExists(SourceFilePath), _
-        "Error:CopyFileIgnoreFileFolder:SourceFilePath is not exists")
+        "Error:CopyFileIgnorePathBase:SourceFilePath is not exists")
     Do
         '除外ファイル
         If MatchText(LCase(SourceFilePath), _
-            Split(LCase(IgnoreFileFolderListStr), ",")) Then
-            Exit Do
+            Split(LCase(IgnorePathsStr), ",")) Then
+            If OverWriteIgnoreMode Then
+                If fso.FileExists(DestFilePath) Then
+                    Exit Do
+                End If
+            Else
+                Exit Do
+            End If
         End IF
 
         Call ForceCreateFolder(fso.GetParentFolderName(DestFilePath))
         Call fso.CopyFile( _
             SourceFilePath, DestFilePath, True)
+    Loop While False
+End Sub
+
+'------------------------------
+'◇除外/対象パス指定ファイル削除処理
+'------------------------------
+'   ・  Target/IgnorePathsStr はカンマ区切りで複数指定可能
+'------------------------------
+Public Sub DeleteFileTargetPath( _
+ByVal FileFolderPath, _
+ByVal TargetPathsStr)
+    If fso.FileExists(FileFolderPath) Then
+        Call DeleteFileTargetIgnorePathBase( _
+            FileFolderPath, TargetPathsStr, False)
+    ElseIf fso.FolderExists(FileFolderPath) Then
+        Dim FileList: FileList = _
+            Split( _
+                FilePathListSubFolder(FileFolderPath), vbCrLf)
+
+        Dim DeleteFilePath
+        Dim I
+        For I = 0 To ArrayCount(FileList) - 1
+        Do
+            Call DeleteFileTargetIgnorePathBase( _
+                FileList(I), TargetPathsStr, False)
+        Loop While False
+        Next
+    End If
+End Sub
+
+Public Sub DeleteFileIgnorePath( _
+ByVal FileFolderPath, _
+ByVal IgnorePathsStr)
+    If fso.FileExists(FileFolderPath) Then
+        Call DeleteFileTargetIgnorePathBase( _
+            FileFolderPath, IgnorePathsStr, True)
+    ElseIf fso.FolderExists(FileFolderPath) Then
+        Dim FileList: FileList = _
+            Split( _
+                FilePathListSubFolder(FileFolderPath), vbCrLf)
+
+        Dim DeleteFilePath
+        Dim I
+        For I = 0 To ArrayCount(FileList) - 1
+        Do
+            Call DeleteFileTargetIgnorePathBase( _
+                FileList(I), IgnorePathsStr, True)
+        Loop While False
+        Next
+    End If
+End Sub
+
+Private Sub DeleteFileTargetIgnorePathBase( _
+ByVal DeleteFilePath, _
+ByVal PathsStr, _
+ByVal DeleteIgnoreMode)
+    Dim DeleteTargetMode: DeleteTargetMode = not DeleteIgnoreMode
+    'DeleteIgnoreモードトDeleteTargetModeで処理を判断するため
+
+    Call Assert(fso.FileExists(DeleteFilePath), _
+        "Error:DeleteFileTargetIgnorePathBase:DeleteFilePath is not exists")
+    Do
+        '除外ファイル
+        If MatchText(LCase(DeleteFilePath), _
+            Split(LCase(PathsStr), ",")) Then
+            If DeleteIgnoreMode Then
+                Exit Do
+            End If
+        Else
+            If DeleteTargetMode Then
+                Exit Do
+            End If
+        End IF
+
+        Call ForceDeleteFile(DeleteFilePath)
     Loop While False
 End Sub
 
@@ -2309,4 +2412,12 @@ End Function
 '・ ForceDeleteFolder/ForceDeleteFile 
 '   /ForceCreateFolder/ReCreateCopyFolder
 '   例外発生時の不具合修正
+'◇ ver 2015/02/26
+'・ CopyFileIgnorePathBaseを作成して
+'   CopyFileIgnorePath/CopyFileOverWriteIgnorePathと
+'   処理を共通化して作成
+'・ CopyFolderOverWriteIgnoreをCopyFolderOverWriteIgnorePathに名称変更
+'   内部をCopyFileOverWriteIgnorePathとして作成
+'・ CopyFolderIgnoreFileFolderをCopyFolderIgnorePathに名称変更
+'・ DeleteFileTargetPath/DeleteFileIgnorePathを追加
 '--------------------------------------------------

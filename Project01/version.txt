@@ -3,9 +3,9 @@
 ◇2015/02/16    ver 1.1.0
 ・  04_MakeRelease.vbs を
     ReleaseIgnoreFileFolderNameに対応した。
-◇2015/02/23	ver 1.2.0
-・	_SupportToolの元ソースを
-	...\StandardSoftwareLibrary_vbs\Source\_SupportTool
-	にした。
-・	CreateNewProject.vbsを作成
+◇2015/02/23    ver 1.2.0
+・  _SupportToolの元ソースを
+    ...\StandardSoftwareLibrary_vbs\Source\_SupportTool
+    にした。
+・  CreateNewProject.vbsを作成
 

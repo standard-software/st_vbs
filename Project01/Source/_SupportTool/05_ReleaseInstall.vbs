@@ -73,15 +73,21 @@ Sub Main
         Exit Sub
     End If
 
-    Call CopyFolderOverWriteIgnore( _
+    Call CopyFolderOverWriteIgnorePath( _
         ReleaseFolderPath, InstallFolderPath, OverWriteIgnoreFiles)
 
     MessageText = MessageText + _
         fso.GetFileName(InstallFolderPath) + vbCrLf
 
-    WScript.Echo _
-        "Finish " + WScript.ScriptName + vbCrLf + _
-        "----------" + vbCrLf + _
-        Trim(MessageText)
+    Dim MessageResult: MessageResult = _
+        MsgBox( _
+            StringCombine(vbCrLf, Array( _
+                "フォルダを開きますか？", _
+                "Finish " + WScript.ScriptName, _
+                "----------", _
+                Trim(MessageText) )), vbYesNo)
+    If MessageResult = vbYes Then
+        Call ShellFileOpen(InstallFolderPath, vbNormalFocus)
+    End If
 End Sub
 
