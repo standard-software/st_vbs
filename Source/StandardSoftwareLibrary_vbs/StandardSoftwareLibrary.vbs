@@ -4,14 +4,14 @@
 'ModuleName:    Basic_Module
 'FileName:      StandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'OpenSource     https://github.com/standard-software/StandardSoftwareLibrary_vbs
+'OpenSource:    https://github.com/standard-software/StandardSoftwareLibrary_vbs
 'License:       Dual License(GPL or Commercial License)
-'               https://github.com/standard-software/StandardSoftwareLibrary_vbs/blob/master/Document/Readme.txt
+'   URL:        https://github.com/standard-software/StandardSoftwareLibrary_vbs/blob/master/Document/Readme.txt
 'All Right Reserved:
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'version        2015/02/27
+'version:       2015/03/03
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -106,6 +106,8 @@ Public Sub test
     Call testStrToLongDefault
 
     Call testArrayFunctions
+
+    Call testProcessExists
 
 Call MsgBox("StandardSoftwareLibrary_vbs Test Finish")
 End Sub
@@ -563,9 +565,11 @@ End Function
 
 '------------------------------
 '◇文字列結合
-'少なくとも1つのDelimiterが間に入って接続される。
-'Delimiterが結合の両端に付属する場合も1つになる。
-'2連続で結合の両端にある場合は1つが削除される(テストでの動作参照)
+'------------------------------
+'   ・  少なくとも1つのDelimiterが間に入って接続される。
+'   ・  Delimiterが結合の両端に付属する場合も1つになる。
+'   ・  2連続で結合の両端にある場合は1つが削除される
+'       (テストでの動作参照)
 '------------------------------
 Public Function StringCombine(ByVal Delimiter, ByVal Values)
     Call Assert(IsArray(Values), "Error:StringCombine:Values is not Array.")
@@ -1329,6 +1333,8 @@ End Sub
 '   ・  パスは改行コードで区切られている
 '------------------------------
 Public Function FolderPathListTopFolder(ByVal FolderPath)
+    Call Assert(fso.FolderExists(FolderPath), _
+        "Error:FolderPathListTopFolder:Folder no Exists")
     Dim Result: Result = ""
     Dim SubFolder
     For Each SubFolder In fso.GetFolder(FolderPath).SubFolders
@@ -1344,11 +1350,14 @@ End Function
 '   ・  パスは改行コードで区切られている
 '------------------------------
 Public Function FolderPathListSubFolder(ByVal FolderPath)
+    Call Assert(fso.FolderExists(FolderPath), _
+        "Error:FolderPathListSubFolder:Folder no Exists")
     Dim Result: Result = ""
     Dim SubFolder 
     For Each SubFolder In fso.GetFolder(FolderPath).SubFolders
         Result = StringCombine(vbCrLf, _
-            Array(Result, SubFolder.Path, FolderPathListSubFolder(SubFolder.Path)))
+            Array(Result, SubFolder.Path, _
+                FolderPathListSubFolder(SubFolder.Path)))
     Next
     FolderPathListSubFolder = Result
 End Function
@@ -1364,6 +1373,8 @@ End Function
 '   ・  パスは改行コードで区切られている
 '------------------------------
 Public Function FilePathListTopFolder(ByVal FolderPath)
+    Call Assert(fso.FolderExists(FolderPath), _
+        "Error:FilePathListTopFolder:Folder no Exists")
     Dim Result: Result = ""
     Dim File 
     For Each File In fso.GetFolder(FolderPath).Files
@@ -1379,6 +1390,8 @@ End Function
 '   ・  パスは改行コードで区切られている
 '------------------------------
 Public Function FilePathListSubFolder(ByVal FolderPath)
+    Call Assert(fso.FolderExists(FolderPath), _
+        "Error:FilePathListSubFolder:Folder no Exists")
     Dim Result: Result = ""
     Dim FolderPathList
     FolderPathList = Split( _
@@ -1420,6 +1433,7 @@ Public Sub ForceCreateFolder(ByVal FolderPath)
     Do Until fso.FolderExists(FolderPath)
         Call fso.CreateFolder(FolderPath)
         If 100 <= I Then Exit Do
+        WScript.Sleep 100
         I = I + 1
     Loop
     On Error GoTo 0
@@ -1452,6 +1466,7 @@ Public Sub ForceDeleteFolder(ByVal FolderPath)
     Do While fso.FolderExists(FolderPath)
         Call fso.DeleteFolder(FolderPath)
         If 100 <= I Then Exit Do
+        WScript.Sleep 100
         I = I + 1
     Loop
     On Error GoTo 0
@@ -1472,6 +1487,7 @@ Public Sub ForceDeleteFile(ByVal FilePath)
     Do While fso.FileExists(FilePath)
         Call fso.DeleteFile(FilePath, True)
         If 100 <= I Then Exit Do
+        WScript.Sleep 100
         I = I + 1
     Loop
     On Error GoTo 0
@@ -1507,6 +1523,7 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
         Call fso.CopyFolder( _
             SourceFolderPath, DestFolderPath, True)
         If 100 <= I Then Exit Do
+        WScript.Sleep 100
         I = I + 1
     Loop Until fso.FolderExists(DestFolderPath)
     'フォルダが作成できるまでループ
@@ -1737,15 +1754,54 @@ On Error Resume Next
 End Sub
 
 
+'------------------------------
+'・ファイル使用中かどうかを確認する
+'------------------------------
+Function IsUseFile(FilePath)
+    Dim Result: Result = False
+    Do
+        If not fso.FileExists(FilePath) Then Exit Do
+        If IsReadOnlyFile(FilePath) Then Exit Do
+        On Error Resume Next
+        Dim File
+        Set File = fso.OpenTextFile(FilePath, 8, False)
+        If 0 < Err.Number Then
+            Result = True
+        End If
+    Loop While False
+    IsUseFile = Result
+End Function
+
+'------------------------------
+'・ファイルが読み取り専用かどうか確認する
+'------------------------------
+Function IsReadOnlyFile(FilePath)
+    Dim Result: Result = False
+    Do
+        If fso.FileExists(FilePath) Then Exit Do
+        '読み取り属性調査は定数1とのAndで判定する
+        If fso.GetFile(FilePath).Attributes And 1 Then
+            Result = True
+        End If
+    Loop While False
+    IsReadOnlyFile = Result
+End Function
+
+
 '----------------------------------------
 '◆ショートカットファイル操作
 '----------------------------------------
+
+'------------------------------
+'・ショートカットファイルのリンク先を取得する
+'------------------------------
 Public Function ShortcutFileLinkPath(ByVal ShortcutFilePath)
     Dim Result: Result = ""
     Dim file: Set file = Shell.CreateShortcut(ShortcutFilePath)
     Result = file.TargetPath
     ShortcutFileLinkPath = Result
 End Function
+
 
 '----------------------------------------
 '◆テキストファイル読み書き
@@ -2179,8 +2235,9 @@ End Sub
 
 '------------------------------
 '・コマンド指定したシェル起動
-'   Wait=   Trueならプログラムの終了を待つ
-'           Falseならそのまま実行を続ける
+'------------------------------
+'   ・  Wait = Trueならプログラムの終了を待つ
+'              Falseならそのまま実行を続ける
 '------------------------------
 Public Sub ShellCommandRun(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
@@ -2200,17 +2257,17 @@ End Sub
 
 '------------------------------
 '・DOSコマンドの実行。戻り値取得。
-'DOS窓が表示されない
 '------------------------------
-Public Function ShellCommandRunReturn(Command, Focus, Wait)
+'   ・  DOS窓が表示されない
+'------------------------------
+Public Function ShellCommandRunReturn(Command, Focus)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
-    Call Assert(OrValue(Wait, Array(True, False)), "Error:ShellCommandRun")
 
     Dim TempFileName: TempFileName = TemporaryPath
 
     Call Shell.Run( _
         "%ComSpec% /c " + Command + ">" + TempFileName + " 2>&1" _
-               , Focus, Wait)
+               , Focus, True)
     ' 戻り値を取得
     ShellCommandRunReturn = _
         LoadTextFile(TempFileName, "shift_jis")
@@ -2219,8 +2276,8 @@ Public Function ShellCommandRunReturn(Command, Focus, Wait)
 End Function
 
 Sub testShellCommandRunReturn()
-    MsgBox ShellCommandRunReturn("tree ""C:\Software""", vbHide, True)
-    MsgBox ShellCommandRunReturn("dir C:\", vbHide, True)
+    MsgBox ShellCommandRunReturn("tree ""C:\Software""", vbHide)
+    MsgBox ShellCommandRunReturn("dir C:\", vbHide)
 End Sub
 
 '------------------------------
@@ -2239,6 +2296,63 @@ Private Sub testEnvironmentalVariables
     MsgBox EnvironmentalVariables("%username%")
     MsgBox EnvironmentalVariables("appdata")
 End Sub
+
+'----------------------------------------
+'◆プロセス存在チェック
+'----------------------------------------
+' プロセスが起動しているか調べる
+'----------------------------------------
+Public Function ProcessExists1(ByVal ProcessName)
+    Dim Result: Result = False
+    Dim Service: Set Service = _
+        WScript.CreateObject("WbemScripting.SWbemLocator").ConnectServer
+    Dim DataSet: Set DataSet = Service.ExecQuery( _
+        "SELECT * FROM Win32_Process")
+    Dim Data
+    For Each Data In DataSet
+        If Data.Description = ProcessName Then
+            Result = True
+        End If
+    Next
+    ProcessExists1 = Result
+End Function
+
+Public Function ProcessExists2(ByVal ProcessName)
+    Dim Result: Result = False
+    Dim Service: Set Service = _
+        WScript.CreateObject("WbemScripting.SWbemLocator").ConnectServer
+    Dim DataSet: Set DataSet = Service.ExecQuery( _
+        "SELECT * FROM Win32_Process WHERE Name='" & ProcessName & "'")
+    Dim Data
+    For Each Data In DataSet
+        Result = True
+    Next
+    ProcessExists2 = Result
+End Function
+
+Public Function ProcessExists(ByVal ProcessName)
+    Dim Query: Query = _
+        "SELECT * FROM Win32_Process WHERE Name = '" + ProcessName + "'"
+    Dim Service: Set Service = GetObject("winmgmts:")
+    Dim DataSet: Set DataSet = Service.ExecQuery(Query)
+    ProcessExists = (DataSet.Count > 0)
+End Function
+
+Private Sub testProcessExists
+    Call Check(True, ProcessExists("explorer.exe"))
+    Call Check(True, ProcessExists1("explorer.exe"))
+    Call Check(True, ProcessExists2("explorer.exe"))
+
+    Call Check(False, ProcessExists("abc.exe"))
+    Call Check(False, ProcessExists1("abc.exe"))
+    Call Check(False, ProcessExists2("abc.exe"))
+
+    'Call Check(False, ProcessExists("C:\Windows\explorer.exe"))
+    'Call Check(False, ProcessExists1("C:\Windows\explorer.exe"))
+    'Call Check(False, ProcessExists2("C:\Windows\explorer.exe"))
+    '上記はエラーになる
+End Sub
+
 
 '----------------------------------------
 '◆キーコード送信
@@ -2330,6 +2444,70 @@ ByVal KeyValue, ByVal WaitMilliSec)
         SearchWindowTitle, AfterWindowTitle, _
         KeyValue, WaitMilliSec, 10)
 End Function
+
+'----------------------------------------
+'◆VBScript ソースコード編集
+'----------------------------------------
+
+'------------------------------
+'・ソース中の[Call Include("ライブラリパス")]という記述を
+'  ライブラリファイルの中身全てで置き換える処理
+'------------------------------
+Public Function IncludeExpanded( _
+ByVal SourceFilePath, ByVal DestFilePath)
+
+    Dim Result: Result = False
+    Do
+        If not fso.FileExists( _
+            SourceFilePath) Then Exit Do
+
+        If not fso.FolderExists( _
+            fso.GetParentFolderName(DestFilePath)) Then Exit Do
+
+        Call fso.CopyFile( _
+            SourceFilePath, _
+            DestFilePath, True)
+
+        Dim FileText: FileText = _
+            LoadTextFile(DestFilePath, "SHIFT_JIS")
+        With Nothing
+            Dim Lines: Lines = _
+                Split(FileText, vbCrLf)
+            Dim I
+            For I = 0 To ArrayCount(Lines) - 1
+                If 1 = InStr(Trim(Lines(I)), "Call Include(""") Then
+                    Dim LibPath: LibPath = Trim(Lines(I))
+                    LibPath = ExcludeFirstStr(LibPath, "Call Include(""")
+                    LibPath = ExcludeLastStr(LibPath, """)")
+                    LibPath = AbsoluteFilePath( _
+                        fso.GetParentFolderName(SourceFilePath), _
+                        LibPath)
+                    Call Assert(fso.FileExists(LibPath), _
+                        "Error:IncludeExpanded:Inclde Library is not found.")
+                    Lines(I) = _
+                        Replace( _
+                            LoadTextFile(LibPath, "SHIFT_JIS"), _
+                            "Option Explicit", "")
+                End If
+            Next
+            FileText = ArrayToString(Lines, vbCrLf)
+        End With
+        Call SaveTextFile(FileText, DestFilePath, "SHIFT_JIS")
+    Loop While False
+    IncludeExpanded = Result
+End Function
+
+'------------------------------
+'・スクリプトエンコーダーを使ったVBSのエンコード
+'------------------------------
+Sub EncodeVBScriptFile(ByVal ScriptEncoderExePath, _
+ByVal SourceFilePath, ByVal DestFilePath)
+    Call ShellCommandRun( _
+        InSpacePlusDoubleQuote(ScriptEncoderExePath) + _
+        " " + InSpacePlusDoubleQuote(SourceFilePath) + _
+        " " + InSpacePlusDoubleQuote(DestFilePath) _
+        , vbHide, True)
+End Sub
 
 
 '--------------------------------------------------
@@ -2424,4 +2602,11 @@ End Function
 '・ DeleteFileTargetPath/DeleteFileIgnorePathを追加
 '◇ ver 2015/02/27
 '・ IniFile.ReadStringの空項目取得時のデフォルト値処理を修正
+'◇ ver 2015/03/02
+'・ IsUseFile/IsReadOnlyFile追加
+'・ ProcessExists追加
+'・ IncludeExpanded/EncodeVBScriptFile追加
+'◇ ver 2015/03/03
+'・ ForceCreateFolder/ForceDeleteFolder
+'   /ForceDeleteFile/ReCreateCopyFolder の待機時間を追加
 '--------------------------------------------------

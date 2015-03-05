@@ -3,7 +3,7 @@
 '
 'ModuleName:    TestStandardSoftwareLibrary.vbs
 '--------------------------------------------------
-'version        2015/01/21
+'version:       2015/01/21
 '--------------------------------------------------
 Option Explicit
 
