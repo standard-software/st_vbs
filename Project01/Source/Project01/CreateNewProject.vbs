@@ -48,7 +48,7 @@ Do
 
     'プロジェクトフォルダ一式コピー
     Call ForceCreateFolder(NewProjectFolderPath)
-    Call CopyFolderIgnoreFileFolder( _
+    Call CopyFolderIgnorePath( _
         AbsoluteFilePath(ScriptFolderPath, "..\..\..\Project01\Source"), _
         PathCombine(Array(NewProjectFolderPath, "Source")), _
         "CreateNewProject.vbs,SupportTool.ini")

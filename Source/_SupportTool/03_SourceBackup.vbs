@@ -45,7 +45,7 @@ Sub Main
 
     Dim BackupFolderLastYYYY_MM_DD: BackupFolderLastYYYY_MM_DD = _
         IniFile.ReadString("Option", "BackupFolderLastYYYY_MM_DD", "True")
-    If UCase(BackupFolderLastYYYY_MM_DD) = "TRUE" Then
+    If LCase(BackupFolderLastYYYY_MM_DD) = "true" Then
         BackupFolderLastYYYY_MM_DD = True
     Else
         BackupFolderLastYYYY_MM_DD = False
