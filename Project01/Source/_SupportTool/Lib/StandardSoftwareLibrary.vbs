@@ -11,7 +11,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'version:       2015/03/03
+'version:       2015/03/06
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -770,6 +770,39 @@ Private Sub testMatchTextKeyWord
 End Sub
 
 '----------------------------------------
+'◆文字列置換
+'----------------------------------------
+
+'------------------------------
+'・日付文字列を削除する関数
+'------------------------------
+'   ・  [_YYYY-MM-DD_]や[YYYYMMDD]という文字列を
+'       元の文字列から削除する
+'------------------------------
+Public Function DeleteDateText(ByVal Value)
+    Dim Result: Result = Value
+    Dim RegExp: Set RegExp = CreateObject("VBScript.RegExp")
+    RegExp.Pattern = "_?\d{4}-?\d{1,2}-?\d{1,2}_?"
+    Do While RegExp.Test(Result)
+        Result = RegExp.Replace(Result, "")
+    Loop
+    'パターンに一致し続ける限りは置き換えを行う
+    DeleteDateText = Result
+End Function
+
+Private Sub testDeleteDateText
+    Call Check("ABCDEFG", DeleteDateText("2015-03-06_ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateText("ABCDEFG_2015-03-06"))
+    Call Check("ABCDEFG", DeleteDateText("2015-03-06_ABCDEFG_2015-03-06"))
+    Call Check("ABCDEFG", DeleteDateText("2015-03-06_ABC2015-03-06DEFG_2015-03-06"))
+    Call Check("ABCDEFG", DeleteDateText("ABC_2015-03-06_DEFG"))
+    Call Check("ABCDEFG", DeleteDateText("ABC_201503-06_DEFG"))
+    Call Check("ABCDEFG", DeleteDateText("ABC_20150306_DEFG"))
+    Call Check("ABCDEFG", DeleteDateText("ABC20150306DE20150306FG"))
+    Call WScript.Echo("Test Finish")
+End Sub
+
+'----------------------------------------
 '◆配列処理
 '----------------------------------------
 
@@ -951,6 +984,10 @@ End Function
 'カレントディレクトリパスと相対パスを指定する
 '------------------------------
 Public Function AbsoluteFilePath(ByVal BasePath, ByVal RelativePath)
+    AbsoluteFilePath = AbsolutePath(BasePath, RelativePath)
+End Function
+
+Public Function AbsolutePath(ByVal BasePath, ByVal RelativePath)
     Dim Result
     Do
         If fso.FolderExists(BasePath) = False Then
@@ -985,28 +1022,28 @@ Public Function AbsoluteFilePath(ByVal BasePath, ByVal RelativePath)
         Shell.CurrentDirectory =  CurDirBuffer
     
     Loop While False
-    AbsoluteFilePath = Result
+    AbsolutePath = Result
 End Function
 
-Sub testAbsoluteFilePath()
+Sub testAbsolutePath()
 
      '通常の相対パス指定
-    Call Check(LCase("C:\Windows\System32"), LCase(AbsoluteFilePath("C:\Windows", ".\System32")))
-    Call Check(LCase("C:\Windows\System32"), LCase(AbsoluteFilePath("C:\Program Files", "..\Windows\System32")))
+    Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Windows", ".\System32")))
+    Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Program Files", "..\Windows\System32")))
     
     'ピリオドではない相対パス指定
-    Call Check(LCase("C:\Windows\System32"), LCase(AbsoluteFilePath("C:\Windows", "System32")))
+    Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Windows", "System32")))
     
     'ドライブパス指定
-    Call Check(LCase("C:\Program Files"), LCase(AbsoluteFilePath("C:\Windows", "C:\Program Files")))
-    Call Check(LCase("C:\Windows\System32"), LCase(AbsoluteFilePath("C:\Program Files", "C:\Windows\System32")))
+    Call Check(LCase("C:\Program Files"), LCase(AbsolutePath("C:\Windows", "C:\Program Files")))
+    Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Program Files", "C:\Windows\System32")))
     
     'ネットワークパス指定
-    Call Check(LCase("\\127.0.0.1\C$"), LCase(AbsoluteFilePath("C:\Windows", "\\127.0.0.1\C$")))
+    Call Check(LCase("\\127.0.0.1\C$"), LCase(AbsolutePath("C:\Windows", "\\127.0.0.1\C$")))
 
-    Call Check(AbsoluteFilePath(ScriptFolderPath, ".\Test\TestFileFolderPathList"), _
+    Call Check(AbsolutePath(ScriptFolderPath, ".\Test\TestFileFolderPathList"), _
         ScriptFolderPath + "\Test\TestFileFolderPathList")
-    Call Check(AbsoluteFilePath(ScriptFolderPath, "..\Test\TestFileFolderPathList"), _
+    Call Check(AbsolutePath(ScriptFolderPath, "..\Test\TestFileFolderPathList"), _
         fso.GetParentFolderName(ScriptFolderPath) + "\Test\TestFileFolderPathList")
 
     MsgBox "Test OK"
@@ -1260,7 +1297,7 @@ End Function
 '----------------------------------------
 
 Sub testFileFolderPathList()
-    Dim Path: Path = AbsoluteFilePath(ScriptFolderPath, ".\Test\TestFileFolderPathList")
+    Dim Path: Path = AbsolutePath(ScriptFolderPath, ".\Test\TestFileFolderPathList")
     Dim PathList
 
     PathList = Replace(UCase(FolderPathListTopFolder(Path)), UCase(Path), "")
@@ -1412,6 +1449,46 @@ End Function
 '----------------------------------------
 
 '------------------------------
+'・ファイルフォルダ存在確認
+'------------------------------
+Public Function FileFolderExists(ByVal Path)
+    Dim Result: Result = False
+    If fso.FileExists(Path) _
+    Or fso.FolderExists(Path) Then
+        Result = True
+    End If
+    FileFolderExists = Result
+End Function
+
+'------------------------------
+'・ファイルフォルダの名前変更
+'------------------------------
+Public Sub RenameFileFolder(ByVal Path, ByVal NewName)
+    If fso.FileExists(Path) Then
+
+        Call fso.MoveFile( _
+            Path, _
+            PathCombine(Array( _
+                fso.GetParentFolderName(Path), _
+                NewName _
+            )) )
+
+    ElseIf fso.FolderExists(Path) Then
+
+        Call fso.MoveFolder( _
+            Path, _
+            PathCombine(Array( _
+                fso.GetParentFolderName(Path), _
+                NewName _
+            )) )
+    Else
+        Call Assert(False, _
+            "Error:RenameFileFolder:File/Folder not found.")
+    End If
+
+End Sub
+
+'------------------------------
 '◇Force/ReCrate
 '------------------------------
 
@@ -1442,16 +1519,16 @@ Public Sub ForceCreateFolder(ByVal FolderPath)
 End Sub
 
 Private Sub testForceCreateFolder
-    Call ForceDeleteFolder(AbsoluteFilePath(ScriptFolderPath, _
+    Call ForceDeleteFolder(AbsolutePath(ScriptFolderPath, _
         ".\Test\TestForceCreateFolder"))
 
-    Call ForceCreateFolder(AbsoluteFilePath(ScriptFolderPath, _
+    Call ForceCreateFolder(AbsolutePath(ScriptFolderPath, _
         ".\Test\TestForceCreateFolder\Test\Test"))
 
-    Call Check(True, fso.FolderExists( AbsoluteFilePath(ScriptFolderPath, _
+    Call Check(True, fso.FolderExists( AbsolutePath(ScriptFolderPath, _
         ".\Test\TestForceCreateFolder\Test\Test") ))
 
-    Call ForceDeleteFolder(AbsoluteFilePath(ScriptFolderPath, _
+    Call ForceDeleteFolder(AbsolutePath(ScriptFolderPath, _
         ".\Test\TestForceCreateFolder"))
 End Sub
 
@@ -1742,6 +1819,19 @@ On Error Resume Next
 End Sub
 
 '------------------------------
+'・MoveFile
+'------------------------------
+'   ・  fso.MoveFileの最終要素に"*.*"を指定すると、
+'       ファイルがない場合にエラーになるので
+'       それを無視するための関数
+'------------------------------
+Sub MoveFile(ByVal SourceFilePath, ByVal DestFilePath)
+On Error Resume Next
+    Call fso.MoveFile(SourceFilePath, DestFilePath)
+End Sub
+
+
+'------------------------------
 '・CopyFolder
 '------------------------------
 '   ・  fso.CopyFolderの最終要素に"*"を指定すると、
@@ -1753,6 +1843,17 @@ On Error Resume Next
     Call fso.CopyFolder(SourceFolderPath, DestFolderPath, True)
 End Sub
 
+'------------------------------
+'・MoveFolder
+'------------------------------
+'   ・  fso.MoveFolderの最終要素に"*"を指定すると、
+'       フォルダがない場合にエラーになるので
+'       それを無視するための関数
+'------------------------------
+Sub MoveFolder(ByVal SourceFolderPath, ByVal DestFolderPath)
+On Error Resume Next
+    Call fso.MoveFolder(SourceFolderPath, DestFolderPath)
+End Sub
 
 '------------------------------
 '・ファイル使用中かどうかを確認する
@@ -1785,6 +1886,27 @@ Function IsReadOnlyFile(FilePath)
         End If
     Loop While False
     IsReadOnlyFile = Result
+End Function
+
+
+'----------------------------------------
+'◆ファイルフォルダ日時
+'----------------------------------------
+
+'------------------------------
+'・ファイル/フォルダの最終更新日時を得る
+'------------------------------
+Public Function FileFolderDate_LastModified(ByVal Path)
+    Dim Result: Result = Now()
+    If fso.FileExists(Path) Then
+        Result = fso.GetFile(Path).DateLastModified
+    ElseIf fso.FolderExists(Path) Then
+        Result = fso.GetFolder(Path).DateLastModified
+    Else
+        Call Assert(False, _
+            "Error:FileFolderDate_LastModified:File/Folder not found.")
+    End If
+    FileFolderDate_LastModified = Result
 End Function
 
 
@@ -2479,7 +2601,7 @@ ByVal SourceFilePath, ByVal DestFilePath)
                     Dim LibPath: LibPath = Trim(Lines(I))
                     LibPath = ExcludeFirstStr(LibPath, "Call Include(""")
                     LibPath = ExcludeLastStr(LibPath, """)")
-                    LibPath = AbsoluteFilePath( _
+                    LibPath = AbsolutePath( _
                         fso.GetParentFolderName(SourceFilePath), _
                         LibPath)
                     Call Assert(fso.FileExists(LibPath), _
@@ -2609,4 +2731,10 @@ End Sub
 '◇ ver 2015/03/03
 '・ ForceCreateFolder/ForceDeleteFolder
 '   /ForceDeleteFile/ReCreateCopyFolder の待機時間を追加
+'◇ ver 2015/03/06
+'・ MoveFile/MoveFolderを追加
+'・ DeleteDateTextを追加
+'・ RenameFileFolder追加
+'・ FileFolderDate_LastModified追加
+'・ FileFolderExists追加
 '--------------------------------------------------
