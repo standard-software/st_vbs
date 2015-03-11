@@ -35,16 +35,25 @@ Sub Main
     '--------------------
     '・設定読込
 	'--------------------
-    Dim Library_Source_Path: Library_Source_Path = _
-        IniFile.ReadString("Option", "LibrarySourcePath01", "")
+    Dim LibrarySourceFilePath: LibrarySourceFilePath = _
+        IniFile.ReadString("Update_HereLib", "LibrarySourceFilePath", "")
+    If LibrarySourceFilePath = "" Then
+        WScript.Echo _
+            "設定が読み取れていません"
+        Exit Sub
+    End If
         
-	Dim Library_Dest_Path: Library_Dest_Path = _
-    	".\Lib\StandardSoftwareLibrary.vbs"
-        
+	Dim LibraryDestFilePath: LibraryDestFilePath = _
+        IniFile.ReadString("Update_HereLib", "LibraryDestFilePath", "")
+    If LibraryDestFilePath = "" Then
+        WScript.Echo _
+            "設定が読み取れていません"
+        Exit Sub
+    End If
     '--------------------
 
     Dim SourcePath: SourcePath = _
-        AbsoluteFilePath(ScriptFolderPath, Library_Source_Path)
+        AbsolutePath(ScriptFolderPath, LibrarySourceFilePath)
     If not fso.FileExists(SourcePath) Then
         WScript.Echo _
             "コピー元ファイルが見つかりません" + vbCrLF + _
@@ -53,9 +62,13 @@ Sub Main
     End If
 
     Dim DestPath: DestPath = _
-        AbsoluteFilePath(ScriptFolderPath, Library_Dest_Path)
-        
-    Call ForceCreateFolder(fso.GetParentFolderName(DestPath))
+        AbsolutePath(ScriptFolderPath, LibraryDestFilePath)
+    If not fso.FolderExists(fso.GetParentFolderName(DestPath)) Then
+        WScript.Echo _
+            "コピー先ファイルのフォルダが見つかりません" + vbCrLF + _
+            SourcePath
+        Exit Sub
+    End If
 
     Call fso.CopyFile(SourcePath, DestPath)
     MessageText = SourcePath + vbCrLf + _

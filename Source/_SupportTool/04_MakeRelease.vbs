@@ -35,23 +35,31 @@ Sub Main
     '------------------------------
     'ÅEê›íËì«çû
     '------------------------------
-    Dim Library_Source_Path: Library_Source_Path = _
-        IniFile.ReadString("Option", "LibrarySourcePath", "")
 
     Dim ProjectName: ProjectName = _
-        IniFile.ReadString("Option", "ProjectName", "")
+        IniFile.ReadString("Common", "ProjectName", "")
+    If ProjectName = "" Then
+        WScript.Echo _
+            "ê›íËÇ™ì«Ç›éÊÇÍÇƒÇ¢Ç‹ÇπÇÒ"
+        Exit Sub
+    End If
 
     Dim IgnoreFileFolderName: IgnoreFileFolderName = _
-        IniFile.ReadString("Option", "ReleaseIgnoreFileFolderName", "")
+        IniFile.ReadString("MakeRelease", "ReleaseIgnoreFileFolderName", "")
 
     Dim IncludeFileFolderPath: IncludeFileFolderPath = _
-        IniFile.ReadString("Option", "ReleaseIncludeFileFolderPath", "")
+        IniFile.ReadString("MakeRelease", "ReleaseIncludeFileFolderPath", "")
+    If IncludeFileFolderPath = "" Then
+        WScript.Echo _
+            "ê›íËÇ™ì«Ç›éÊÇÍÇƒÇ¢Ç‹ÇπÇÒ"
+        Exit Sub
+    End If
 
     Dim ScriptEncoderExePath: ScriptEncoderExePath = _
-        IniFile.ReadString("Option", "ScriptEncoderExePath", "")
+        IniFile.ReadString("MakeRelease", "ScriptEncoderExePath", "")
 
     Dim ScriptEncodeTargets: ScriptEncodeTargets = _
-        IniFile.ReadString("Option", "ScriptEncodeTargets", "")
+        IniFile.ReadString("MakeRelease", "ScriptEncodeTargets", "")
     '------------------------------
 
     Dim NowValue: NowValue = Now

@@ -36,13 +36,23 @@ Sub Main
     'ÅEê›íËì«çû
     '--------------------
     Dim ProjectName: ProjectName = _
-        IniFile.ReadString("Option", "ProjectName", "")
+        IniFile.ReadString("Common", "ProjectName", "")
+    If ProjectName = "" Then
+        WScript.Echo _
+            "ê›íËÇ™ì«Ç›éÊÇÍÇƒÇ¢Ç‹ÇπÇÒ"
+        Exit Sub
+    End If
 
     Dim InstallParentFolderPath: InstallParentFolderPath = _
-        IniFile.ReadString("Option", "InstallParentFolderPath", "")
+        IniFile.ReadString("ReleaseInstall", "InstallParentFolderPath", "")
+    If InstallParentFolderPath = "" Then
+        WScript.Echo _
+            "ê›íËÇ™ì«Ç›éÊÇÍÇƒÇ¢Ç‹ÇπÇÒ"
+        Exit Sub
+    End If
 
     Dim OverWriteIgnoreFiles: OverWriteIgnoreFiles = _
-        IniFile.ReadString("Option", "InstallOverWriteIgnoreFiles", "")
+        IniFile.ReadString("ReleaseInstall", "InstallOverWriteIgnoreFiles", "")
     '--------------------
 
     Dim NowValue: NowValue = Now

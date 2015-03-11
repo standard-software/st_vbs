@@ -36,7 +36,12 @@ Sub Main
     'ÅEê›íËì«çû
 	'--------------------
     Dim SupportTool_Source_Path: SupportTool_Source_Path = _
-        IniFile.ReadString("Option", "SupportToolSourcePath", "")
+        IniFile.ReadString("Update_SupportTool", "SupportToolSourcePath", "")
+    If SupportTool_Source_Path = "" Then
+        WScript.Echo _
+            "ê›íËÇ™ì«Ç›éÊÇÍÇƒÇ¢Ç‹ÇπÇÒ"
+        Exit Sub
+    End If
     '--------------------
 
     Dim SourceFolderPath: SourceFolderPath = _
@@ -65,7 +70,7 @@ Sub Main
         DestFolderPath, "*.vbs")
 
     Call CopyFolderIgnorePath( _
-        SourceFolderPath, DestFolderPath, "*.ini,Update_Lib-Here.vbs")
+        SourceFolderPath, DestFolderPath, "*.ini,Update_HereLib.vbs")
 
 
     MessageText = MessageText + _

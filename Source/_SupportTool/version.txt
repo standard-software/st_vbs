@@ -11,6 +11,9 @@
     Lib_Download_Here.vbs → Update_Project-Lib.vbs
 ◇2015/02/10
 ・  ライブラリファイルの複数指定対応
+◇2015/02/16
+・  04_MakeRelease.vbs を
+    ReleaseIgnoreFileFolderNameに対応した。
 ◇2015/02/23    ver 2.0.0
 ・  フォルダ構成変更
     Project01からSource内に移動
@@ -32,4 +35,14 @@
 ・  MakeRelease.vbsに機能追加
     リリース時にスクリプトエンコーダーで
     vbsからvbeへ変換する機能を追加
+◇2015/03/09    ver 2.4.0
+・  ファイル名変更
+        00_Update_HereLib.vbs
+        01_Update_SupportTool.vbs
+        02_Update_ProjectLib.vbs
+        03_SourceBackup.vbs
+        04_MakeRelease.vbs
+        05_ReleaseInstall.vbs
+・  SupportTool.iniの形式変更
+    項目が読み取れない場合のエラー処理を全体に追加
 

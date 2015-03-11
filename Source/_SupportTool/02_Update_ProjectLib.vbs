@@ -39,25 +39,36 @@ Sub Main
 
     'LibrarySourcePath01/02/03...というIniファイル項目の読み取り
     Dim I: I = 1
-    Do While IniFile.SectionIdentExists("Option", "LibrarySourcePath" + LongToStrDigitZero(I, 2))
-        LibrarySourceFilePathList = LibrarySourceFilePathList + _
-            IniFile.ReadString("Option", "LibrarySourcePath"  + LongToStrDigitZero(I, 2), "") + vbCrLf
+    Do While IniFile.SectionIdentExists("Update_ProjectLib", "LibrarySourceFilePath" + LongToStrDigitZero(I, 2))
+        LibrarySourceFilePathList = StringCombine(vbCrLf, Array(LibrarySourceFilePathList, _
+            IniFile.ReadString("Update_ProjectLib", "LibrarySourceFilePath"  + LongToStrDigitZero(I, 2), "")))
         I = I + 1
     Loop
-    LibrarySourceFilePathList = ExcludeLastStr(LibrarySourceFilePathList, vbCrLf)
+    If LibrarySourceFilePathList = "" Then
+        WScript.Echo _
+            "設定が読み取れていません"
+        Exit Sub
+    End If
 
     Dim ProjectName: ProjectName = _
-        IniFile.ReadString("Option", "ProjectName", "")
+        IniFile.ReadString("Common", "ProjectName", "")
+    If ProjectName = "" Then
+        WScript.Echo _
+            "設定が読み取れていません"
+        Exit Sub
+    End If
 
     Dim LibraryDestFolderPath: LibraryDestFolderPath = _
-        "..\" + _
-        ProjectName + _
-        "\Lib"
+        IniFile.ReadString("Update_ProjectLib", "LibraryDestFolderPath", "")
+    If LibraryDestFolderPath = "" Then
+        WScript.Echo _
+            "設定が読み取れていません"
+        Exit Sub
+    End If
     '--------------------
 
     Dim DestFolderPath: DestFolderPath = _
-        AbsoluteFilePath(ScriptFolderPath, LibraryDestFolderPath)
-
+        AbsolutePath(ScriptFolderPath, LibraryDestFolderPath)
     If not fso.FolderExists(DestFolderPath) Then
         WScript.Echo _
             "コピー先フォルダが見つかりません" + vbCrLF + _
@@ -66,20 +77,13 @@ Sub Main
     End If
 
     Dim FilePaths: FilePaths = Split(LibrarySourceFilePathList, vbCrLf)
-
-    If ArrayCount(FilePaths) = 0 Then
-        WScript.Echo _
-            "コピー先ファイルが見つかりません" + vbCrLF + _
-            LibrarySourceFilePathList
-        Exit Sub
-    End If
-
     Dim FilePath
     For I = 0 To ArrayCount(FilePaths) - 1
         FilePath = FilePaths(I)
 
         Dim SourcePath: SourcePath = _
-            AbsoluteFilePath(ScriptFolderPath, FilePath)
+            AbsolutePath(ScriptFolderPath, FilePath)
+
         If not fso.FileExists(SourcePath) Then
             WScript.Echo _
                 "コピー元ファイルが見つかりません" + vbCrLF + _
