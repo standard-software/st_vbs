@@ -11,7 +11,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'version:       2015/03/06
+'version:       2015/03/09
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -85,7 +85,9 @@ Public Sub test
 '    Call testExcludePathExt
 '    Call testChangeFileExt
 '    Call testPathCombine
-    Call testFileFolderPathList
+
+'    Call testFileFolderPathList
+    'テストフォルダが必要なので注意
 
 '    Call testShellCommandRunReturn
 '    Call testEnvironmentalVariables
@@ -98,7 +100,11 @@ Public Sub test
     Call testMatchText
     Call testMatchTextWildCard
     Call testMatchTextKeyWord
-    Call testForceCreateFolder
+    Call testMatchTextRegExp
+
+'    Call testForceCreateFolder
+    'テストフォルダを作成してしまうので注意
+
     Call testMaxValue
     Call testMinValue
     Call testIsLong
@@ -108,6 +114,8 @@ Public Sub test
     Call testArrayFunctions
 
     Call testProcessExists
+
+    Call testSplit
 
 Call MsgBox("StandardSoftwareLibrary_vbs Test Finish")
 End Sub
@@ -650,9 +658,9 @@ Private Sub testStringCombine()
     Call Check("\\test\temp\temp\temp\", StringCombine("\", Array("\\test\", "\temp\", "temp", "\temp\")))
 End Sub
 
-'----------------------------------------
-'◆文字列比較
-'----------------------------------------
+'------------------------------
+'◇文字列比較
+'------------------------------
 
 '------------------------------
 '・ワイルドカード検索
@@ -681,26 +689,30 @@ End Function
 '       含まれているかどうかで判定する
 '------------------------------
 Public Function MatchText(ByVal TargetText, ByVal SearchStrArray)
-    Call Assert(IsArray(SearchStrArray), "Error:MatchText:SearchStrArray is not Array.")
-    Dim Result: Result = False
+    MatchText = (0 <= IndexOfArray(TargetText, SearchStrArray))
+End Function
+
+Public Function IndexOfArray(ByVal TargetText, ByVal SearchStrArray)
+    Call Assert(IsArray(SearchStrArray), "Error:IndexOfArray:SearchStrArray is not Array.")
+    Dim Result: Result = -1
     Dim I
     For I = 0 To ArrayCount(SearchStrArray) - 1
         If IncludeStr(SearchStrArray(I), "*") _
         Or IncludeStr(SearchStrArray(I), "?")  Then
             'ワイルドカードマッチ
             If (LikeCompare(TargetText, SearchStrArray(I))) Then
-                Result = True
+                Result = I
                 Exit For
             End If
         Else
             'キーワードマッチ
             If (1 <= InStr(TargetText, SearchStrArray(I))) Then
-                Result = True
+                Result = I
                 Exit For
             End If
         End If
     Next
-    MatchText = Result
+    IndexOfArray = Result
 End Function
 
 Private Sub testMatchText
@@ -716,17 +728,21 @@ Private Sub testMatchText
 End Sub
 
 Public Function MatchTextWildCard(ByVal TargetText, ByVal SearchStrArray)
-    Call Assert(IsArray(SearchStrArray), "Error:MatchTextWildCard:SearchStrArray is not Array.")
-    Dim Result: Result = False
+    MatchTextWildCard = (0 <= IndexOfArrayWildCard(TargetText, SearchStrArray))
+End Function
+
+Public Function IndexOfArrayWildCard(ByVal TargetText, ByVal SearchStrArray)
+    Call Assert(IsArray(SearchStrArray), "Error:IndexOfArrayWildCard:SearchStrArray is not Array.")
+    Dim Result: Result = -1
     Dim I
     For I = 0 To ArrayCount(SearchStrArray) - 1
         'ワイルドカードマッチ
         If (LikeCompare(TargetText, SearchStrArray(I))) Then
-            Result = True
+            Result = I
             Exit For
         End If
     Next
-    MatchTextWildCard = Result
+    IndexOfArrayWildCard = Result
 End Function
 
 Private Sub testMatchTextWildCard
@@ -744,17 +760,21 @@ Private Sub testMatchTextWildCard
 End Sub
 
 Public Function MatchTextKeyWord(ByVal TargetText, ByVal SearchStrArray)
+    MatchTextKeyWord = (0 <= IndexOfArrayKeyWord(TargetText, SearchStrArray))
+End Function
+
+Public Function IndexOfArrayKeyWord(ByVal TargetText, ByVal SearchStrArray)
     Call Assert(IsArray(SearchStrArray), "Error:MatchTextKeyWord:SearchStrArray is not Array.")
-    Dim Result: Result = False
+    Dim Result: Result = -1
     Dim I
     For I = 0 To ArrayCount(SearchStrArray) - 1
         'キーワードマッチ
         If IncludeStr(TargetText, SearchStrArray(I)) Then
-            Result = True
+            Result = I
             Exit For
         End If
     Next
-    MatchTextKeyWord = Result
+    IndexOfArrayKeyWord = Result
 End Function
 
 Private Sub testMatchTextKeyWord
@@ -769,9 +789,50 @@ Private Sub testMatchTextKeyWord
     Call Check(True, MatchTextKeyWord("aaa.ini", Array("*.txt", "123", "a.i")))
 End Sub
 
-'----------------------------------------
-'◆文字列置換
-'----------------------------------------
+'------------------------------
+'・文字列一致を正規表現で確認する関数
+'------------------------------
+Public Function MatchTextRegExp(ByVal TargetText, ByVal SearchPatternArray)
+    MatchTextRegExp = (0 <= IndexOfArrayRegExp(TargetText, SearchPatternArray))
+End Function
+
+Public Function IndexOfArrayRegExp(ByVal TargetText, ByVal SearchPatternArray)
+    Call Assert(IsArray(SearchPatternArray), "Error:IndexOfArrayRegExp:SearchPatternArray is not Array.")
+    Dim RegExp: Set RegExp = CreateObject("VBScript.RegExp")
+    Dim Result: Result = -1
+    Dim I
+    For I = 0 To ArrayCount(SearchPatternArray) - 1
+        RegExp.Pattern = SearchPatternArray(I)
+        If RegExp.Test(TargetText) Then
+            Result = I
+            Exit For
+        End If
+    Next
+    IndexOfArrayRegExp = Result
+End Function
+
+Private Sub testMatchTextRegExp
+    Call Check(True, MatchTextRegExp("2015-03-07", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("20150307", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("_2015-03-07_", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("_20150307_", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?")))
+    Call Check(False, MatchTextRegExp("2015/03/07", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("2015/03/07", Array("_?\d{4}/?\d{1,2}/?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("20150307", Array("_?\d{4}/?\d{1,2}/?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("_2015/03/07_", Array("_?\d{4}/?\d{1,2}/?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("_20150307_", Array("_?\d{4}/?\d{1,2}/?\d{1,2}_?")))
+    Call Check(False, MatchTextRegExp("2015/03/07", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("2015-03-07", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?", "_?\d{4}/?\d{1,2}/?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("2015/03/07", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?", "_?\d{4}/?\d{1,2}/?\d{1,2}_?")))
+    Call Check(True, MatchTextRegExp("20150307", Array("_?\d{4}-?\d{1,2}-?\d{1,2}_?", "_?\d{4}/?\d{1,2}/?\d{1,2}_?")))
+    'Call MsgBox("testMatchRegExp")
+End Sub
+
+
+
+'------------------------------
+'◇文字列置換
+'------------------------------
 
 '------------------------------
 '・日付文字列を削除する関数
@@ -800,6 +861,21 @@ Private Sub testDeleteDateText
     Call Check("ABCDEFG", DeleteDateText("ABC_20150306_DEFG"))
     Call Check("ABCDEFG", DeleteDateText("ABC20150306DE20150306FG"))
     Call WScript.Echo("Test Finish")
+End Sub
+
+'------------------------------
+'◇文字列処理テスト
+'------------------------------
+Private Sub testSplit
+    Call Check(0, ArrayCount(Split("", "-")))
+    Call Check(1, ArrayCount(Split("aaa", "-")))
+    Call Check(2, ArrayCount(Split("aaa-", "-")))
+    Call Check(2, ArrayCount(Split("-aaa", "-")))
+    Call Check(2, ArrayCount(Split("a-aa", "-")))
+    Call Check(3, ArrayCount(Split("a-a-a", "-")))
+    Call Check(4, ArrayCount(Split("-a-a-a", "-")))
+    Call Check(4, ArrayCount(Split("a-a-a-", "-")))
+    Call Check(5, ArrayCount(Split("-a-a-a-", "-")))
 End Sub
 
 '----------------------------------------
@@ -2145,6 +2221,13 @@ Class IniFile
             IniDic.Exists(DictionaryKey(Section, Ident)) 
     End Function
 
+    Public Function SectionIdentDelete( _
+    ByVal Section, ByVal Ident)
+        If IniDic.Exists(DictionaryKey(Section, Ident)) Then
+            Call IniDic.Remove(DictionaryKey(Section, Ident))
+        End If
+    End Function
+
     Public Function ReadString( _
     ByVal Section, ByVal Ident, ByVal DefaultValue)
         Dim Result
@@ -2737,4 +2820,10 @@ End Sub
 '・ RenameFileFolder追加
 '・ FileFolderDate_LastModified追加
 '・ FileFolderExists追加
+'◇ ver 2015/03/07
+'・ MatchText/MatchTextWildCard/MatchTextKeyWordを
+'   リファクタリングしてIndexOfArrayを作成
+'・ MatchTextRegExpを追加
+'◇ ver 2015/03/09
+'・ IniFileクラスにSectionIdentDelete追加
 '--------------------------------------------------
