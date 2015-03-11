@@ -3,7 +3,7 @@
 '
 'ModuleName:    Project01.vbs
 '--------------------------------------------------
-'version        2015/02/04
+'version:       YYYY/MM/DD
 '--------------------------------------------------
 
 Option Explicit
@@ -11,9 +11,8 @@ Option Explicit
 '--------------------------------------------------
 '■Include Standard Software Library
 '--------------------------------------------------
-'FileNameには相対アドレスも指定可能
+'FileNameには相対アドレスを指定可能
 '--------------------------------------------------
-'Include ".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs"  
 Call Include(".\Lib\StandardSoftwareLibrary.vbs")
 
 Sub Include(ByVal FileName)

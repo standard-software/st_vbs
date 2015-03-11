@@ -1,0 +1,19 @@
+◇2015/02/04    ver 1.0.0
+・  作成
+◇2015/02/16    ver 1.1.0
+・  04_MakeRelease.vbs を
+    ReleaseIgnoreFileFolderNameに対応した。
+◇2015/02/23    ver 1.2.0
+・  _SupportToolを
+    ...\StandardSoftwareLibrary_vbs\Source\_SupportTool
+    に移動した。
+・  CreateNewProject.vbsを作成
+◇2015/03/09    ver 1.3.0
+・  フォルダ構成を変更した
+    CreateNewProject.vbsの修正。
+・  SupportToolに合わせて
+    Iniファイル構成を変更した
+◇2015/03/10    ver 1.3.1
+・  CreateNewProject.vbsの修正。
+    新規プロジェクトファイルのヘッダーに
+    プロジェクト名と現在日付を埋め込む処理の追加

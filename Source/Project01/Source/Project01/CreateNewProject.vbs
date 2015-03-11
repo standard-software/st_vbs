@@ -1,9 +1,9 @@
 '--------------------------------------------------
 'Standard Software Library For VBScript
 '
-'ModuleName:    Project01.vbs
+'ModuleName:    CreateNewProject.vbs.vbs
 '--------------------------------------------------
-'version        2015/02/04
+'version:       2015/03/10
 '--------------------------------------------------
 
 Option Explicit
@@ -11,9 +11,8 @@ Option Explicit
 '--------------------------------------------------
 '■Include Standard Software Library
 '--------------------------------------------------
-'FileNameには相対アドレスも指定可能
+'FileNameには相対アドレスを指定可能
 '--------------------------------------------------
-'Include ".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs"  
 Call Include(".\Lib\StandardSoftwareLibrary.vbs")
 
 Sub Include(ByVal FileName)
@@ -39,7 +38,7 @@ Do
     End If
 
     Dim NewProjectFolderPath: NewProjectFolderPath = _
-        AbsoluteFilePath(ScriptFolderPath, "..\..\..\..\" + NewProjectName)
+        AbsolutePath(ScriptFolderPath, "..\..\..\..\..\" + NewProjectName)
     If fso.FolderExists(NewProjectFolderPath) Then
         Call MsgBox("プロジェクト名は既に使われています。"+ vbCrLf + _
             "処理を終了します。")
@@ -49,7 +48,7 @@ Do
     'プロジェクトフォルダ一式コピー
     Call ForceCreateFolder(NewProjectFolderPath)
     Call CopyFolderIgnorePath( _
-        AbsoluteFilePath(ScriptFolderPath, "..\..\..\Project01\Source"), _
+        AbsolutePath(ScriptFolderPath, "..\..\..\Project01\Source"), _
         PathCombine(Array(NewProjectFolderPath, "Source")), _
         "CreateNewProject.vbs,SupportTool.ini")
 
@@ -61,16 +60,49 @@ Do
         PathCombine(Array(NewProjectFolderPath, "Source", "Project01")), _
         PathCombine(Array(NewProjectFolderPath, "Source", NewProjectName)))
 
+    '新規プロジェクトファイルのヘッダー加工
+    Dim VbsFilePath: VbsFilePath = PathCombine(Array( _
+        NewProjectFolderPath, "Source", NewProjectName, NewProjectName + ".vbs"))
+    Dim FileText: FileText = LoadTextFile(VbsFilePath, "SHIFT_JIS")
+    FileText = Replace(FileText, "Project01.vbs", NewProjectName + ".vbs")
+    FileText = Replace(FileText, "YYYY/MM/DD", FormatYYYY_MM_DD(Now, "/"))
+    Call SaveTextFile(FileText, VbsFilePath, "SHIFT_JIS")
+
+    'SupportToolフォルダコピー
+    Call CopyFolderIgnorePath( _
+        AbsolutePath(ScriptFolderPath, "..\..\..\_SupportTool"), _
+        PathCombine(Array(NewProjectFolderPath, "Source\_SupportTool")), _
+        "Update_HereLib.vbs")
+
     'Iniファイル設定
-    Call CopyFile( _
-        PathCombine(Array(ScriptFolderPath, "SupportTool.ini")), _
-        PathCombine(Array(NewProjectFolderPath, "Source", "_SupportTool", "SupportTool.ini")))
     Dim IniFilePath: IniFilePath = _
         PathCombine(Array(NewProjectFolderPath, "Source", "_SupportTool", "SupportTool.ini"))
     Dim IniFile: Set IniFile = New IniFile
     Call IniFile.Initialize(IniFilePath)
-    Call IniFile.WriteString( _
-        "Option", "ProjectName", NewProjectName)
+    Call IniFile.WriteString("Common", "ProjectName", NewProjectName)
+
+    Call IniFile.SectionIdentDelete("Update_HereLib", "LibrarySourceFilePath")
+    Call IniFile.SectionIdentDelete("Update_HereLib", "LibraryDestFilePath")
+
+    Call IniFile.WriteString("Update_ProjectLib", "LibrarySourceFilePath01", "..\..\..\StandardSoftwareLibrary_vbs\Source\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs")
+    Call IniFile.SectionIdentDelete("Update_ProjectLib", "LibrarySourceFilePath02")
+    Call IniFile.SectionIdentDelete("Update_ProjectLib", "LibrarySourceFilePath03")
+    Call IniFile.WriteString("Update_ProjectLib", "LibraryDestFolderPath", "..\" + NewProjectName + "\Lib")
+
+    Call IniFile.WriteString("Update_SupportTool", "SupportToolSourcePath", "..\..\..\StandardSoftwareLibrary_vbs\Source\_SupportTool")
+
+    Call IniFile.WriteString("SourceBackup", "BackupSourceFolderPaths", "..\..\Source")
+    Call IniFile.WriteString("SourceBackup", "BackupDestFolderPaths", "..\..\Backup\Source")
+    Call IniFile.WriteString("SourceBackup", "BackupFolderLastYYYY_MM_DD", "False")
+
+    Call IniFile.WriteString("MakeRelease", "ReleaseIgnoreFileFolderName", "")
+    Call IniFile.WriteString("MakeRelease", "ReleaseIncludeFileFolderPath", "..\..\version.txt")
+    Call IniFile.WriteString("MakeRelease", "ScriptEncoderExePath", "C:\Program Files\Windows Script Encoder\screnc.exe")
+    Call IniFile.WriteString("MakeRelease", "ScriptEncodeTargets", "..\" + NewProjectName + "\" + NewProjectName + ".vbs")
+
+    Call IniFile.WriteString("ReleaseInstall", "InstallParentFolderPath", "C:\Program Files")
+    Call IniFile.WriteString("ReleaseInstall", "InstallOverWriteIgnoreFiles", "*.ini")
+
     IniFile.Update
     Set IniFile = Nothing
 
