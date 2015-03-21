@@ -10,9 +10,8 @@ Option Explicit
 '--------------------------------------------------
 '■Include Standard Software Library
 '--------------------------------------------------
-'FileNameには相対アドレスも指定可能
+'FileNameには相対アドレスを指定可能
 '--------------------------------------------------
-'Call Include(".\Test\..\..\StandardSoftwareLibrary_vbs\StandardSoftwareLibrary.vbs")
 Call Include(".\StandardSoftwareLibrary.vbs")
 
 Sub Include(ByVal FileName)
