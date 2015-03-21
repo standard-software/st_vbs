@@ -65,9 +65,11 @@ Sub Main
     Dim NowValue: NowValue = Now
     Dim ReleaseFolderPath: ReleaseFolderPath = _
         PathCombine(Array( _
-            "..\..\\Release", _
+            "..\..\Release", _
             "Recent", _
             ProjectName))
+    ReleaseFolderPath = _
+        AbsoluteFilePath(ScriptFolderPath, ReleaseFolderPath)
 
     Dim SourceFolderPath: SourceFolderPath = _
         "..\..\Source\" + _
@@ -84,7 +86,7 @@ Sub Main
 
     'フォルダ再生成コピー
 '    Call ReCreateCopyFolder(SourceFolderPath, ReleaseFolderPath)
-    Call ReCreateFolder(fso.GetParentFolderName(ReleaseFolderPath))
+    Call RecreateFolder(fso.GetParentFolderName(ReleaseFolderPath))
     Call CopyFolderIgnorePath( _
         SourceFolderPath, ReleaseFolderPath, _
         IgnoreFileFolderName)
@@ -123,11 +125,11 @@ Sub Main
         Split(ScriptEncodeTargets, ",")
     If (1 <= ArrayCount(ScriptEncodeTargetArray)) Then
         If fso.FileExists(ScriptEncoderExePath) = False Then
-            MessageText = StringCombine(vbCrLf, Array( _
-                MessageText, _
-                "Worning:ScriptEncoder not found."))
+            MessageText = StringCombine(vbCrLf, Array(MessageText, _
+                "Warning:ScriptEncoder not found."))
         Else
             For I = 0 To ArrayCount(ScriptEncodeTargetArray) - 1
+            Do
                 ScriptEncodeTargetArray(I) = AbsoluteFilePath( _ 
                     ScriptFolderPath, ScriptEncodeTargetArray(I))
 
@@ -135,20 +137,29 @@ Sub Main
                 ScriptEncodeTargetArray(I) = Replace(ScriptEncodeTargetArray(I), _
                     SourceFolderPath, ReleaseFolderPath)
 
+                If fso.FileExists(ScriptEncodeTargetArray(I)) = False Then
+                    MessageText = StringCombine(vbCrLf, Array(MessageText, _
+                        "Warning:ScriptTarget not found."))
+                    Exit Do
+                End If
+
                 Call IncludeExpanded(ScriptEncodeTargetArray(I), ScriptEncodeTargetArray(I))
                 Call EncodeVBScriptFile( _
                     ScriptEncoderExePath, _
                     ScriptEncodeTargetArray(I), _
                     ChangeFileExt(ScriptEncodeTargetArray(I), ".vbe"))
+            Loop While False
             Next
-            For I = 0 To ArrayCount(ScriptEncodeTargetArray) - 1
-                Call ForceDeleteFile(ScriptEncodeTargetArray(I))
-                Call ForceDeleteFolder( _
-                    PathCombine(Array( _
-                    fso.GetParentFolderName(ScriptEncodeTargetArray(I)), _
-                    "Lib")) )
-                'vbsファイルとLibフォルダの削除
-            Next
+            If MessageText = "" Then
+                For I = 0 To ArrayCount(ScriptEncodeTargetArray) - 1
+                    Call ForceDeleteFile(ScriptEncodeTargetArray(I))
+                    Call ForceDeleteFolder( _
+                        PathCombine(Array( _
+                        fso.GetParentFolderName(ScriptEncodeTargetArray(I)), _
+                        "Lib")) )
+                    'vbsファイルとLibフォルダの削除
+                Next
+            End If
         End If
     End If
 

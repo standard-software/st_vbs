@@ -45,4 +45,9 @@
         05_ReleaseInstall.vbs
 ・  SupportTool.iniの形式変更
     項目が読み取れない場合のエラー処理を全体に追加
+◇2015/03/18    ver 2.5.0
+・  MakeRelease.vbs修正
+    Releaseフォルダの指定不具合を修正
+    VBE変換Ini設定にミスがあるときに警告を表示
+    Libフォルダの削除誤動作の防止
 
