@@ -8,7 +8,7 @@
 Option Explicit
 
 '--------------------------------------------------
-'Å°Include Standard Software Library
+'¬Å¬°Include Standard Software Library
 '--------------------------------------------------
 Sub Include(ByVal FileName)
     Dim fso: Set fso = WScript.CreateObject("Scripting.FileSystemObject") 
