@@ -1,9 +1,9 @@
 '--------------------------------------------------
-'Standard Software Library For VBScript
-'
+'st_vbs
+'--------------------------------------------------
 'ModuleName:    CreateNewProject.vbs.vbs
 '--------------------------------------------------
-'version:       2015/03/10
+'Version:       2015/07/24
 '--------------------------------------------------
 
 Option Explicit
@@ -11,18 +11,16 @@ Option Explicit
 '--------------------------------------------------
 '■Include Standard Software Library
 '--------------------------------------------------
-'FileNameには相対アドレスを指定可能
-'--------------------------------------------------
-Call Include(".\Lib\StandardSoftwareLibrary.vbs")
-
 Sub Include(ByVal FileName)
     Dim fso: Set fso = WScript.CreateObject("Scripting.FileSystemObject") 
     Dim Stream: Set Stream = fso.OpenTextFile( _
         fso.GetParentFolderName(WScript.ScriptFullName) _
         + "\" + FileName, 1)
-    ExecuteGlobal Stream.ReadAll() 
+    Call ExecuteGlobal(Stream.ReadAll())
     Call Stream.Close
 End Sub
+'--------------------------------------------------
+Call Include(".\Lib\st.vbs")
 '--------------------------------------------------
 
 Call Main
@@ -65,6 +63,7 @@ Do
         NewProjectFolderPath, "Source", NewProjectName, NewProjectName + ".vbs"))
     Dim FileText: FileText = LoadTextFile(VbsFilePath, "SHIFT_JIS")
     FileText = Replace(FileText, "Project01.vbs", NewProjectName + ".vbs")
+    FileText = Replace(FileText, "Project01", NewProjectName)
     FileText = Replace(FileText, "YYYY/MM/DD", FormatYYYY_MM_DD(Now, "/"))
     Call SaveTextFile(FileText, VbsFilePath, "SHIFT_JIS")
 
