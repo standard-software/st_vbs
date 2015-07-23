@@ -39,6 +39,9 @@ Sub Main
             "ê›íËÇ™ì«Ç›éÊÇÍÇƒÇ¢Ç‹ÇπÇÒ"
         Exit Sub
     End If
+
+    Dim SupportTool_IgnoreFile: SupportTool_IgnoreFile = _
+        IniFile.ReadString("Update_SupportTool", "SupportToolIgnoreFiles", "")
     '--------------------
 
     Dim SourceFolderPath: SourceFolderPath = _
@@ -67,8 +70,8 @@ Sub Main
         DestFolderPath, "*.vbs")
 
     Call CopyFolderIgnorePath( _
-        SourceFolderPath, DestFolderPath, "*.ini,Update_HereLib.vbs")
-
+        SourceFolderPath, DestFolderPath, _
+        StringCombine(",", Array("*.ini", "Update_HereLib.vbs", SupportTool_IgnoreFile)))
 
     MessageText = MessageText + _
         DestFolderPath + vbCrLf

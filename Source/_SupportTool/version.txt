@@ -50,7 +50,9 @@
     Releaseフォルダの指定不具合を修正
     VBE変換Ini設定にミスがあるときに警告を表示
     Libフォルダの削除誤動作の防止
-◇2015/07/24    ver 2.5.1
+◇2015/07/24    ver 2.6.0
 ・  StandardSoftwareLibrary.vbsからst.vbsへ
     名称変更対応
+・  01_Update_SupportTool.vbs 機能追加
+    更新除外設定対応
 
