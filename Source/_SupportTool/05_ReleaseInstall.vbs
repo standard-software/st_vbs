@@ -48,6 +48,12 @@ Sub Main
         Exit Sub
     End If
 
+    Dim InstallFolderName: InstallFolderName = _
+        IniFile.ReadString("ReleaseInstall", "InstallFolderName", "")
+
+    Dim IgnoreFiles: IgnoreFiles = _
+        IniFile.ReadString("ReleaseInstall", "InstallIgnoreFiles", "")
+
     Dim OverWriteIgnoreFiles: OverWriteIgnoreFiles = _
         IniFile.ReadString("ReleaseInstall", "InstallOverWriteIgnoreFiles", "")
     '--------------------
@@ -64,7 +70,7 @@ Sub Main
     Dim InstallFolderPath: InstallFolderPath = _
         PathCombine(Array( _
             InstallParentFolderPath, _
-            ProjectName))
+            IIF(InstallFolderName="", ProjectName, InstallFolderName)))
 
     If not fso.FolderExists(ReleaseFolderPath) Then
         WScript.Echo _
@@ -80,8 +86,9 @@ Sub Main
         Exit Sub
     End If
 
-    Call CopyFolderOverWriteIgnorePath( _
-        ReleaseFolderPath, InstallFolderPath, OverWriteIgnoreFiles)
+    Call CopyFolderIgnorePath( _
+        ReleaseFolderPath, InstallFolderPath, _
+        IgnoreFiles, OverWriteIgnoreFiles)
 
     MessageText = MessageText + _
         fso.GetFileName(InstallFolderPath) + vbCrLf

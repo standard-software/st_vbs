@@ -53,6 +53,9 @@
 ◇2015/07/24    ver 2.6.0
 ・  StandardSoftwareLibrary.vbsからst.vbsへ
     名称変更対応
-・  01_Update_SupportTool.vbs 機能追加
+・  01_Update_SupportTool.vbs
     更新除外設定対応
+・  05_ReleaseInstall.vbs
+    インストール時のフォルダ名変更機能追加
+    上書き除外に追加して、通常除外ファイル指定可能にした
 

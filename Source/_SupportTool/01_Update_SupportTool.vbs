@@ -71,7 +71,8 @@ Sub Main
 
     Call CopyFolderIgnorePath( _
         SourceFolderPath, DestFolderPath, _
-        StringCombine(",", Array("*.ini", "Update_HereLib.vbs", SupportTool_IgnoreFile)))
+        StringCombine(",", Array("*.ini", "Update_HereLib.vbs", SupportTool_IgnoreFile)), _
+        "")
 
     MessageText = MessageText + _
         DestFolderPath + vbCrLf

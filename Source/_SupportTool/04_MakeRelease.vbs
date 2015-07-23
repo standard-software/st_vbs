@@ -86,7 +86,7 @@ Sub Main
     Call RecreateFolder(fso.GetParentFolderName(ReleaseFolderPath))
     Call CopyFolderIgnorePath( _
         SourceFolderPath, ReleaseFolderPath, _
-        IgnoreFileFolderName)
+        IgnoreFileFolderName, "")
 
     MessageText = MessageText + _
         fso.GetFileName(SourceFolderPath) + vbCrLf

@@ -2150,29 +2150,9 @@ End Sub
 Public Sub CopyFolderOverWriteIgnorePath( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
 ByVal IgnorePathsStr)
-
-    Dim FileList: FileList = _
-        Split( _
-            FilePathListSubFolder(SourceFolderPath), vbCrLf)
-
-    Dim CopyDestFilePath
-    Dim I
-    For I = 0 To ArrayCount(FileList) - 1
-    Do
-        CopyDestFilePath = _
-            IncludeFirstStr( _
-                ExcludeFirstStr(FileList(I), SourceFolderPath), _
-                DestFolderPath)
-
-        Call CopyFileOverWriteIgnorePath( _
-            FileList(I), CopyDestFilePath, _
-            IgnorePathsStr)
-    Loop While False
-    Next
-End Sub
-
-Private Sub testCopyFolderOverWriteIgnorePath
-    'テスト記述はまだ途中
+    Call CopyFolderIgnorePath( _
+        SourceFolderPath, DestFilePath, _
+        "", IgnorePathsStr)
 End Sub
 
 '----------------------------------------
@@ -2182,7 +2162,7 @@ End Sub
 '----------------------------------------
 Public Sub CopyFolderIgnorePath( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
-ByVal IgnorePathsStr)
+ByVal IgnorePathsStr, ByVal OverWriteIgnorePathsStr)
 
     Dim FileList: FileList = _
         Split( _
@@ -2197,9 +2177,9 @@ ByVal IgnorePathsStr)
                 ExcludeFirstStr(FileList(I), SourceFolderPath), _
                 DestFolderPath)
 
-        Call CopyFileIgnorePath( _
+        Call CopyFileIgnorePathBase( _
             FileList(I), CopyDestFilePath, _
-            IgnorePathsStr)
+            IgnorePathsStr, OverWriteIgnorePathsStr)
     Loop While False
     Next
 End Sub
@@ -2208,27 +2188,27 @@ End Sub
 '・除外ファイル/フォルダを指定したファイルコピー関数
 '----------------------------------------
 '   ・  IgnorePathsStr はカンマ区切りで複数指定可能
-'   ・  該当するファイルはすべて無視するのと
-'       上書きだけ無視するものがある
+'   ・  該当するファイルを普通に無視するCopyFileIgnorePathと
+'       上書きだけ無視するCopyFileOverWriteIgnorePathがある
 '----------------------------------------
 Public Sub CopyFileIgnorePath( _
 ByVal SourceFilePath, ByVal DestFilePath, _
 ByVal IgnorePathsStr)
     Call CopyFileIgnorePathBase( _
-        SourceFilePath, DestFilePath, IgnorePathsStr, False)
+        SourceFilePath, DestFilePath, IgnorePathsStr, "")
 End Sub
 
 Public Sub CopyFileOverWriteIgnorePath( _
 ByVal SourceFilePath, ByVal DestFilePath, _
 ByVal IgnorePathsStr)
     Call CopyFileIgnorePathBase( _
-        SourceFilePath, DestFilePath, IgnorePathsStr, True)
+        SourceFilePath, DestFilePath, "", IgnorePathsStr)
 End Sub
 
 Private Sub CopyFileIgnorePathBase( _
 ByVal SourceFilePath, ByVal DestFilePath, _
 ByVal IgnorePathsStr, _
-ByVal OverWriteIgnoreMode)
+ByVal OverWriteIgnorePathsStr)
 
     Call Assert(fso.FileExists(SourceFilePath), _
         "Error:CopyFileIgnorePathBase:SourceFilePath is not exists")
@@ -2236,11 +2216,13 @@ ByVal OverWriteIgnoreMode)
         '除外ファイル
         If MatchText(LCase(SourceFilePath), _
             Split(LCase(IgnorePathsStr), ",")) Then
-            If OverWriteIgnoreMode Then
-                If fso.FileExists(DestFilePath) Then
-                    Exit Do
-                End If
-            Else
+            Exit Do
+        End IF
+
+        '上書き除外ファイル
+        If MatchText(LCase(SourceFilePath), _
+            Split(LCase(OverWriteIgnorePathsStr), ",")) Then
+            If fso.FileExists(DestFilePath) Then
                 Exit Do
             End If
         End IF
@@ -3470,4 +3452,7 @@ End Sub
 '・ StarndardSoftwareLibraryからst.vbsに名前変更
 '・ ライセンスをGPLからMITに変更した。
 '・ MoveFolderOverWriteを追加
+'◇ ver 2015/07/24
+'・ CopyFileIgnorePathBase/CopyFolderIgnorePathを変更
+'   通常無視と上書き無視を同時指定可能にした
 '--------------------------------------------------
