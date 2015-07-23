@@ -1,17 +1,19 @@
 '--------------------------------------------------
-'Standard Software Library For VBScript
-'
-'ModuleName:    Basic_Module
-'FileName:      StandardSoftwareLibrary.vbs
+'st.vbs
 '--------------------------------------------------
-'OpenSource:    https://github.com/standard-software/StandardSoftwareLibrary_vbs
-'License:       Dual License(GPL or Commercial License)
-'   URL:        https://github.com/standard-software/StandardSoftwareLibrary_vbs/blob/master/Document/Readme.txt
+'ModuleName:    Basic_Module
+'FileName:      st.vbs
+'--------------------------------------------------
+'Discription:   Standard Software Library For VBScript
+'--------------------------------------------------
+'OpenSource:    https://github.com/standard-software/st.vbs
+'License:       MIT License
+'   URL:        https://github.com/standard-software/st.vbs/blob/master/Document/Readme.txt
 'All Right Reserved:
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2015/03/18
+'Version:       2015/07/23
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -25,14 +27,10 @@
     '----------------------------------------
     '◆
     '----------------------------------------
-
-    '------------------------------
     '◇
-    '------------------------------
-
-    '------------------------------
+    '----------------------------------------
     '・
-    '------------------------------
+    '----------------------------------------
 
 Option Explicit
 
@@ -97,11 +95,16 @@ Public Sub test
 
 '    Call testFormatYYYYMMDD
 '    Call testFormatHHMMSS
+    Call testFormatDateTimeToString
+
 '    Call testIniFile
     Call testMatchText
     Call testMatchTextWildCard
     Call testMatchTextKeyWord
     Call testMatchTextRegExp
+
+    Call testDeleteDateText
+    Call testDeleteDateTimeText
 
 '    Call testForceCreateFolder
     'テストフォルダを作成してしまうので注意
@@ -132,17 +135,17 @@ End Sub
 '◆条件判断
 '----------------------------------------
 
-'------------------------------
-'◇Assert
-'------------------------------
-'Assert = 主張する
-'Err番号 vbObjectError + 1 は
-'ユーザー定義エラー番号の1
-'動作させると次のようにエラーダイアログが表示される
-'   エラー: Messageの内容
-'   コード: 80040001
-'   ソース: Sub Assert
-'------------------------------
+'----------------------------------------
+'・Assert
+'----------------------------------------
+'   ・  Assert = 主張する
+'   ・  Err番号 vbObjectError + 1 は
+'       ユーザー定義エラー番号の1
+'       動作させると次のようにエラーダイアログが表示される
+'       エラー: Messageの内容
+'       コード: 80040001
+'       ソース: Sub Assert
+'----------------------------------------
 Public Sub Assert(ByVal Value, ByVal Message)
     If Value = False Then
         Call Err.Raise(vbObjectError + 1, "Sub Assert", Message)
@@ -153,12 +156,12 @@ Private Sub testAssert()
     Call Assert(False, "テスト")
 End Sub
 
-'------------------------------
-'◇Check
-'------------------------------
-'2つの値を比較して一致しなければ
-'メッセージを出す関数
-'------------------------------
+'----------------------------------------
+'・Check
+'----------------------------------------
+'   ・  2つの値を比較して一致しなければ
+'       メッセージを出す関数
+'----------------------------------------
 Public Function Check(ByVal A, ByVal B)
     Check = (A = B)
     If Check = False Then
@@ -172,11 +175,11 @@ Private Sub testCheck()
     Call Check(10, 20)
 End Sub
 
-'------------------------------
-'◇OrValue
-'------------------------------
-'例：If OrValue(ValueA, Array(1, 2, 3)) Then
-'------------------------------
+'----------------------------------------
+'・OrValue
+'----------------------------------------
+'   ・例：If OrValue(ValueA, Array(1, 2, 3)) Then
+'----------------------------------------
 Public Function OrValue(ByVal Value, ByVal Values)
     Call Assert(IsArray(Values), "Error:OrValue:Values is not Array.")
 
@@ -195,9 +198,9 @@ Private Sub testOrValue()
     Call Check(False, OrValue(50, Array(20, 30, 40, 10)))
 End Sub
 
-'------------------------------
-'◇IIF
-'------------------------------
+'----------------------------------------
+'・IIF
+'----------------------------------------
 Public Function IIF(ByVal CompareValue, ByVal Result1, ByVal Result2)
     If CompareValue Then
         IIF = Result1
@@ -210,9 +213,9 @@ End Function
 '◆型、型変換
 '----------------------------------------
 
-'------------------------------
-'◇変数に値やオブジェクトをセットする
-'------------------------------
+'----------------------------------------
+'・変数に値やオブジェクトをセットする
+'----------------------------------------
 Public Sub SetValue(ByRef Variable, ByVal Value)
     If IsObject(Value) Then
         Set Variable = Value
@@ -228,14 +231,13 @@ Private Sub testSetValue
     Call Check(2, A)
 
     Dim B
-    'Set B = fso
     Call SetValue(B, fso)
     Call Check("test.txt", B.GetFileName("C:\temp\test.txt"))
 End Sub
 
-'------------------------------
-'◇Long
-'------------------------------
+'----------------------------------------
+'・Long
+'----------------------------------------
 Public Function IsLong(ByVal Value)
     Dim Result: Result = False
     If IsNumeric(Value) Then
@@ -285,14 +287,50 @@ Private Sub testStrToLongDefault()
 End Sub
 
 '----------------------------------------
+'◇Boolean
+'----------------------------------------
+Function StrToBoolean(ByVal Value, ByVal DefaultValue)
+    Call Assert(OrValue(DefaultValue, Array(True, False)), "Error:StrToBoolean")
+
+    Dim Result: Result = DefaultValue
+
+    If LCase(Value) = "true" Then
+        Result = True
+    ElseIf LCase(Value) = "false" Then
+        Result = False
+    Else
+        Result = DefaultValue
+    End If
+
+    StrToBoolean = Result
+End Function
+
+Sub CheckStrToBoolean
+    Call Check(True, StrToBoolean("True", False))
+    Call Check(True, StrToBoolean("true", False))
+    Call Check(True, StrToBoolean("TRUE", False))
+    Call Check(False, StrToBoolean("False", True))
+    Call Check(False, StrToBoolean("false", True))
+    Call Check(False, StrToBoolean("FALSE", True))
+
+    Call Check(True, StrToBoolean("", True))
+    Call Check(True, StrToBoolean("123", True))
+    Call Check(True, StrToBoolean("ABC", True))
+    Call Check(False, StrToBoolean("", False))
+    Call Check(False, StrToBoolean("123", False))
+    Call Check(False, StrToBoolean("ABC", False))
+
+End Sub
+
+'----------------------------------------
 '◆数値処理
 '----------------------------------------
 
-'------------------------------
-'◇最大値最小値
-'------------------------------
-'例：MsgBox MaxValue(Array(1, 2, 3))
-'------------------------------
+'----------------------------------------
+'・最大値最小値
+'----------------------------------------
+'   ・  例：MsgBox MaxValue(Array(1, 2, 3))
+'----------------------------------------
 Public Function MaxValue(ByVal Values)
     Call Assert(IsArray(Values), "Error:OrValue:Values is not Array.")
     Dim Result: Result = Empty
@@ -328,9 +366,9 @@ Private Sub testMinValue()
     Call Check(9, MinValue(Array(50, 20, 30, 100, 9)))
 End Sub
 
-'------------------------------
-'◇値範囲
-'------------------------------
+'----------------------------------------
+'・値範囲
+'----------------------------------------
 Public Function InRange(ByVal MinValue, ByVal Value, ByVal MaxValue)
     InRange = ((MinValue <= Value) And (Value <= MaxValue))
 End Function
@@ -339,24 +377,28 @@ End Function
 '◆文字列処理
 '----------------------------------------
 
-'------------------------------
-'◇Include
-'------------------------------
+'----------------------------------------
+'・IsInclude
+'----------------------------------------
 Public Function IsIncludeStr(ByVal Str, ByVal SubStr)
     IsIncludeStr = _
         (1 <= InStr(Str, SubStr))
 End Function
 
-'------------------------------
-'◇FirstStr Include/Exclude
-'------------------------------
+'----------------------------------------
+'◇First / Last
+'----------------------------------------
+
+'----------------------------------------
+'・FirstStr
+'----------------------------------------
 Public Function IsFirstStr(ByVal Str , ByVal SubStr)
     Dim Result: Result = False
     Do
         If SubStr = "" Then Exit Do
         If Str = "" Then Exit Do
         If Len(Str) < Len(SubStr) Then Exit Do
-        
+
         If InStr(1, Str, SubStr) = 1 Then
             Result = True
         End If
@@ -404,11 +446,11 @@ Private Sub testExcludeFirstStr()
     Call Check("12345", ExcludeFirstStr("12345", "23"))
 End Sub
 
-'------------------------------
-'◇FirstText Include/Exclude
-'------------------------------
-'・ 大小文字を区別せずに比較する
-'------------------------------
+'----------------------------------------
+'・FirstText
+'----------------------------------------
+'   ・  大小文字を区別せずに比較する
+'----------------------------------------
 Public Function IsFirstText(ByVal Str , ByVal SubStr)
     IsFirstText = IsFirstStr(LCase(Str), LCase(SubStr))
 End Function
@@ -429,16 +471,16 @@ Public Function ExcludeFirstText(ByVal Str, ByVal SubStr)
     End If
 End Function
 
-'------------------------------
-'◇LastStr Include/Exclude
-'------------------------------
+'----------------------------------------
+'・LastStr
+'----------------------------------------
 Public Function IsLastStr(ByVal Str, ByVal SubStr)
     Dim Result: Result = False
     Do
         If SubStr = "" Then Exit Do
         If Str = "" Then Exit Do
         If Len(Str) < Len(SubStr) Then Exit Do
-        
+
         If Right(Str, Len(SubStr)) = SubStr Then
             Result = True
         End If
@@ -486,11 +528,11 @@ Private Sub testExcludeLastStr()
     Call Check("12345", ExcludeLastStr("12345", "34"))
 End Sub
 
-'------------------------------
-'◇LastText Include/Exclude
-'------------------------------
-'・ 大小文字を区別せずに比較する
-'------------------------------
+'----------------------------------------
+'・LastText
+'----------------------------------------
+'   ・  大小文字を区別せずに比較する
+'----------------------------------------
 Public Function IsLastText(ByVal Str, ByVal SubStr)
     IsLastText = IsLastStr(LCase(Str), LCase(SubStr))
 End Function
@@ -511,9 +553,9 @@ Public Function ExcludeLastText(ByVal Str, ByVal SubStr)
     End If
 End Function
 
-'------------------------------
-'◇BothStr  Include/Exclude
-'------------------------------
+'----------------------------------------
+'・BothStr
+'----------------------------------------
 Public Function IncludeBothEndsStr(ByVal Str, ByVal SubStr)
     IncludeBothEndsStr = _
         IncludeFirstStr(IncludeLastStr(Str, SubStr), SubStr)
@@ -524,11 +566,11 @@ Public Function ExcludeBothEndsStr(ByVal Str, ByVal SubStr)
         ExcludeFirstStr(ExcludeLastStr(Str, SubStr), SubStr)
 End Function
 
-'------------------------------
-'◇BothText  Include/Exclude
-'------------------------------
-'・ 大小文字を区別せずに比較する
-'------------------------------
+'----------------------------------------
+'・BothText
+'----------------------------------------
+'   ・  大小文字を区別せずに比較する
+'----------------------------------------
 Public Function IncludeBothEndsText(ByVal Str, ByVal SubStr)
     IncludeBothEndsText = _
         IncludeFirstText(IncludeLastText(Str, SubStr), SubStr)
@@ -539,13 +581,9 @@ Public Function ExcludeBothEndsText(ByVal Str, ByVal SubStr)
         ExcludeFirstText(ExcludeLastText(Str, SubStr), SubStr)
 End Function
 
-'------------------------------
-'◇First/Last Delimiter
-'------------------------------
-
-'------------------------------
-'◇FirstStrFirstDelim
-'------------------------------
+'----------------------------------------
+'・FirstStrFirst/LastDelim
+'----------------------------------------
 Public Function FirstStrFirstDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
     Dim Index: Index = InStr(Value, Delimiter)
@@ -564,9 +602,13 @@ Private Sub testFirstStrFirstDelim
     Call Check("", FirstStrFirstDelim("123ttt456", ","))
 End Sub
 
-'------------------------------
-'◇FirstStrLastDelim
-'------------------------------
+'----------------------------------------
+'◇First / Last Delim
+'----------------------------------------
+
+'----------------------------------------
+'・FirstStrLastDelim
+'----------------------------------------
 Public Function FirstStrLastDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
     Dim Index: Index = InStrRev(Value, Delimiter)
@@ -585,9 +627,9 @@ Private Sub testFirstStrLastDelim
     Call Check("", FirstStrLastDelim("123ttt456", ","))
 End Sub
 
-'------------------------------
-'◇LastStrFirstDelim
-'------------------------------
+'----------------------------------------
+'・LastStrFirstDelim
+'----------------------------------------
 Public Function LastStrFirstDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
     Dim Index: Index = InStr(Value, Delimiter)
@@ -606,9 +648,9 @@ Private Sub testLastStrFirstDelim
     Call Check("", LastStrFirstDelim("123ttt456", ","))
 End Sub
 
-'------------------------------
-'◇LastStrLastDelim
-'------------------------------
+'----------------------------------------
+'・LastStrLastDelim
+'----------------------------------------
 Public Function LastStrLastDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
     Dim Index: Index = InStrRev(Value, Delimiter)
@@ -627,9 +669,10 @@ Private Sub testLastStrLastDelim
     Call Check("", LastStrLastDelim("123ttt456", ","))
 End Sub
 
-'------------------------------
+'----------------------------------------
 '◇Trim
-'------------------------------
+'----------------------------------------
+
 Public Function TrimFirstStrs(ByVal Str, ByVal TrimStrs)
     Call Assert(IsArray(TrimStrs), "Error:TrimFirstStrs:TrimStrs is not Array.")
     Dim Result: Result = Str
@@ -673,14 +716,18 @@ Public Function TrimBothEndsStrs(ByVal Str, ByVal TrimStrs)
         TrimFirstStrs(TrimLastStrs(Str, TrimStrs), TrimStrs)
 End Function
 
-'------------------------------
+'----------------------------------------
 '◇文字列結合
-'------------------------------
-'・ 少なくとも1つのDelimiterが間に入って接続される。
-'・ Delimiterが結合の両端に付属する場合も1つになる。
-'・ 2連続で結合の両端にある場合は1つが削除される
-'   (テストでの動作参照)
-'------------------------------
+'----------------------------------------
+
+'----------------------------------------
+'・文字列結合
+'----------------------------------------
+'   ・  少なくとも1つのDelimiterが間に入って接続される。
+'   ・  Delimiterが結合の両端に付属する場合も1つになる。
+'   ・  2連続で結合の両端にある場合は1つが削除される
+'       (テストでの動作参照)
+'----------------------------------------
 Public Function StringCombine(ByVal Delimiter, ByVal Values)
     Call Assert(IsArray(Values), "Error:StringCombine:Values is not Array.")
     Dim Result: Result = ""
@@ -760,17 +807,18 @@ Private Sub testStringCombine()
     Call Check("\\test\temp\temp\temp\", StringCombine("\", Array("\\test\", "\temp\", "temp", "\temp\")))
 End Sub
 
-'------------------------------
-'◇文字列比較
-'------------------------------
 
-'------------------------------
-'◇ワイルドカード検索
-'------------------------------
-'・ VBのLike演算子と似た文字列比較
-'・ 厳密には正規表現を利用しているので
-'   正規表現文字が含まれていると誤動作する
-'------------------------------
+'----------------------------------------
+'◇文字列比較
+'----------------------------------------
+
+'----------------------------------------
+'・ワイルドカード検索
+'----------------------------------------
+'   ・  VBのLike演算子と似た文字列比較
+'   ・  厳密には正規表現を利用しているので
+'       正規表現文字が含まれていると誤動作する
+'----------------------------------------
 Public Function LikeCompare(ByVal TargetText, ByVal WildCard)
     Dim Result: Result = False
     Dim RegExp: Set RegExp = CreateObject("VBScript.RegExp")
@@ -782,13 +830,13 @@ Public Function LikeCompare(ByVal TargetText, ByVal WildCard)
     LikeCompare = Result
 End Function
 
-'------------------------------
-'◇文字列一致を確認する関数
-'------------------------------
-'・ 部分文字列(キーワード)かワイルドカードで一致確認する
-'・ ワイルドカード指定かどうかは[*]か[?]が
-'   含まれているかどうかで判定する
-'------------------------------
+'----------------------------------------
+'・文字列一致を確認する関数
+'----------------------------------------
+'   ・  部分文字列(キーワード)かワイルドカードで一致確認する
+'   ・  ワイルドカード指定かどうかは[*]か[?]が
+'       含まれているかどうかで判定する
+'----------------------------------------
 Public Function MatchText(ByVal TargetText, ByVal SearchStrArray)
     MatchText = (0 <= IndexOfArray(TargetText, SearchStrArray))
 End Function
@@ -890,9 +938,9 @@ Private Sub testMatchTextKeyWord
     Call Check(True, MatchTextKeyWord("aaa.ini", Array("*.txt", "123", "a.i")))
 End Sub
 
-'------------------------------
-'◇文字列一致を正規表現で確認する関数
-'------------------------------
+'----------------------------------------
+'・文字列一致を正規表現で確認する関数
+'----------------------------------------
 Public Function MatchTextRegExp(ByVal TargetText, ByVal SearchPatternArray)
     MatchTextRegExp = (0 <= IndexOfArrayRegExp(TargetText, SearchPatternArray))
 End Function
@@ -930,43 +978,114 @@ Private Sub testMatchTextRegExp
 End Sub
 
 
-
-'------------------------------
+'----------------------------------------
 '◇文字列置換
-'------------------------------
+'----------------------------------------
 
-'------------------------------
-'◇日付文字列を削除する関数
-'------------------------------
-'・ [_YYYY-MM-DD_]や[YYYYMMDD]という文字列を
-'   元の文字列から削除する
-'------------------------------
-Public Function DeleteDateText(ByVal Value)
+'----------------------------------------
+'・正規表現に一致するものを削除する関数
+'----------------------------------------
+Public Function DeleteRegText(ByVal Value, ByVal Pattern)
     Dim Result: Result = Value
     Dim RegExp: Set RegExp = CreateObject("VBScript.RegExp")
-    RegExp.Pattern = "_?\d{4}-?\d{1,2}-?\d{1,2}_?"
+    RegExp.Pattern = Pattern
     Do While RegExp.Test(Result)
         Result = RegExp.Replace(Result, "")
     Loop
     'パターンに一致し続ける限りは置き換えを行う
-    DeleteDateText = Result
+    DeleteRegText = Result
+End Function
+
+'----------------------------------------
+'・日付文字列を削除する関数
+'----------------------------------------
+'   ・  [_YYYY-MM-DD_]や[YYYYMMDD]という文字列を
+'       元の文字列から削除する
+'----------------------------------------
+Public Function DeleteDateText(ByVal Value)
+'    DeleteDateText = DeleteRegText(Value, _
+'        "_?\d{4}-?\d{1,2}-?\d{1,2}_?")
+    DeleteDateText = DeleteRegText(Value, _
+        "(^\d{4}-\d{1,2}-\d{1,2}_?|" + _
+        "^\d{4}\d{2}\d{2}_?|" + _
+        "_?\d{4}-\d{1,2}-\d{1,2}$|" + _
+        "_?\d{4}\d{2}\d{2}$)")
 End Function
 
 Private Sub testDeleteDateText
     Call Check("ABCDEFG", DeleteDateText("2015-03-06_ABCDEFG"))
     Call Check("ABCDEFG", DeleteDateText("ABCDEFG_2015-03-06"))
     Call Check("ABCDEFG", DeleteDateText("2015-03-06_ABCDEFG_2015-03-06"))
-    Call Check("ABCDEFG", DeleteDateText("2015-03-06_ABC2015-03-06DEFG_2015-03-06"))
-    Call Check("ABCDEFG", DeleteDateText("ABC_2015-03-06_DEFG"))
-    Call Check("ABCDEFG", DeleteDateText("ABC_201503-06_DEFG"))
-    Call Check("ABCDEFG", DeleteDateText("ABC_20150306_DEFG"))
-    Call Check("ABCDEFG", DeleteDateText("ABC20150306DE20150306FG"))
-    Call WScript.Echo("Test Finish")
+
+    Call Check("ABCDEFG", DeleteDateText("2015-03-06ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateText("ABCDEFG2015-03-06"))
+    Call Check("ABCDEFG", DeleteDateText("2015-03-06ABCDEFG2015-03-06"))
+
+    Call Check("ABCDEFG", DeleteDateText("20150306_ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateText("ABCDEFG_20150306"))
+    Call Check("ABCDEFG", DeleteDateText("20150306_ABCDEFG_20150306"))
+
+    Call Check("ABCDEFG", DeleteDateText("20150306ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateText("ABCDEFG20150306"))
+    Call Check("ABCDEFG", DeleteDateText("20150306ABCDEFG20150306"))
+
+    'Call WScript.Echo("Test Finish")
 End Sub
 
-'------------------------------
-'◇文字列処理テスト
-'------------------------------
+'----------------------------------------
+'・日付時刻文字列を削除する関数
+'----------------------------------------
+'   ・  [_YYYY-MM-DD_HH-MM-DD_]や[YYYYMMDDHHMMDD]という文字列を
+'       元の文字列から削除する
+'----------------------------------------
+Public Function DeleteDateTimeText(ByVal Value)
+'    DeleteDateTimeText = DeleteRegText(Value, _
+'        "_?\d{4}-?\d{1,2}-?\d{1,2}_?-?\d{1,2}-?\d{1,2}-?\d{1,2}_?")
+    DeleteDateTimeText = DeleteRegText(Value, _
+        "(^\d{4}-\d{1,2}-\d{1,2}_\d{1,2}-\d{1,2}-\d{1,2}_?|" + _
+        "^\d{4}\d{2}\d{2}(-|_)?\d{2}\d{2}\d{2}_?|" + _
+        "_?\d{4}-\d{1,2}-\d{1,2}_\d{1,2}-\d{1,2}-\d{1,2}$|" + _
+        "_?\d{4}\d{2}\d{2}(-|_)?\d{2}\d{2}\d{2})")
+End Function
+
+Private Sub testDeleteDateTimeText
+    Call Check("ABCDEFG", DeleteDateTimeText("2015-03-06_22-25-57_ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateTimeText("ABCDEFG_2015-03-06_22-25-57"))
+    Call Check("ABCDEFG", DeleteDateTimeText("2015-03-06_22-25-57_ABCDEFG_2015-03-06_22-25-57"))
+
+    Call Check("ABCDEFG", DeleteDateTimeText("2015-03-06_22-25-57ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateTimeText("ABCDEFG2015-03-06_22-25-57"))
+    Call Check("ABCDEFG", DeleteDateTimeText("2015-03-06_22-25-57ABCDEFG2015-03-06_22-25-57"))
+
+    Call Check("ABCDEFG", DeleteDateTimeText("20150306_222557_ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateTimeText("ABCDEFG_20150306_222557"))
+    Call Check("ABCDEFG", DeleteDateTimeText("20150306_222557_ABCDEFG_20150306_222557"))
+
+    Call Check("ABCDEFG", DeleteDateTimeText("20150306-222557_ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateTimeText("ABCDEFG_20150306-222557"))
+    Call Check("ABCDEFG", DeleteDateTimeText("20150306-222557_ABCDEFG_20150306-222557"))
+
+    Call Check("ABCDEFG", DeleteDateTimeText("20150306222557ABCDEFG"))
+    Call Check("ABCDEFG", DeleteDateTimeText("ABCDEFG20150306222557"))
+    Call Check("ABCDEFG", DeleteDateTimeText("20150306222557ABCDEFG20150306222557"))
+
+
+'    Call Check("ABCDEFG", DeleteDateTimeText("2015-03-06-22-25-57_ABC2015-03-06_22-25-57DEFG_2015-03-06-22-25-57"))
+'    Call Check("ABCDEFG", DeleteDateTimeText("ABC_2015-03-06_22-25-57_DEFG"))
+'    Call Check("ABCDEFG", DeleteDateTimeText("ABC_201503-06-222557_DEFG"))
+'    Call Check("ABCDEFG", DeleteDateTimeText("ABC_20150306222557_DEFG"))
+'    Call Check("ABCDEFG", DeleteDateTimeText("ABC2015030622-25-57DE20150306222557FG"))
+    'Call WScript.Echo("Test Finish")
+End Sub
+
+
+'----------------------------------------
+'◇標準文字列関数動作確認テスト
+'----------------------------------------
+
+'----------------------------------------
+'・Split
+'----------------------------------------
 Private Sub testSplit
     Call Check(0, ArrayCount(Split("", "-")))
     Call Check(1, ArrayCount(Split("aaa", "-")))
@@ -985,14 +1104,14 @@ End Sub
 'VBScriptは
 '   Dim A(3 To 5)
 '   ReDim B(4 To 6)
-'というような宣言ができなく
-'LBoundは常に0だと考えて処理を実装することにする
+'というような宣言ができないので
+'LBoundは常に0だと考えて処理を実装する
 '例外はあるかもしれないが不明
 '----------------------------------------
 
-'------------------------------
-'◇配列の要素数を求める関数
-'------------------------------
+'----------------------------------------
+'・配列の要素数を求める関数
+'----------------------------------------
 Public Function ArrayCount(ByVal ArrayValue)
     Call Assert(IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array.")
     ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
@@ -1007,14 +1126,14 @@ Private Sub testArrayCount
     Call Check(5, ArrayCount(A))
 End Sub
 
-'------------------------------
-'◇配列の要素を追加する
-'------------------------------
-'・ オブジェクト値にも対応
-'------------------------------
+'----------------------------------------
+'・配列の要素を追加する
+'----------------------------------------
+'   ・  オブジェクト値にも対応
+'----------------------------------------
 Sub ArrayAdd(ByRef ArrayValue, ByVal Value)
     Call Assert(IsArray(ArrayValue), "Error:ArrayAdd:ArrayValue is not Array.")
-    
+
     ReDim Preserve ArrayValue(ArrayCount(ArrayValue))
     Call SetValue(ArrayValue(UBound(ArrayValue)), Value)
 End Sub
@@ -1036,11 +1155,11 @@ Private Sub testArrayAdd
     Call Check("test.txt", B(3).GetFileName("C:\temp\test.txt"))
 End Sub
 
-'------------------------------
-'◇配列の要素を挿入する
-'------------------------------
-'・ オブジェクト値にも対応
-'------------------------------
+'----------------------------------------
+'・配列の要素を挿入する
+'----------------------------------------
+'   ・  オブジェクト値にも対応
+'----------------------------------------
 Sub ArrayInsert(ByRef ArrayValue, ByVal Index, ByVal Value)
     Call Assert(IsArray(ArrayValue), "Error:ArrayInsert:ArrayValue is not Array.")
     Call Assert(InRange(LBound(ArrayValue), Index, UBound(ArrayValue)), _
@@ -1074,11 +1193,11 @@ Private Sub testArrayInsert
     Call Check("test.txt", B(1).GetFileName("C:\temp\test.txt"))
 End Sub
 
-'------------------------------
-'◇配列の要素を削除する
-'------------------------------
-'・ オブジェクト値にも対応
-'------------------------------
+'----------------------------------------
+'・配列の要素を削除する
+'----------------------------------------
+'   ・  オブジェクト値にも対応
+'----------------------------------------
 Sub ArrayDelete(ByRef ArrayValue, ByVal Index)
     Call Assert(IsArray(ArrayValue), "Error:ArrayDelete:ArrayValue is not Array.")
     Call Assert(InRange(LBound(ArrayValue), Index, UBound(ArrayValue)), _
@@ -1110,9 +1229,9 @@ Private Sub testArrayDelete
     Call Check("test.txt", B(1).GetFileName("C:\temp\test.txt"))
 End Sub
 
-'------------------------------
-'◇配列関数のテスト
-'------------------------------
+'----------------------------------------
+'・配列関数のテスト
+'----------------------------------------
 Sub testArrayFunctions
     Dim A
     A = Array("A", "B", "C")
@@ -1139,9 +1258,9 @@ Sub testArrayFunctions
     Call Check("1 A B 2 C", ArrayToString(A, " "))
 End Sub
 
-'------------------------------
-'◇配列を文字列にして単純に結合する関数
-'------------------------------
+'----------------------------------------
+'・配列を文字列にして単純に結合する関数
+'----------------------------------------
 Function ArrayToString(ByRef ArrayValue, ByVal Delimiter)
     Call Assert(IsArray(ArrayValue), "配列ではありません")
     Dim Result: Result = ""
@@ -1153,9 +1272,9 @@ Function ArrayToString(ByRef ArrayValue, ByVal Delimiter)
     ArrayToString = Result
 End Function
 
-'------------------------------
-'◇配列同士を結合する関数
-'------------------------------
+'----------------------------------------
+'・配列同士を結合する関数
+'----------------------------------------
 Sub ArrayAddArray(ByRef ArrayValue, ByVal AddArrayValue)
     Call Assert(IsArray(ArrayValue), "Error:ArrayAddArray:ArrayValue is not array.")
     Call Assert(IsArray(AddArrayValue), "Error:ArrayAddArray:AddArrayValue is not array.")
@@ -1171,9 +1290,9 @@ End Sub
 '◆日付時刻処理
 '----------------------------------------
 
-'------------------------------
-'◇日付書式
-'------------------------------
+'----------------------------------------
+'・日付書式
+'----------------------------------------
 Public Function FormatYYYYMMDD(ByVal DateValue)
     FormatYYYYMMDD = FormatYYYY_MM_DD(DateValue, "")
 End Function
@@ -1198,9 +1317,9 @@ Public Function FormatYYYY_MM_DD(ByVal DateValue, ByVal Delimiter)
     FormatYYYY_MM_DD = Result
 End Function
 
-'------------------------------
-'◇時刻書式
-'------------------------------
+'----------------------------------------
+'・時刻書式
+'----------------------------------------
 Public Function FormatHHMMSS(ByVal TimeValue)
     FormatHHMMSS = FormatHH_MM_SS(TimeValue, "")
 End Function
@@ -1213,7 +1332,7 @@ End Sub
 Public Function FormatHH_MM_SS(ByVal TimeValue, ByVal Delimiter)
     Dim Result: Result = ""
     Do
-        If IsDate(TimeValue) = False Then Exit Do 
+        If IsDate(TimeValue) = False Then Exit Do
 
         Result = _
             Right("0" & Hour(TimeValue) , 2) & _
@@ -1225,24 +1344,184 @@ Public Function FormatHH_MM_SS(ByVal TimeValue, ByVal Delimiter)
     FormatHH_MM_SS = Result
 End Function
 
-'------------------------------
-'◇日付時刻書式
-'------------------------------
+'----------------------------------------
+'・日付時刻書式
+'----------------------------------------
 Public Function FormatYYYYMMDDHHMMSS(ByVal DateTimeValue)
     FormatYYYYMMDDHHMMSS = _
         FormatYYYYMMDD(DateTimeValue) + _
         FormatHHMMSS(DateTimeValue)
 End Function
 
+'----------------------------------------
+'◇書式指定
+'----------------------------------------
+'Const vbSunday = 1
+'Const vbMonday = 2
+'Const vbTuesday = 3
+'Const vbWednesday = 4
+'Const vbThursday = 5
+'Const vbFriday = 6
+'Const vbSaturday = 7
+
+Public Function WeekDayJapaneseShort(ByVal DateValue)
+    Dim Result: Result = ""
+    Do
+        If IsDate(DateValue) = False Then Exit Do
+
+        Select Case Weekday(DateValue)
+        Case vbSunday:      Result = "日"
+        Case vbMonday:      Result = "月"
+        Case vbTuesday:     Result = "火"
+        Case vbWednesday:   Result = "水"
+        Case vbThursday:    Result = "木"
+        Case vbFriday:      Result = "金"
+        Case vbSaturday:    Result = "土"
+        End Select
+    Loop While False
+    WeekDayJapaneseShort = Result
+End Function
+
+Public Function WeekDayJapaneseLong(ByVal DateValue)
+    Dim Result: Result = ""
+    Do
+        If IsDate(DateValue) = False Then Exit Do
+        Result = WeekDayJapaneseShort(DateValue) + "曜日"
+    Loop While False
+    WeekDayJapaneseLong = Result
+End Function
+
+Public Function WeekDayEnglishShort(ByVal DateValue)
+    Dim Result: Result = ""
+    Do
+        If IsDate(DateValue) = False Then Exit Do
+
+        Select Case Weekday(DateValue)
+        Case vbSunday:      Result = "Sun"
+        Case vbMonday:      Result = "Mon"
+        Case vbTuesday:     Result = "Tue"
+        Case vbWednesday:   Result = "Wed"
+        Case vbThursday:    Result = "Thu"
+        Case vbFriday:      Result = "Fri"
+        Case vbSaturday:    Result = "Sat"
+        End Select
+    Loop While False
+    WeekDayEnglishShort = Result
+End Function
+
+Public Function WeekDayEnglishLong(ByVal DateValue)
+    Dim Result: Result = ""
+    Do
+        If IsDate(DateValue) = False Then Exit Do
+
+        Select Case Weekday(DateValue)
+        Case vbSunday:      Result = "Sunday"
+        Case vbMonday:      Result = "Monday"
+        Case vbTuesday:     Result = "Tuesday"
+        Case vbWednesday:   Result = "Wednesday"
+        Case vbThursday:    Result = "Thursday"
+        Case vbFriday:      Result = "Friday"
+        Case vbSaturday:    Result = "Saturday"
+        End Select
+    Loop While False
+    WeekDayEnglishLong = Result
+End Function
+'----------------------------------------
+'・書式日付時刻変換関数
+'----------------------------------------
+'   ・  対応書式文字列
+'   yyyy/yy/y
+'   mm/m
+'   dd/d
+'   dddd/ddd    Sunday..Saturday / Sun..Sat
+'   aaaa/aaa    日曜日..土曜日 / 日..土
+'   hh/h
+'   nn/n
+'   ss/s
+Public Function FormatDateTimeToString(ByVal DateValue, ByVal FormatStr)
+    Dim Result: Result = ""
+    Do
+        If IsDate(DateValue) = False Then Exit Do
+
+        Result = LCase(FormatStr)
+
+        Result = Replace(Result, "yyyy", Year(DateValue))
+        Result = Replace(Result, "yy", Right(Year(DateValue), 2))
+        Result = Replace(Result, "y", Right(Year(DateValue), 1))
+
+        Result = Replace(Result, "mm", Right("0" & Month(DateValue), 2))
+        Result = Replace(Result, "m", Month(DateValue))
+
+        Result = Replace(Result, "dddd", "DDDD")
+        Result = Replace(Result, "ddd", "DDD")
+
+        Result = Replace(Result, "dd", Right("0" & Day(DateValue), 2))
+        Result = Replace(Result, "d", Day(DateValue))
+
+        Result = Replace(Result, "aaaa", WeekDayJapaneseLong(DateValue))
+        Result = Replace(Result, "aaa", WeekDayJapaneseShort(DateValue))
+
+        Result = Replace(Result, "hh", Right("0" & Hour(DateValue), 2))
+        Result = Replace(Result, "h", Hour(DateValue))
+
+        Result = Replace(Result, "nn", Right("0" & Minute(DateValue), 2))
+        Result = Replace(Result, "n", Minute(DateValue))
+
+        Result = Replace(Result, "ss", Right("0" & Second(DateValue), 2))
+        Result = Replace(Result, "s", Second(DateValue))
+
+        Result = Replace(Result, "DDDD", WeekDayEnglishLong(DateValue))
+        Result = Replace(Result, "DDD", WeekDayEnglishShort(DateValue))
+
+    Loop While False
+    FormatDateTimeToString = Result
+End Function
+
+Sub testFormatDateTimeToString
+    Dim Value
+    Value = CDate("2015/01/02 3:4:5")
+    Call Check("2015", FormatDateTimeToString(Value, "YYYY"))
+    Call Check("2015", FormatDateTimeToString(Value, "yyyy"))
+    Call Check("15", FormatDateTimeToString(Value, "yY"))
+    Call Check("5", FormatDateTimeToString(Value, "y"))
+    Call Check("5", FormatDateTimeToString(Value, "y"))
+    Call Check("01", FormatDateTimeToString(Value, "mm"))
+    Call Check("1", FormatDateTimeToString(Value, "m"))
+    Call Check("02", FormatDateTimeToString(Value, "dd"))
+    Call Check("2", FormatDateTimeToString(Value, "d"))
+    Call Check("03", FormatDateTimeToString(Value, "hh"))
+    Call Check("3", FormatDateTimeToString(Value, "h"))
+    Call Check("04", FormatDateTimeToString(Value, "nn"))
+    Call Check("4", FormatDateTimeToString(Value, "n"))
+    Call Check("05", FormatDateTimeToString(Value, "ss"))
+    Call Check("5", FormatDateTimeToString(Value, "s"))
+
+    Call Check("金", FormatDateTimeToString(Value, "aaa"))
+    Call Check("金曜日", FormatDateTimeToString(Value, "aaaa"))
+    Call Check("Fri", FormatDateTimeToString(Value, "ddd"))
+    Call Check("Friday", FormatDateTimeToString(Value, "dddd"))
+
+    Value = CDate("2015/11/12 13:14:15")
+    Call Check("11", FormatDateTimeToString(Value, "mm"))
+    Call Check("11", FormatDateTimeToString(Value, "m"))
+    Call Check("12", FormatDateTimeToString(Value, "dd"))
+    Call Check("12", FormatDateTimeToString(Value, "d"))
+    Call Check("13", FormatDateTimeToString(Value, "hh"))
+    Call Check("13", FormatDateTimeToString(Value, "h"))
+    Call Check("14", FormatDateTimeToString(Value, "nn"))
+    Call Check("14", FormatDateTimeToString(Value, "n"))
+    Call Check("15", FormatDateTimeToString(Value, "ss"))
+    Call Check("15", FormatDateTimeToString(Value, "s"))
+End Sub
 
 '----------------------------------------
 '◆ファイルフォルダパス処理
 '----------------------------------------
 
-'------------------------------
-'◇絶対パスを取得する関数
+'----------------------------------------
+'・絶対パスを取得する関数
 'カレントディレクトリパスと相対パスを指定する
-'------------------------------
+'----------------------------------------
 Public Function AbsoluteFilePath(ByVal BasePath, ByVal RelativePath)
     AbsoluteFilePath = AbsolutePath(BasePath, RelativePath)
 End Function
@@ -1254,14 +1533,14 @@ Public Function AbsolutePath(ByVal BasePath, ByVal RelativePath)
             Result = RelativePath
             Exit Do
         End If
-        
+
         '相対パス指定部分が絶対パスの場合、
         '処理は行わずにそのまま絶対パスを返す
         If IsIncludeDrivePath(RelativePath) Then
             Result = RelativePath
             Exit Do
         End If
-        
+
         '相対パス指定部分がネットワークパスの場合、
         '処理は行わずにそのまま絶対パスを返す
         If IsNetworkPath(RelativePath) Then
@@ -1272,15 +1551,15 @@ Public Function AbsolutePath(ByVal BasePath, ByVal RelativePath)
         'カレントディレクトリを確保
         Dim CurDirBuffer
         CurDirBuffer = Shell.CurrentDirectory
-        
+
         Shell.CurrentDirectory = BasePath
-        
+
         '相対パスを取得
         Result = fso.GetAbsolutePathName(RelativePath)
-        
+
         'カレントディレクトリを元に戻す
         Shell.CurrentDirectory =  CurDirBuffer
-    
+
     Loop While False
     AbsolutePath = Result
 End Function
@@ -1290,14 +1569,14 @@ Sub testAbsolutePath()
      '通常の相対パス指定
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Windows", ".\System32")))
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Program Files", "..\Windows\System32")))
-    
+
     'ピリオドではない相対パス指定
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Windows", "System32")))
-    
+
     'ドライブパス指定
     Call Check(LCase("C:\Program Files"), LCase(AbsolutePath("C:\Windows", "C:\Program Files")))
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Program Files", "C:\Windows\System32")))
-    
+
     'ネットワークパス指定
     Call Check(LCase("\\127.0.0.1\C$"), LCase(AbsolutePath("C:\Windows", "\\127.0.0.1\C$")))
 
@@ -1309,19 +1588,19 @@ Sub testAbsolutePath()
     MsgBox "Test OK"
 End Sub
 
-'------------------------------
-'◇ドライブパスが含まれているかどうか確認する関数
+'----------------------------------------
+'・ドライブパスが含まれているかどうか確認する関数
 '[:]が2文字目以降にあるかどうかで判定
-'------------------------------
+'----------------------------------------
 Public Function IsIncludeDrivePath(ByVal Path)
     Dim Result
     Result = (2 <= InStr(Path, ":"))
     IsIncludeDrivePath = Result
 End Function
 '
-'------------------------------
-'◇ネットワークドライブかどうか確認する関数
-'------------------------------
+'----------------------------------------
+'・ネットワークドライブかどうか確認する関数
+'----------------------------------------
 Public Function IsNetworkPath(ByVal Path)
     Dim Result: Result = False
     If IsFirstStr(Path, "\\") Then
@@ -1332,9 +1611,9 @@ Public Function IsNetworkPath(ByVal Path)
     IsNetworkPath = Result
 End Function
 '
-'------------------------------
-'◇ドライブパス"C:"を取り出す関数
-'------------------------------
+'----------------------------------------
+'・ドライブパス"C:"を取り出す関数
+'----------------------------------------
 Public Function GetDrivePath(ByVal Path)
     Dim Result: Result = ""
     If IsIncludeDrivePath(Path) Then
@@ -1344,9 +1623,9 @@ Public Function GetDrivePath(ByVal Path)
     GetDrivePath = Result
 End Function
 
-'------------------------------
-'◇終端にパス区切りを追加する関数
-'------------------------------
+'----------------------------------------
+'・終端にパス区切りを追加する関数
+'----------------------------------------
 Public Function IncludeLastPathDelim(ByVal Path)
     Dim Result: Result = ""
     If Path <> "" Then
@@ -1355,9 +1634,9 @@ Public Function IncludeLastPathDelim(ByVal Path)
     IncludeLastPathDelim = Result
 End Function
 
-'------------------------------
-'◇終端からパス区切りを削除する関数
-'------------------------------
+'----------------------------------------
+'・終端からパス区切りを削除する関数
+'----------------------------------------
 Public Function ExcludeLastPathDelim(ByVal Path)
     Dim Result: Result = ""
     If Path <> "" Then
@@ -1366,9 +1645,9 @@ Public Function ExcludeLastPathDelim(ByVal Path)
     ExcludeLastPathDelim = Result
 End Function
 
-'------------------------------
-'◇スペースの含まれた値をダブルクウォートで囲う
-'------------------------------
+'----------------------------------------
+'・スペースの含まれた値をダブルクウォートで囲う
+'----------------------------------------
 Function InSpacePlusDoubleQuote(ByVal Value)
     Dim Result: Result = ""
     If 0 < InStr(Value, " ") Then
@@ -1379,15 +1658,15 @@ Function InSpacePlusDoubleQuote(ByVal Value)
     InSpacePlusDoubleQuote = Result
 End Function
 
-'------------------------------
-'◇ファイルパス配列をダブルクウォートで囲み指定文字で連結する
-'------------------------------
+'----------------------------------------
+'・ファイルパス配列をダブルクウォートで囲み指定文字で連結する
+'----------------------------------------
 Function IncludeBothEndsDoubleQuoteCombineArray(ByVal ArrayValue, ByVal Delimiter)
     Call Assert(IsArray(ArrayValue), _
         "Error:Function IncludeBothEndsDoubleQuoteCombineArray:ArrayValue is not array")
 
     Dim Result: Result = ""
-    Dim I 
+    Dim I
     For I = 0 To ArrayCount(ArrayValue) - 1
         ArrayValue(I) = IncludeBothEndsStr(ArrayValue(I), """")
     Next
@@ -1397,13 +1676,13 @@ Function IncludeBothEndsDoubleQuoteCombineArray(ByVal ArrayValue, ByVal Delimite
 End Function
 
 
-'------------------------------
-'◇ピリオドを含む拡張子を取得する関数
-'------------------------------
+'----------------------------------------
+'・ピリオドを含む拡張子を取得する関数
+'----------------------------------------
 'ピリオドのないファイル名の場合は空文字を返す
 'fso.GetExtensionName ではピリオドで終わるファイル名を
 '判断できないために作成した。
-'------------------------------
+'----------------------------------------
 Public Function PeriodExtName(ByVal Path)
     Dim Result: Result = ""
     Result = fso.GetExtensionName(Path)
@@ -1420,9 +1699,9 @@ Sub testPeriodExtName
     Call Check(".", PeriodExtName("C:\temp\test."))
 End Sub
 
-'------------------------------
-'◇ファイル名から拡張子を取り除く関数
-'------------------------------
+'----------------------------------------
+'・ファイル名から拡張子を取り除く関数
+'----------------------------------------
 Public Function ExcludePathExt(ByVal Path)
     Dim Result: Result = ""
     If Path <> "" Then
@@ -1438,9 +1717,9 @@ Sub testExcludePathExt
     Call Check("C:\temp\test",      ExcludePathExt("C:\temp\test."))
 End Sub
 
-'------------------------------
-'◇ファイルパスの拡張子を変更する関数
-'------------------------------
+'----------------------------------------
+'・ファイルパスの拡張子を変更する関数
+'----------------------------------------
 Public Function ChangeFileExt(ByVal Path, ByVal NewExt)
     Dim Result: Result = ""
     If Path <> "" Then
@@ -1458,9 +1737,9 @@ Sub testChangeFileExt
     Call Check("C:\temp\test",          ChangeFileExt("C:\temp\test.", ""))
 End Sub
 
-'------------------------------
-'◇ファイルパスを結合する関数
-'------------------------------
+'----------------------------------------
+'・ファイルパスを結合する関数
+'----------------------------------------
 Public Function PathCombine(ByVal Values)
     Call Assert(IsArray(Values), "Error:PathCombine")
     PathCombine = StringCombine("\", Values)
@@ -1488,27 +1767,27 @@ End Sub
 '◆ファイルフォルダパス取得
 '----------------------------------------
 
-'------------------------------
-'◇カレントディレクトリの取得
-'------------------------------
+'----------------------------------------
+'・カレントディレクトリの取得
+'----------------------------------------
 Public Function CurrentDirectory
     CurrentDirectory = Shell.CurrentDirectory
 End Function
 
-'------------------------------
-'◇スクリプトフォルダの取得
-'------------------------------
+'----------------------------------------
+'・スクリプトフォルダの取得
+'----------------------------------------
 Public Function ScriptFolderPath
     ScriptFolderPath = _
         fso.GetParentFolderName(WScript.ScriptFullName)
 End Function
 
-'------------------------------
-'◇一時ファイルの取得
-'------------------------------
-'・ このようなパスが取得できる
-'   C:\Users\<UserName>\AppData\Local\Temp\rad92218.tmp
-'------------------------------
+'----------------------------------------
+'・一時ファイルの取得
+'----------------------------------------
+'   ・  このようなパスが取得できる
+'       C:\Users\<UserName>\AppData\Local\Temp\rad92218.tmp
+'----------------------------------------
 Public Function TemporaryPath
     TemporaryPath = TemporaryFilePath
 End Function
@@ -1523,15 +1802,15 @@ Public Function TemporaryFilePath
             fso.GetSpecialFolder(TemporaryFolder).Path, _
             fso.GetTempName)
     Loop While fso.FileExists(Result)
-    TemporaryPath = Result
+    TemporaryFilePath = Result
 End Function
 
-'------------------------------
-'◇一時フォルダの取得
-'------------------------------
-'・ このようなパスが取得できる
-'   C:\Users\<UserName>\AppData\Local\Temp\rad92218
-'------------------------------
+'----------------------------------------
+'・一時フォルダの取得
+'----------------------------------------
+'   ・  このようなパスが取得できる
+'       C:\Users\<UserName>\AppData\Local\Temp\rad92218
+'----------------------------------------
 Public Function TemporaryFolderPath
     Dim Result
     Do
@@ -1540,23 +1819,23 @@ Public Function TemporaryFolderPath
     TemporaryFolderPath = Result
 End Function
 
-'------------------------------
-'◇一時ファイル名
-'------------------------------
-'・ このような名前が取得できる
-'   [rad92218.tmp]
-'------------------------------
+'----------------------------------------
+'・一時ファイル名
+'----------------------------------------
+'   ・  このような名前が取得できる
+'       [rad92218.tmp]
+'----------------------------------------
 Function TemporaryFileName
     TemporaryFileName = fso.GetTempName
 End Function
 
 
-'------------------------------
-'◇一時フォルダ名
-'------------------------------
-'・ このような名前が取得できる
-'   [rad92218]
-'------------------------------
+'----------------------------------------
+'・一時フォルダ名
+'----------------------------------------
+'   ・  このような名前が取得できる
+'       [rad92218]
+'----------------------------------------
 Function TemporaryFolderName
     TemporaryFolderName = ChangeFileExt(fso.GetTempName, "")
 End Function
@@ -1570,7 +1849,7 @@ Sub testFileFolderPathList()
     Dim PathList
 
     PathList = Replace(UCase(FolderPathListTopFolder(Path)), UCase(Path), "")
-'    Call MsgBox(PathList)
+    'Call MsgBox(PathList)
     Call Check(PathList, _
         StringCombine(vbCrLf, Array( _
             "\AAA", _
@@ -1578,7 +1857,7 @@ Sub testFileFolderPathList()
         )))
 
     PathList = Replace(UCase(FolderPathListSubFolder(Path)), UCase(Path), "")
-'    Call MsgBox(PathList)
+    'Call MsgBox(PathList)
     Call Check(PathList, _
         StringCombine(vbCrLf, Array( _
             "\AAA", _
@@ -1596,7 +1875,7 @@ Sub testFileFolderPathList()
         )))
 
     PathList = Replace(UCase(FilePathListTopFolder(Path)), UCase(Path), "")
-'    Call MsgBox(PathList)
+    'Call MsgBox(PathList)
     Call Check(PathList, _
         StringCombine(vbCrLf, Array( _
             "\AAA.TXT", _
@@ -1604,7 +1883,7 @@ Sub testFileFolderPathList()
         )))
 
     PathList = Replace(UCase(FilePathListSubFolder(Path)), UCase(Path), "")
-'    Call MsgBox(PathList)
+    'Call MsgBox(PathList)
     Call Check(PathList, _
         StringCombine(vbCrLf, Array( _
             "\AAA\AAA-1.TXT", _
@@ -1628,16 +1907,12 @@ Sub testFileFolderPathList()
         )))
 End Sub
 
-'------------------------------
-'◇フォルダ
-'------------------------------
-
-'------------------------------
-'◇トップレベルのフォルダリストを取得
-'------------------------------
-'・ 存在しなければ空文字を返す。
-'・ パスは改行コードで区切られている
-'------------------------------
+'----------------------------------------
+'・フォルダリストを取得
+'----------------------------------------
+'   ・  存在しなければ空文字を返す。
+'   ・  パスは改行コードで区切られている
+'----------------------------------------
 Public Function FolderPathListTopFolder(ByVal FolderPath)
     Call Assert(fso.FolderExists(FolderPath), _
         "Error:FolderPathListTopFolder:Folder no Exists")
@@ -1649,17 +1924,11 @@ Public Function FolderPathListTopFolder(ByVal FolderPath)
     FolderPathListTopFolder = Result
 End Function
 
-'------------------------------
-'◇サブフォルダのフォルダリストを取得
-'------------------------------
-'・ 存在しなければ空文字を返す。
-'・ パスは改行コードで区切られている
-'------------------------------
 Public Function FolderPathListSubFolder(ByVal FolderPath)
     Call Assert(fso.FolderExists(FolderPath), _
         "Error:FolderPathListSubFolder:Folder no Exists")
     Dim Result: Result = ""
-    Dim SubFolder 
+    Dim SubFolder
     For Each SubFolder In fso.GetFolder(FolderPath).SubFolders
         Result = StringCombine(vbCrLf, _
             Array(Result, SubFolder.Path, _
@@ -1668,33 +1937,23 @@ Public Function FolderPathListSubFolder(ByVal FolderPath)
     FolderPathListSubFolder = Result
 End Function
 
-'------------------------------
-'◇ファイル
-'------------------------------
-
-'------------------------------
-'◇トップレベルのファイルリストを取得
-'------------------------------
-'・ 存在しなければ空文字を返す。
-'・ パスは改行コードで区切られている
-'------------------------------
+'----------------------------------------
+'・ファイルリストを取得
+'----------------------------------------
+'   ・  存在しなければ空文字を返す。
+'   ・  パスは改行コードで区切られている
+'----------------------------------------
 Public Function FilePathListTopFolder(ByVal FolderPath)
     Call Assert(fso.FolderExists(FolderPath), _
         "Error:FilePathListTopFolder:Folder no Exists")
     Dim Result: Result = ""
-    Dim File 
+    Dim File
     For Each File In fso.GetFolder(FolderPath).Files
         Result = StringCombine(vbCrLf, Array(Result, File.Path))
     Next
     FilePathListTopFolder = ExcludeLastStr(Result, vbCrLf)
 End Function
 
-'------------------------------
-'◇サブフォルダのファイルリストを取得
-'------------------------------
-'・ 存在しなければ空文字を返す。
-'・ パスは改行コードで区切られている
-'------------------------------
 Public Function FilePathListSubFolder(ByVal FolderPath)
     Call Assert(fso.FolderExists(FolderPath), _
         "Error:FilePathListSubFolder:Folder no Exists")
@@ -1702,7 +1961,7 @@ Public Function FilePathListSubFolder(ByVal FolderPath)
     Dim FolderPathList
     FolderPathList = Split( _
         FolderPathListSubFolder(FolderPath) + vbCrLf + FolderPath, vbCrLf)
-    Dim I 
+    Dim I
     For I = 0 To ArrayCount(FolderPathList) - 1
         If fso.FolderExists(FolderPathList(I)) Then
             Result = StringCombine(vbCrLf, _
@@ -1717,9 +1976,9 @@ End Function
 '◆ファイルフォルダ操作
 '----------------------------------------
 
-'------------------------------
-'◇ファイルフォルダの名前変更
-'------------------------------
+'----------------------------------------
+'・ファイルフォルダの名前変更
+'----------------------------------------
 Public Sub RenameFileFolder(ByVal Path, ByVal NewName)
     If fso.FileExists(Path) Then
 
@@ -1744,13 +2003,13 @@ Public Sub RenameFileFolder(ByVal Path, ByVal NewName)
     End If
 End Sub
 
-'------------------------------
+'----------------------------------------
 '◇Force/Recrate
-'------------------------------
+'----------------------------------------
 
-'------------------------------
-'◇深い階層のフォルダでも一気に作成する関数
-'------------------------------
+'----------------------------------------
+'・深い階層のフォルダでも一気に作成する関数
+'----------------------------------------
 Public Sub ForceCreateFolder(ByVal FolderPath)
     Dim ParentFolderPath
     ParentFolderPath = fso.GetParentFolderName(FolderPath)
@@ -1788,9 +2047,9 @@ Private Sub testForceCreateFolder
         ".\Test\TestForceCreateFolder"))
 End Sub
 
-'------------------------------
-'◇フォルダ削除を確認するまでDeleteFolderする関数
-'------------------------------
+'----------------------------------------
+'・フォルダ削除を確認するまでDeleteFolderする関数
+'----------------------------------------
 Public Sub ForceDeleteFolder(ByVal FolderPath)
     'フォルダがある間繰り返す。
     '100回繰り返して無理ならエラー
@@ -1809,9 +2068,9 @@ Public Sub ForceDeleteFolder(ByVal FolderPath)
 End Sub
 
 
-'------------------------------
-'◇ファイル削除を確認するまでDeleteFileする関数
-'------------------------------
+'----------------------------------------
+'・ファイル削除を確認するまでDeleteFileする関数
+'----------------------------------------
 Public Sub ForceDeleteFile(ByVal FilePath)
     'ファイルがある間繰り返す。
     '100回繰り返して無理ならエラー
@@ -1828,19 +2087,19 @@ Public Sub ForceDeleteFile(ByVal FilePath)
         "Error:ForceDeleteFile:File Delete Fail.")
 End Sub
 
-'------------------------------
-'◇フォルダを再生成する関数
-'------------------------------
+'----------------------------------------
+'・フォルダを再生成する関数
+'----------------------------------------
 Public Sub RecreateFolder(ByVal FolderPath)
     Call ForceDeleteFolder(FolderPath)
     Call ForceCreateFolder(FolderPath)
 End Sub
 
-'------------------------------
-'◇フォルダを再生成してコピーする関数
-'------------------------------
+'----------------------------------------
+'・フォルダを再生成してコピーする関数
+'----------------------------------------
 'フォルダの日付が最新になる
-'------------------------------
+'----------------------------------------
 Public Sub RecreateCopyFolder( _
 ByVal SourceFolderPath, ByVal DestFolderPath)
 
@@ -1865,19 +2124,19 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
         "Error:ReCreateCopyFolder:Copy Folder Fail.")
 End Sub
 
-'------------------------------
+'----------------------------------------
 '◇除外ファイル/フォルダ指定
-'------------------------------
+'----------------------------------------
 
-'------------------------------
-'◇上書き除外ファイルを指定したフォルダ内ファイルのコピー関数
-'------------------------------
-'・ インストール時などにiniファイルを除外して
-'   上書きインストールするときに使用する
-'・ 指定例：
-'   IgnorePathsStr = "*.ini"
-'   IgnorePathsStr = "*.ini,setting.txt"
-'------------------------------
+'----------------------------------------
+'・上書き除外ファイルを指定したフォルダ内ファイルのコピー関数
+'----------------------------------------
+'   ・  インストール時などにiniファイルを除外して
+'       上書きインストールするときに使用する
+'   ・  指定例：
+'       IgnorePathsStr = "*.ini"
+'       IgnorePathsStr = "*.ini,setting.txt"
+'----------------------------------------
 Public Sub CopyFolderOverWriteIgnorePath( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
 ByVal IgnorePathsStr)
@@ -1906,11 +2165,11 @@ Private Sub testCopyFolderOverWriteIgnorePath
     'テスト記述はまだ途中
 End Sub
 
-'------------------------------
-'◇除外ファイル/フォルダを指定したフォルダ内ファイルのコピー関数
-'------------------------------
-'・ IgnorePathsStr はカンマ区切りで複数指定可能
-'------------------------------
+'----------------------------------------
+'・除外ファイル/フォルダを指定したフォルダ内ファイルのコピー関数
+'----------------------------------------
+'   ・  IgnorePathsStr はカンマ区切りで複数指定可能
+'----------------------------------------
 Public Sub CopyFolderIgnorePath( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
 ByVal IgnorePathsStr)
@@ -1935,13 +2194,13 @@ ByVal IgnorePathsStr)
     Next
 End Sub
 
-'------------------------------
-'◇除外ファイル/フォルダを指定したファイルコピー関数
-'------------------------------
-'・ IgnorePathsStr はカンマ区切りで複数指定可能
-'・ 該当するファイルはすべて無視するのと
-'   上書きだけ無視するものがある
-'------------------------------
+'----------------------------------------
+'・除外ファイル/フォルダを指定したファイルコピー関数
+'----------------------------------------
+'   ・  IgnorePathsStr はカンマ区切りで複数指定可能
+'   ・  該当するファイルはすべて無視するのと
+'       上書きだけ無視するものがある
+'----------------------------------------
 Public Sub CopyFileIgnorePath( _
 ByVal SourceFilePath, ByVal DestFilePath, _
 ByVal IgnorePathsStr)
@@ -1982,11 +2241,11 @@ ByVal OverWriteIgnoreMode)
     Loop While False
 End Sub
 
-'------------------------------
-'◇除外/対象パス指定ファイル削除処理
-'------------------------------
-'・ Target/IgnorePathsStr はカンマ区切りで複数指定可能
-'------------------------------
+'----------------------------------------
+'・除外/対象パス指定ファイル削除処理
+'----------------------------------------
+'   ・  Target/IgnorePathsStr はカンマ区切りで複数指定可能
+'----------------------------------------
 Public Sub DeleteFileTargetPath( _
 ByVal FileFolderPath, _
 ByVal TargetPathsStr)
@@ -2057,55 +2316,53 @@ ByVal DeleteIgnoreMode)
     Loop While False
 End Sub
 
-
-'------------------------------
+'----------------------------------------
 '◇エラーを無視する処理
-'------------------------------
+'----------------------------------------
 
-'------------------------------
-'◇CopyFile
-'------------------------------
-'・ fso.CopyFileの最終要素に"*.*"を指定すると、
-'   ファイルがない場合にエラーになるので
-'   それを無視するための関数
-'------------------------------
+'----------------------------------------
+'・CopyFile
+'----------------------------------------
+'   ・  fso.CopyFileの最終要素に"*.*"を指定すると、
+'       ファイルがない場合にエラーになるので
+'       それを無視するための関数
+'----------------------------------------
 Sub CopyFile(ByVal SourceFilePath, ByVal DestFilePath)
 On Error Resume Next
     Call fso.CopyFile(SourceFilePath, DestFilePath, True)
 End Sub
 
-'------------------------------
-'◇MoveFile
-'------------------------------
-'・ fso.MoveFileの最終要素に"*.*"を指定すると、
+'----------------------------------------
+'・MoveFile
+'----------------------------------------
+'   ・  fso.MoveFileの最終要素に"*.*"を指定すると、
 '   ファイルがない場合にエラーになるので
 '   それを無視するための関数
-'------------------------------
+'----------------------------------------
 Sub MoveFile(ByVal SourceFilePath, ByVal DestFilePath)
 On Error Resume Next
     Call fso.MoveFile(SourceFilePath, DestFilePath)
 End Sub
 
-
-'------------------------------
-'◇CopyFolder
-'------------------------------
-'・ fso.CopyFolderの最終要素に"*"を指定すると、
-'   フォルダがない場合にエラーになるので
-'   それを無視するための関数
-'------------------------------
+'----------------------------------------
+'・CopyFolder
+'----------------------------------------
+'   ・  fso.CopyFolderの最終要素に"*"を指定すると、
+'       フォルダがない場合にエラーになるので
+'       それを無視するための関数
+'----------------------------------------
 Sub CopyFolder(ByVal SourceFolderPath, ByVal DestFolderPath)
 On Error Resume Next
     Call fso.CopyFolder(SourceFolderPath, DestFolderPath, True)
 End Sub
 
-'------------------------------
-'◇MoveFolder
-'------------------------------
-'・ fso.MoveFolderの最終要素に"*"を指定すると、
-'   フォルダがない場合にエラーになるので
-'   それを無視するための関数
-'------------------------------
+'----------------------------------------
+'・MoveFolder
+'----------------------------------------
+'   ・  fso.MoveFolderの最終要素に"*"を指定すると、
+'       フォルダがない場合にエラーになるので
+'       それを無視するための関数
+'----------------------------------------
 Sub MoveFolder(ByVal SourceFolderPath, ByVal DestFolderPath)
 On Error Resume Next
     Call fso.MoveFolder(SourceFolderPath, DestFolderPath)
@@ -2115,9 +2372,9 @@ End Sub
 '◆ファイルの状態確認
 '----------------------------------------
 
-'------------------------------
-'◇ファイルフォルダ存在確認
-'------------------------------
+'----------------------------------------
+'・ファイルフォルダ存在確認
+'----------------------------------------
 Public Function FileFolderExists(ByVal Path)
     Dim Result: Result = False
     If fso.FileExists(Path) _
@@ -2127,9 +2384,9 @@ Public Function FileFolderExists(ByVal Path)
     FileFolderExists = Result
 End Function
 
-'------------------------------
-'◇ファイル使用中かどうかを確認する
-'------------------------------
+'----------------------------------------
+'・ファイル使用中かどうかを確認する
+'----------------------------------------
 Function IsUseFile(FilePath)
     Dim Result: Result = False
     Do
@@ -2145,9 +2402,9 @@ Function IsUseFile(FilePath)
     IsUseFile = Result
 End Function
 
-'------------------------------
-'◇ファイルが読み取り専用かどうか確認する
-'------------------------------
+'----------------------------------------
+'・ファイルが読み取り専用かどうか確認する
+'----------------------------------------
 Function IsReadOnlyFile(FilePath)
     Dim Result: Result = False
     Do
@@ -2165,9 +2422,9 @@ End Function
 '◆ファイルフォルダ日時
 '----------------------------------------
 
-'------------------------------
-'◇ファイル/フォルダの最終更新日時を得る
-'------------------------------
+'----------------------------------------
+'・ファイル/フォルダの最終更新日時を得る
+'----------------------------------------
 Public Function FileFolderDate_LastModified(ByVal Path)
     Dim Result: Result = Now()
     If fso.FileExists(Path) Then
@@ -2186,9 +2443,9 @@ End Function
 '◆ショートカットファイル操作
 '----------------------------------------
 
-'------------------------------
-'◇ショートカットファイルのリンク先を取得する
-'------------------------------
+'----------------------------------------
+'・ショートカットファイルのリンク先を取得する
+'----------------------------------------
 Public Function ShortcutFileLinkPath(ByVal ShortcutFilePath)
     Dim Result: Result = ""
     Dim file: Set file = Shell.CreateShortcut(ShortcutFilePath)
@@ -2214,23 +2471,23 @@ Public Function CheckEncodeName(ByVal EncodeName)
         "UTF-7") )
 End Function
 
-'------------------------------
-'◇テキストファイル読込
-'------------------------------
-'エンコード指定は下記の通り
-'   エンコード          指定文字
-'   ShiftJIS            SHIFT_JIS
-'   UTF-16LE BOM有/無   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
-'                       BOMの有無に関わらず読込可能
-'   UTF-16BE _BOM_ON    UNICODEFEFF
-'   UTF-16BE _BOM_OFF   UTF-16BE
-'   UTF-8 BOM有/無      UTF-8/UTF-8N
-'                       BOMの有無に関わらず読込可能
-'   JIS                 ISO-2022-JP
-'   EUC-JP              EUC-JP
-'   UTF-7               UTF-7
-'UTF-16LEとUTF-8は、BOMの有無にかかわらず読み込める
-'------------------------------
+'----------------------------------------
+'・テキストファイル読込
+'----------------------------------------
+'   ・  エンコード指定は下記の通り
+'           エンコード          指定文字
+'           ShiftJIS            SHIFT_JIS
+'           UTF-16LE BOM有/無   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
+'                           BOMの有無に関わらず読込可能
+'           UTF-16BE _BOM_ON    UNICODEFEFF
+'           UTF-16BE _BOM_OFF   UTF-16BE
+'           UTF-8 BOM有/無      UTF-8/UTF-8N
+'                           BOMの有無に関わらず読込可能
+'           JIS                 ISO-2022-JP
+'           EUC-JP              EUC-JP
+'           UTF-7               UTF-7
+'   ・  UTF-16LEとUTF-8は、BOMの有無にかかわらず読み込める
+'----------------------------------------
 Const StreamTypeEnum_adTypeBinary = 1
 Const StreamTypeEnum_adTypeText = 2
 Const StreamReadEnum_adReadAll = -1
@@ -2284,24 +2541,24 @@ Private Sub testLoadTextFile()
     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE"))
 End Sub
 
-'------------------------------
-'◇テキストファイル保存
-'------------------------------
-'エンコード指定は下記の通り
-'   エンコード          指定文字
-'   ShiftJIS            SHIFT_JIS
-'   UTF-16LE _BOM_ON    UNICODEFFFE/UNICODE/UTF-16
-'   UTF-16LE _BOM_OFF    UTF-16LE
-'   UTF-16BE _BOM_ON    UNICODEFEFF
-'   UTF-16BE _BOM_OFF    UTF-16BE
-'   UTF-8 _BOM_ON       UTF-8
-'   UTF-8 _BOM_OFF       UTF-8N
-'   JIS                 ISO-2022-JP
-'   EUC-JP              EUC-JP
-'   UTF-7               UTF-7
-'UTF-16LEとUTF-8はそのままだと_BOM_ONになるので
-'BON無し指定の場合は特殊処理をしている
-'------------------------------
+'----------------------------------------
+'・テキストファイル保存
+'----------------------------------------
+'   ・  エンコード指定は下記の通り
+'           エンコード          指定文字
+'           ShiftJIS            SHIFT_JIS
+'           UTF-16LE _BOM_ON    UNICODEFFFE/UNICODE/UTF-16
+'           UTF-16LE _BOM_OFF    UTF-16LE
+'           UTF-16BE _BOM_ON    UNICODEFEFF
+'           UTF-16BE _BOM_OFF    UTF-16BE
+'           UTF-8 _BOM_ON       UTF-8
+'           UTF-8 _BOM_OFF       UTF-8N
+'           JIS                 ISO-2022-JP
+'           EUC-JP              EUC-JP
+'           UTF-7               UTF-7
+'   ・  UTF-16LEとUTF-8はそのままだと_BOM_ONになるので
+'       BON無し指定の場合は特殊処理をしている
+'----------------------------------------
 Public Sub SaveTextFile(ByVal Text, _
 ByVal TextFilePath, ByVal EncodeName)
     If CheckEncodeName(EncodeName) = False Then
@@ -2380,6 +2637,7 @@ Class IniFile
         Call Assert(fso.FolderExists(fso.GetParentFolderName(IniFilePath)), _
             "Error:IniFile.Initialize:IniFile Folder not found")
         IniDic.RemoveAll
+
         If fso.FileExists(IniFilePath) Then
             Dim IniFileText
             IniFileText = LoadTextFile(IniFilePath, "SHIFT_JIS")
@@ -2416,7 +2674,7 @@ Class IniFile
     Public Function SectionIdentExists( _
     ByVal Section, ByVal Ident)
         SectionIdentExists = _
-            IniDic.Exists(DictionaryKey(Section, Ident)) 
+            IniDic.Exists(DictionaryKey(Section, Ident))
     End Function
 
     Public Function SectionIdentDelete( _
@@ -2478,9 +2736,9 @@ Class IniFile
                 If IsFirstStr(Keys1(I), Keys2(J)) Then
                     IniFileText = IniFileText + _
                         ExcludeFirstStr(Keys1(I), Keys2(J)) + _
-                        "=" + IniDic(Keys1(I)) + vbCrLf 
+                        "=" + IniDic(Keys1(I)) + vbCrLf
                 End If
-            Next 
+            Next
         Next
         Set IniSectionDic = Nothing
 
@@ -2518,12 +2776,12 @@ End Sub
 '◆圧縮ファイル処理
 '----------------------------------------
 
-'------------------------------
-'◇Zipファイル解凍
-'------------------------------
-'・ Windows標準機能を利用
-'・ テンポラリフォルダに展開してから移動する
-'------------------------------
+'----------------------------------------
+'・Zipファイル解凍
+'----------------------------------------
+'   ・  Windows標準機能を利用
+'   ・  テンポラリフォルダに展開してから移動する
+'----------------------------------------
 Function UnZip(ByVal ZipFilePath, ByVal UnCompressFolderPath)
     Call Assert(fso.FileExists(ZipFilePath), "Error:UnZip:ZipFilePath no exists")
     Call Assert(fso.FolderExists(UnCompressFolderPath), "Error:UnZip:UnCompressFolderPath no exists")
@@ -2545,12 +2803,12 @@ Function UnZip(ByVal ZipFilePath, ByVal UnCompressFolderPath)
     Call ForceDeleteFolder(OutputTempFolderPath)
 End Function
 
-'------------------------------
-'◇Zipファイル圧縮
-'------------------------------
-'・ Windows標準機能を利用
-'・ テンポラリファイルを作成してから名前変更している
-'------------------------------
+'----------------------------------------
+'・Zipファイル圧縮
+'----------------------------------------
+'   ・  Windows標準機能を利用
+'   ・  テンポラリファイルを作成してから名前変更している
+'----------------------------------------
 Function Zip(ByVal CompressSourcePath, ByVal ZipFilePath)
     Call Assert(fso.FileExists(ZipFilePath) = False, "Error:Zip:ZipFilePath exists")
     Call Assert(FileFolderExists(CompressSourcePath), "Error:Zip:CompressSourcePath no exists")
@@ -2591,9 +2849,9 @@ End Function
 '◆システム
 '----------------------------------------
 
-'------------------------------
-'◇実行時GUI/CUI確認
-'------------------------------
+'----------------------------------------
+'・実行時GUI/CUI確認
+'----------------------------------------
 
 Function IsCUI
     IsCui = _
@@ -2609,31 +2867,31 @@ End Function
 '◆コマンドライン引数
 '----------------------------------------
 
-'------------------------------
-'◇コマンドライン引数を配列に入れる関数
-'------------------------------
+'----------------------------------------
+'・コマンドライン引数を配列に入れる関数
+'----------------------------------------
 Public Function ArgsToArray
     Dim Result()
     Dim Args: Set Args = WScript.Arguments
     ReDim Result(Args.Count - 1)
-    Dim I 
+    Dim I
     For I = 0 To Args.Count - 1
         Result(I) = Args(I)
     Next
     ArgsToArray = Result
 End Function
 
-'------------------------------
-'◇引数からオプションを調べる
-'------------------------------
-'・ OptionFirstStrArray = Array("/a", "-a") のように指定する
-'・ そのオプションで開始する引数が存在すればその引数を返す。
-'   存在しなければ空文字を返す
-'   例：[/a:123 /b /c file.txt]というコマンドラインから
+'----------------------------------------
+'・引数からオプションを調べる
+'----------------------------------------
+'   ・  OptionFirstStrArray = Array("/a", "-a") のように指定する
+'   ・  そのオプションで開始する引数が存在すればその引数を返す。
+'       存在しなければ空文字を返す
+'       例：[/a:123 /b /c file.txt]というコマンドラインから
 '       ArgsOption(ArgsArray, Array("/a"))を指定すると
 '       戻り値は "/a:123" になる
-'・ 該当オプションが2つ存在しても先頭のものだけ取り出す
-'------------------------------
+'   ・  該当オプションが2つ存在しても先頭のものだけ取り出す
+'----------------------------------------
 Public Function ArgsOption(ByRef ArgsArray, ByVal OptionFirstStrArray)
     Call Assert(IsArray(ArgsArray), _
         "Error:Function ArgsOption:ArgsArray is not array")
@@ -2662,15 +2920,15 @@ Private Sub testArgsOption
     Call Check("", ArgsOption(Args, Array("/d")))
 End Sub
 
-'------------------------------
-'◇引数からオプションのエラーを調べる
-'------------------------------
-'・ OptionFirstStrArray = Array("/a", "-a") のように指定する
-'・ 重複オプションがあれば True を返す
-'   例：[/a:123 -a /c file.txt]というコマンドラインから
+'----------------------------------------
+'・引数からオプションのエラーを調べる
+'----------------------------------------
+'   ・  OptionFirstStrArray = Array("/a", "-a") のように指定する
+'   ・  重複オプションがあれば True を返す
+'       例：[/a:123 -a /c file.txt]というコマンドラインから
 '       ArgsOption(ArgsArray, Array("/a", "-a"))を指定すると
 '       該当オプションが2つあるのでエラーということでTrueを返す
-'------------------------------
+'----------------------------------------
 '引数からオプションを調べる
 '同じものが二つみつかれば True = エラーがあるということ
 Public Function ArgsOptionCheckError(ByRef ArgsArray, ByVal OptionFirstStrArray)
@@ -2709,23 +2967,23 @@ End Sub
 '◆クリップボード
 '----------------------------------------
 
-'------------------------------
-'◇テキストデータ取得
-'------------------------------
-Public Function GetClipbordText
+'----------------------------------------
+'・テキストデータ取得
+'----------------------------------------
+Public Function GetClipboardText
     Dim HtmlFile
     Set HtmlFile = WScript.CreateObject("HtmlFile")
-    GetClipbordText = HtmlFile.ParentWindow.ClipboardData.GetData("text")
+    GetClipboardText = HtmlFile.ParentWindow.ClipboardData.GetData("text")
 End Function
 
-'------------------------------
-'◇テキストデータ設定
-'------------------------------
-'・ IEオブジェクト利用のクリップボード設定方法などは
-'   セキュリティの関係で安定して動作しないようなので
-'   一時ファイルとClipコマンドを使用した
-'------------------------------
-Public Sub SetClipbordText(ByVal ClipboardToText)
+'----------------------------------------
+'・テキストデータ設定
+'----------------------------------------
+'   ・  IEオブジェクト利用のクリップボード設定方法などは
+'       セキュリティの関係で安定して動作しないようなので
+'       一時ファイルとClipコマンドを使用した
+'----------------------------------------
+Public Sub SetClipboardText(ByVal ClipboardToText)
     Dim TempFileName: TempFileName = TemporaryPath
 
     Call SaveTextFile(ClipboardToText, TempFileName, "Shift_JIS")
@@ -2738,14 +2996,24 @@ Public Sub SetClipbordText(ByVal ClipboardToText)
     Call ForceDeleteFile(TempFileName)
 End Sub
 
+'ExcelなどOfficeのある環境の場合は次のコードでも可能
+'Sub SetClipboardText(ByVal Value)
+'    Dim FormObj: Set FormObj = CreateObject("Forms.Form.1")
+'    Dim TextBoxObj: Set TextBoxObj=FormObj.Controls.Add("Forms.TextBox.1").Object
+'    TextBoxObj.MultiLine=True
+'    TextBoxObj.Text=Value
+'    TextBoxObj.SelStart=0
+'    TextBoxObj.SelLength = TextBoxObj.TextLength
+'    TextBoxObj.Copy
+'End Sub
 
 '----------------------------------------
 '◆シェル
 '----------------------------------------
 
-'------------------------------
-'◇シェル起動定数
-'------------------------------
+'----------------------------------------
+'・シェル起動定数
+'----------------------------------------
 Const vbHide = 0             'ウィンドウ非表示
 Const vbNormalFocus = 1      '通常表示起動
 Const vbMinimizedFocus = 2   '最小化起動
@@ -2753,9 +3021,9 @@ Const vbMaximizedFocus = 3   '最大化起動
 Const vbNormalNoFocus = 4    '通常表示起動、フォーカスなし
 Const vbMinimizedNoFocus = 6 '最小化起動、フォーカスなし
 
-'------------------------------
-'◇ファイル指定したシェル起動
-'------------------------------
+'----------------------------------------
+'・ファイル指定したシェル起動
+'----------------------------------------
 Public Sub ShellFileOpen( _
 ByVal FilePath, ByVal Focus)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellFileOpen")
@@ -2776,12 +3044,12 @@ Private Sub testShellFileOpen
     Call ShellFileOpen(Path, vbNormalFocus)
 End Sub
 
-'------------------------------
-'◇コマンド指定したシェル起動
-'------------------------------
-'・ Wait = Trueならプログラムの終了を待つ
+'----------------------------------------
+'・コマンド指定したシェル起動
+'----------------------------------------
+'   ・  Wait = Trueならプログラムの終了を待つ
 '          Falseならそのまま実行を続ける
-'------------------------------
+'----------------------------------------
 Public Sub ShellCommandRun(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
     Call Assert(OrValue(Wait, Array(True, False)), "Error:ShellCommandRun")
@@ -2798,11 +3066,11 @@ Private Sub testShellCommandRun
     Call ShellCommandRun(Path, vbNormalFocus, True)
 End Sub
 
-'------------------------------
-'◇DOSコマンドの実行。戻り値取得。
-'------------------------------
-'・ DOS窓が表示されない
-'------------------------------
+'----------------------------------------
+'・DOSコマンドの実行。戻り値取得。
+'----------------------------------------
+'   ・  DOS窓が表示されない
+'----------------------------------------
 Public Function ShellCommandRunReturn(Command, Focus)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
 
@@ -2814,7 +3082,7 @@ Public Function ShellCommandRunReturn(Command, Focus)
     ' 戻り値を取得
     ShellCommandRunReturn = _
         LoadTextFile(TempFileName, "shift_jis")
-    
+
     Call ForceDeleteFile(TempFileName)
 End Function
 
@@ -2823,9 +3091,9 @@ Sub testShellCommandRunReturn()
     MsgBox ShellCommandRunReturn("dir C:\", vbHide)
 End Sub
 
-'------------------------------
-'◇環境変数の取得
-'------------------------------
+'----------------------------------------
+'・環境変数の取得
+'----------------------------------------
 Public Function EnvironmentalVariables(ByVal Name)
 On Error Resume Next
     Dim Result: Result = ""
@@ -2901,21 +3169,17 @@ End Sub
 '◆キーコード送信
 '----------------------------------------
 
-'------------------------------
-'◇キーを送信
-'------------------------------
-
-'------------------------------
-'◇ウィンドウタイトルを指定してキー送信
-'------------------------------
-'・ Shell.AppActivateを実行して成功してから
-'   Shell.SendKeysを送信する関数
-'・ SearchWindowTitle=""と指定すると
-'   Shell.SendKeysだけの処理になる
-'・ キーの文字は小文字で指定すること。
-'   Ctrl+Cキーを指定しようとして[^C]と
-'   大文字で指定するとShiftがロックされて挙動がおかしくなる
-'------------------------------
+'----------------------------------------
+'・ウィンドウタイトルを指定してキー送信
+'----------------------------------------
+'   ・  Shell.AppActivateを実行して成功してから
+'       Shell.SendKeysを送信する関数
+'   ・  SearchWindowTitle=""と指定すると
+'       Shell.SendKeysだけの処理になる
+'   ・  キーの文字は小文字で指定すること。
+'       Ctrl+Cキーを指定しようとして[^C]と
+'       大文字で指定するとShiftがロックされて挙動がおかしくなる
+'----------------------------------------
 Public Function AppActSendKeysLoop( _
 ByVal SearchWindowTitle, _
 ByVal KeyValue, ByVal WaitMilliSec, ByVal LoopCount)
@@ -2949,15 +3213,15 @@ ByVal KeyValue, ByVal WaitMilliSec)
         KeyValue, WaitMilliSec, 10)
 End Function
 
-'------------------------------
-'◇キー送信後、指定ウィンドウタイトルのアクティブ化確認
-'------------------------------
-'・ AppActSendKeysLoop後
-'   配列で指定したウィンドウタイトルのどれかをアクティブに
-'   出来たらTrueを返す関数
-'・ 例：    Call AppActSendKeysAfterWindow("test", _
+'----------------------------------------
+'・キー送信後、指定ウィンドウタイトルのアクティブ化確認
+'----------------------------------------
+'   ・  AppActSendKeysLoop後
+'       配列で指定したウィンドウタイトルのどれかをアクティブに
+'       出来たらTrueを返す関数
+'   ・  例：    Call AppActSendKeysAfterWindow("test", _
 '               Array("WindowA", "WindowB"), "%te", 1000)
-'------------------------------
+'----------------------------------------
 Public Function AppActSendKeysAfterWindowLoop( _
 ByVal SearchWindowTitle, ByVal AfterWindowTitle, _
 ByVal KeyValue, ByVal WaitMilliSec, ByVal LoopCount)
@@ -2988,14 +3252,15 @@ ByVal KeyValue, ByVal WaitMilliSec)
         KeyValue, WaitMilliSec, 10)
 End Function
 
+
 '----------------------------------------
 '◆VBScript ソースコード編集
 '----------------------------------------
 
-'------------------------------
-'◇ソース中の[Call Include("ライブラリパス")]という記述を
+'----------------------------------------
+'・ソース中の[Call Include("ライブラリパス")]という記述を
 '  ライブラリファイルの中身全てで置き換える処理
-'------------------------------
+'----------------------------------------
 Public Function IncludeExpanded( _
 ByVal SourceFilePath, ByVal DestFilePath)
 
@@ -3040,9 +3305,9 @@ ByVal SourceFilePath, ByVal DestFilePath)
     IncludeExpanded = Result
 End Function
 
-'------------------------------
-'◇スクリプトエンコーダーを使ったVBSのエンコード
-'------------------------------
+'----------------------------------------
+'・スクリプトエンコーダーを使ったVBSのエンコード
+'----------------------------------------
 Sub EncodeVBScriptFile(ByVal ScriptEncoderExePath, _
 ByVal SourceFilePath, ByVal DestFilePath)
     Call ShellCommandRun( _
@@ -3051,7 +3316,6 @@ ByVal SourceFilePath, ByVal DestFilePath)
         " " + InSpacePlusDoubleQuote(DestFilePath) _
         , vbHide, True)
 End Sub
-
 
 '--------------------------------------------------
 '■履歴
@@ -3093,7 +3357,7 @@ End Sub
 '・ IniFile読み書きクラス作成
 '・ IsCUI/IsGUI
 '◇ ver 2015/02/06
-'・	ArrayText
+'・ ArrayText
 '・ LikeCompare/MatchText
 '・ ShortcutFileLinkPath
 '・ ForceCreateFolder修正
@@ -3110,7 +3374,7 @@ End Sub
 '・ ShellCommandRunReturnリファクタリング
 '   TemporaryFilePathの作成
 '・ GetClipbordText/SetClipbordText作成
-'・	ForceDeleteFile作成
+'・ ForceDeleteFile作成
 '◇ ver 2015/02/12
 '・ FilePathListSubFolderの修正
 '◇ ver 2015/02/16
@@ -3120,7 +3384,7 @@ End Sub
 '・ ArrayText廃止
 '   IncludeBothEndsDoubleQuoteCombineArray追加
 '◇ ver 2015/02/17
-'・	LikeCompare修正
+'・ LikeCompare修正
 '・ TemporaryFilePath>>TemporaryPath名前変更
 '◇ ver 2015/02/18
 '・ TemporaryFolderPath追加
@@ -3136,12 +3400,13 @@ End Sub
 '   /ForceCreateFolder/ReCreateCopyFolder
 '   例外発生時の不具合修正
 '◇ ver 2015/02/26
+'・ CopyFolderIgnoreFileFolderをCopyFolderIgnorePathに名称変更
+'・ CopyFileIgnoreFileFolderをCopyFileIgnorePathに名称変更
 '・ CopyFileIgnorePathBaseを作成して
 '   CopyFileIgnorePath/CopyFileOverWriteIgnorePathと
-'   処理を共通化して作成
+'   処理を共通化
 '・ CopyFolderOverWriteIgnoreをCopyFolderOverWriteIgnorePathに名称変更
 '   内部をCopyFileOverWriteIgnorePathとして作成
-'・ CopyFolderIgnoreFileFolderをCopyFolderIgnorePathに名称変更
 '・ DeleteFileTargetPath/DeleteFileIgnorePathを追加
 '◇ ver 2015/02/27
 '・ IniFile.ReadStringの空項目取得時のデフォルト値処理を修正
@@ -3178,4 +3443,17 @@ End Sub
 '   IsLastText/IncludeLastText/ExcludeLastText
 '   IncludeBothEndsText/ExcludeBothEndsText を追加
 '・ IncludeStr>>IsIncludeStrに名前変更
+'◇ ver 2015/04/10
+'・ DeleteDateTimeText追加
+'・ コメント形式の全体的な修正
+'◇ ver 2015/04/25
+'・ コメント形式を変更
+'◇ ver 2015/05/17
+'・ CopyFolderIgnorePath内のファイルパスの大小文字不一致の不具合を修正
+'・ StrToBooleanを追加
+'・ FormatDateTimeToStringを追加
+'◇ ver 2015/05/20
+'・ DeleteDateText/DeleteDateTimeText を修正
+'◇ ver 2015/07/23
+'・ ライセンスをGPLからMITに変更しました。
 '--------------------------------------------------
