@@ -12,7 +12,7 @@ Sub Include(ByVal FileName)
     Call Stream.Close
 End Sub
 '--------------------------------------------------
-Call Include(".\Lib\StandardSoftwareLibrary.vbs")
+Call Include(".\Lib\st.vbs")
 '--------------------------------------------------
 
 '------------------------------
