@@ -17,43 +17,43 @@
 '--------------------------------------------------
 
 '--------------------------------------------------
-'¡ƒ}[ƒN
+'â– ãƒãƒ¼ã‚¯
 '--------------------------------------------------
 
     '--------------------------------------------------
-    '¡
+    'â– 
     '--------------------------------------------------
 
     '----------------------------------------
-    'Ÿ
+    'â—†
     '----------------------------------------
-    '
+    'â—‡
     '----------------------------------------
-    'E
+    'ãƒ»
     '----------------------------------------
 
 Option Explicit
 
 '--------------------------------------------------
-'¡’è”/Œ^éŒ¾
+'â– å®šæ•°/å‹å®£è¨€
 '--------------------------------------------------
 
 '----------------------------------------
-'ŸFileSystemObject
+'â—†FileSystemObject
 '----------------------------------------
 Public fso: Set fso = CreateObject("Scripting.FileSystemObject")
 
 '----------------------------------------
-'ŸShell
+'â—†Shell
 '----------------------------------------
 Public Shell: Set Shell = WScript.CreateObject("WScript.Shell")
 
 '--------------------------------------------------
-'¡À‘•
+'â– å®Ÿè£…
 '--------------------------------------------------
 
 '----------------------------------------
-'ŸƒeƒXƒg
+'â—†ãƒ†ã‚¹ãƒˆ
 '----------------------------------------
 'Call test
 Public Sub test
@@ -86,7 +86,7 @@ Public Sub test
 '    Call testPathCombine
 
 '    Call testFileFolderPathList
-    'ƒeƒXƒgƒtƒHƒ‹ƒ_‚ª•K—v‚È‚Ì‚Å’ˆÓ
+    'ãƒ†ã‚¹ãƒˆãƒ•ã‚©ãƒ«ãƒ€ãŒå¿…è¦ãªã®ã§æ³¨æ„
 
 '    Call testShellCommandRunReturn
 '    Call testEnvironmentalVariables
@@ -107,7 +107,7 @@ Public Sub test
     Call testDeleteDateTimeText
 
 '    Call testForceCreateFolder
-    'ƒeƒXƒgƒtƒHƒ‹ƒ_‚ğì¬‚µ‚Ä‚µ‚Ü‚¤‚Ì‚Å’ˆÓ
+    'ãƒ†ã‚¹ãƒˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã—ã¦ã—ã¾ã†ã®ã§æ³¨æ„
 
     Call testMaxValue
     Call testMinValue
@@ -132,19 +132,19 @@ Call MsgBox("StandardSoftwareLibrary_vbs Test Finish")
 End Sub
 
 '----------------------------------------
-'ŸğŒ”»’f
+'â—†æ¡ä»¶åˆ¤æ–­
 '----------------------------------------
 
 '----------------------------------------
-'EAssert
+'ãƒ»Assert
 '----------------------------------------
-'   E  Assert = å’£‚·‚é
-'   E  Err”Ô† vbObjectError + 1 ‚Í
-'       ƒ†[ƒU[’è‹`ƒGƒ‰[”Ô†‚Ì1
-'       “®ì‚³‚¹‚é‚ÆŸ‚Ì‚æ‚¤‚ÉƒGƒ‰[ƒ_ƒCƒAƒƒO‚ª•\¦‚³‚ê‚é
-'       ƒGƒ‰[: Message‚Ì“à—e
-'       ƒR[ƒh: 80040001
-'       ƒ\[ƒX: Sub Assert
+'   ãƒ»  Assert = ä¸»å¼µã™ã‚‹
+'   ãƒ»  Errç•ªå· vbObjectError + 1 ã¯
+'       ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã‚¨ãƒ©ãƒ¼ç•ªå·ã®1
+'       å‹•ä½œã•ã›ã‚‹ã¨æ¬¡ã®ã‚ˆã†ã«ã‚¨ãƒ©ãƒ¼ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãŒè¡¨ç¤ºã•ã‚Œã‚‹
+'       ã‚¨ãƒ©ãƒ¼: Messageã®å†…å®¹
+'       ã‚³ãƒ¼ãƒ‰: 80040001
+'       ã‚½ãƒ¼ã‚¹: Sub Assert
 '----------------------------------------
 Public Sub Assert(ByVal Value, ByVal Message)
     If Value = False Then
@@ -153,14 +153,14 @@ Public Sub Assert(ByVal Value, ByVal Message)
 End Sub
 
 Private Sub testAssert()
-    Call Assert(False, "ƒeƒXƒg")
+    Call Assert(False, "ãƒ†ã‚¹ãƒˆ")
 End Sub
 
 '----------------------------------------
-'ECheck
+'ãƒ»Check
 '----------------------------------------
-'   E  2‚Â‚Ì’l‚ğ”äŠr‚µ‚Äˆê’v‚µ‚È‚¯‚ê‚Î
-'       ƒƒbƒZ[ƒW‚ğo‚·ŠÖ”
+'   ãƒ»  2ã¤ã®å€¤ã‚’æ¯”è¼ƒã—ã¦ä¸€è‡´ã—ãªã‘ã‚Œã°
+'       ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡ºã™é–¢æ•°
 '----------------------------------------
 Public Function Check(ByVal A, ByVal B)
     Check = (A = B)
@@ -176,9 +176,9 @@ Private Sub testCheck()
 End Sub
 
 '----------------------------------------
-'EOrValue
+'ãƒ»OrValue
 '----------------------------------------
-'   E—áFIf OrValue(ValueA, Array(1, 2, 3)) Then
+'   ãƒ»ä¾‹ï¼šIf OrValue(ValueA, Array(1, 2, 3)) Then
 '----------------------------------------
 Public Function OrValue(ByVal Value, ByVal Values)
     Call Assert(IsArray(Values), "Error:OrValue:Values is not Array.")
@@ -199,7 +199,7 @@ Private Sub testOrValue()
 End Sub
 
 '----------------------------------------
-'EIIF
+'ãƒ»IIF
 '----------------------------------------
 Public Function IIF(ByVal CompareValue, ByVal Result1, ByVal Result2)
     If CompareValue Then
@@ -210,11 +210,11 @@ Public Function IIF(ByVal CompareValue, ByVal Result1, ByVal Result2)
 End Function
 
 '----------------------------------------
-'ŸŒ^AŒ^•ÏŠ·
+'â—†å‹ã€å‹å¤‰æ›
 '----------------------------------------
 
 '----------------------------------------
-'E•Ï”‚É’l‚âƒIƒuƒWƒFƒNƒg‚ğƒZƒbƒg‚·‚é
+'ãƒ»å¤‰æ•°ã«å€¤ã‚„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹
 '----------------------------------------
 Public Sub SetValue(ByRef Variable, ByVal Value)
     If IsObject(Value) Then
@@ -236,7 +236,7 @@ Private Sub testSetValue
 End Sub
 
 '----------------------------------------
-'ELong
+'ãƒ»Long
 '----------------------------------------
 Public Function IsLong(ByVal Value)
     Dim Result: Result = False
@@ -287,7 +287,7 @@ Private Sub testStrToLongDefault()
 End Sub
 
 '----------------------------------------
-'Boolean
+'â—‡Boolean
 '----------------------------------------
 Function StrToBoolean(ByVal Value, ByVal DefaultValue)
     Call Assert(OrValue(DefaultValue, Array(True, False)), "Error:StrToBoolean")
@@ -323,13 +323,13 @@ Sub CheckStrToBoolean
 End Sub
 
 '----------------------------------------
-'Ÿ”’lˆ—
+'â—†æ•°å€¤å‡¦ç†
 '----------------------------------------
 
 '----------------------------------------
-'EÅ‘å’lÅ¬’l
+'ãƒ»æœ€å¤§å€¤æœ€å°å€¤
 '----------------------------------------
-'   E  —áFMsgBox MaxValue(Array(1, 2, 3))
+'   ãƒ»  ä¾‹ï¼šMsgBox MaxValue(Array(1, 2, 3))
 '----------------------------------------
 Public Function MaxValue(ByVal Values)
     Call Assert(IsArray(Values), "Error:OrValue:Values is not Array.")
@@ -367,18 +367,18 @@ Private Sub testMinValue()
 End Sub
 
 '----------------------------------------
-'E’l”ÍˆÍ
+'ãƒ»å€¤ç¯„å›²
 '----------------------------------------
 Public Function InRange(ByVal MinValue, ByVal Value, ByVal MaxValue)
     InRange = ((MinValue <= Value) And (Value <= MaxValue))
 End Function
 
 '----------------------------------------
-'Ÿ•¶š—ñˆ—
+'â—†æ–‡å­—åˆ—å‡¦ç†
 '----------------------------------------
 
 '----------------------------------------
-'EIsInclude
+'ãƒ»IsInclude
 '----------------------------------------
 Public Function IsIncludeStr(ByVal Str, ByVal SubStr)
     IsIncludeStr = _
@@ -386,11 +386,11 @@ Public Function IsIncludeStr(ByVal Str, ByVal SubStr)
 End Function
 
 '----------------------------------------
-'First / Last
+'â—‡First / Last
 '----------------------------------------
 
 '----------------------------------------
-'EFirstStr
+'ãƒ»FirstStr
 '----------------------------------------
 Public Function IsFirstStr(ByVal Str , ByVal SubStr)
     Dim Result: Result = False
@@ -447,9 +447,9 @@ Private Sub testExcludeFirstStr()
 End Sub
 
 '----------------------------------------
-'EFirstText
+'ãƒ»FirstText
 '----------------------------------------
-'   E  ‘å¬•¶š‚ğ‹æ•Ê‚¹‚¸‚É”äŠr‚·‚é
+'   ãƒ»  å¤§å°æ–‡å­—ã‚’åŒºåˆ¥ã›ãšã«æ¯”è¼ƒã™ã‚‹
 '----------------------------------------
 Public Function IsFirstText(ByVal Str , ByVal SubStr)
     IsFirstText = IsFirstStr(LCase(Str), LCase(SubStr))
@@ -472,7 +472,7 @@ Public Function ExcludeFirstText(ByVal Str, ByVal SubStr)
 End Function
 
 '----------------------------------------
-'ELastStr
+'ãƒ»LastStr
 '----------------------------------------
 Public Function IsLastStr(ByVal Str, ByVal SubStr)
     Dim Result: Result = False
@@ -529,9 +529,9 @@ Private Sub testExcludeLastStr()
 End Sub
 
 '----------------------------------------
-'ELastText
+'ãƒ»LastText
 '----------------------------------------
-'   E  ‘å¬•¶š‚ğ‹æ•Ê‚¹‚¸‚É”äŠr‚·‚é
+'   ãƒ»  å¤§å°æ–‡å­—ã‚’åŒºåˆ¥ã›ãšã«æ¯”è¼ƒã™ã‚‹
 '----------------------------------------
 Public Function IsLastText(ByVal Str, ByVal SubStr)
     IsLastText = IsLastStr(LCase(Str), LCase(SubStr))
@@ -554,7 +554,7 @@ Public Function ExcludeLastText(ByVal Str, ByVal SubStr)
 End Function
 
 '----------------------------------------
-'EBothStr
+'ãƒ»BothStr
 '----------------------------------------
 Public Function IncludeBothEndsStr(ByVal Str, ByVal SubStr)
     IncludeBothEndsStr = _
@@ -567,9 +567,9 @@ Public Function ExcludeBothEndsStr(ByVal Str, ByVal SubStr)
 End Function
 
 '----------------------------------------
-'EBothText
+'ãƒ»BothText
 '----------------------------------------
-'   E  ‘å¬•¶š‚ğ‹æ•Ê‚¹‚¸‚É”äŠr‚·‚é
+'   ãƒ»  å¤§å°æ–‡å­—ã‚’åŒºåˆ¥ã›ãšã«æ¯”è¼ƒã™ã‚‹
 '----------------------------------------
 Public Function IncludeBothEndsText(ByVal Str, ByVal SubStr)
     IncludeBothEndsText = _
@@ -582,7 +582,7 @@ Public Function ExcludeBothEndsText(ByVal Str, ByVal SubStr)
 End Function
 
 '----------------------------------------
-'EFirstStrFirst/LastDelim
+'ãƒ»FirstStrFirst/LastDelim
 '----------------------------------------
 Public Function FirstStrFirstDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -603,11 +603,11 @@ Private Sub testFirstStrFirstDelim
 End Sub
 
 '----------------------------------------
-'First / Last Delim
+'â—‡First / Last Delim
 '----------------------------------------
 
 '----------------------------------------
-'EFirstStrLastDelim
+'ãƒ»FirstStrLastDelim
 '----------------------------------------
 Public Function FirstStrLastDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -628,7 +628,7 @@ Private Sub testFirstStrLastDelim
 End Sub
 
 '----------------------------------------
-'ELastStrFirstDelim
+'ãƒ»LastStrFirstDelim
 '----------------------------------------
 Public Function LastStrFirstDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -649,7 +649,7 @@ Private Sub testLastStrFirstDelim
 End Sub
 
 '----------------------------------------
-'ELastStrLastDelim
+'ãƒ»LastStrLastDelim
 '----------------------------------------
 Public Function LastStrLastDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -670,7 +670,7 @@ Private Sub testLastStrLastDelim
 End Sub
 
 '----------------------------------------
-'Trim
+'â—‡Trim
 '----------------------------------------
 
 Public Function TrimFirstStrs(ByVal Str, ByVal TrimStrs)
@@ -717,16 +717,16 @@ Public Function TrimBothEndsStrs(ByVal Str, ByVal TrimStrs)
 End Function
 
 '----------------------------------------
-'•¶š—ñŒ‹‡
+'â—‡æ–‡å­—åˆ—çµåˆ
 '----------------------------------------
 
 '----------------------------------------
-'E•¶š—ñŒ‹‡
+'ãƒ»æ–‡å­—åˆ—çµåˆ
 '----------------------------------------
-'   E  ­‚È‚­‚Æ‚à1‚Â‚ÌDelimiter‚ªŠÔ‚É“ü‚Á‚ÄÚ‘±‚³‚ê‚éB
-'   E  Delimiter‚ªŒ‹‡‚Ì—¼’[‚É•t‘®‚·‚éê‡‚à1‚Â‚É‚È‚éB
-'   E  2˜A‘±‚ÅŒ‹‡‚Ì—¼’[‚É‚ ‚éê‡‚Í1‚Â‚ªíœ‚³‚ê‚é
-'       (ƒeƒXƒg‚Å‚Ì“®ìQÆ)
+'   ãƒ»  å°‘ãªãã¨ã‚‚1ã¤ã®DelimiterãŒé–“ã«å…¥ã£ã¦æ¥ç¶šã•ã‚Œã‚‹ã€‚
+'   ãƒ»  DelimiterãŒçµåˆã®ä¸¡ç«¯ã«ä»˜å±ã™ã‚‹å ´åˆã‚‚1ã¤ã«ãªã‚‹ã€‚
+'   ãƒ»  2é€£ç¶šã§çµåˆã®ä¸¡ç«¯ã«ã‚ã‚‹å ´åˆã¯1ã¤ãŒå‰Šé™¤ã•ã‚Œã‚‹
+'       (ãƒ†ã‚¹ãƒˆã§ã®å‹•ä½œå‚ç…§)
 '----------------------------------------
 Public Function StringCombine(ByVal Delimiter, ByVal Values)
     Call Assert(IsArray(Values), "Error:StringCombine:Values is not Array.")
@@ -809,15 +809,15 @@ End Sub
 
 
 '----------------------------------------
-'•¶š—ñ”äŠr
+'â—‡æ–‡å­—åˆ—æ¯”è¼ƒ
 '----------------------------------------
 
 '----------------------------------------
-'EƒƒCƒ‹ƒhƒJ[ƒhŒŸõ
+'ãƒ»ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰æ¤œç´¢
 '----------------------------------------
-'   E  VB‚ÌLike‰‰Zq‚Æ—‚½•¶š—ñ”äŠr
-'   E  Œµ–§‚É‚Í³‹K•\Œ»‚ğ—˜—p‚µ‚Ä‚¢‚é‚Ì‚Å
-'       ³‹K•\Œ»•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚ÆŒë“®ì‚·‚é
+'   ãƒ»  VBã®Likeæ¼”ç®—å­ã¨ä¼¼ãŸæ–‡å­—åˆ—æ¯”è¼ƒ
+'   ãƒ»  å³å¯†ã«ã¯æ­£è¦è¡¨ç¾ã‚’åˆ©ç”¨ã—ã¦ã„ã‚‹ã®ã§
+'       æ­£è¦è¡¨ç¾æ–‡å­—ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã¨èª¤å‹•ä½œã™ã‚‹
 '----------------------------------------
 Public Function LikeCompare(ByVal TargetText, ByVal WildCard)
     Dim Result: Result = False
@@ -831,11 +831,11 @@ Public Function LikeCompare(ByVal TargetText, ByVal WildCard)
 End Function
 
 '----------------------------------------
-'E•¶š—ñˆê’v‚ğŠm”F‚·‚éŠÖ”
+'ãƒ»æ–‡å­—åˆ—ä¸€è‡´ã‚’ç¢ºèªã™ã‚‹é–¢æ•°
 '----------------------------------------
-'   E  •”•ª•¶š—ñ(ƒL[ƒ[ƒh)‚©ƒƒCƒ‹ƒhƒJ[ƒh‚Åˆê’vŠm”F‚·‚é
-'   E  ƒƒCƒ‹ƒhƒJ[ƒhw’è‚©‚Ç‚¤‚©‚Í[*]‚©[?]‚ª
-'       ŠÜ‚Ü‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Å”»’è‚·‚é
+'   ãƒ»  éƒ¨åˆ†æ–‡å­—åˆ—(ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰)ã‹ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ã§ä¸€è‡´ç¢ºèªã™ã‚‹
+'   ãƒ»  ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰æŒ‡å®šã‹ã©ã†ã‹ã¯[*]ã‹[?]ãŒ
+'       å«ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã§åˆ¤å®šã™ã‚‹
 '----------------------------------------
 Public Function MatchText(ByVal TargetText, ByVal SearchStrArray)
     MatchText = (0 <= IndexOfArray(TargetText, SearchStrArray))
@@ -848,13 +848,13 @@ Public Function IndexOfArray(ByVal TargetText, ByVal SearchStrArray)
     For I = 0 To ArrayCount(SearchStrArray) - 1
         If IsIncludeStr(SearchStrArray(I), "*") _
         Or IsIncludeStr(SearchStrArray(I), "?")  Then
-            'ƒƒCƒ‹ƒhƒJ[ƒhƒ}ƒbƒ`
+            'ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ãƒãƒƒãƒ
             If (LikeCompare(TargetText, SearchStrArray(I))) Then
                 Result = I
                 Exit For
             End If
         Else
-            'ƒL[ƒ[ƒhƒ}ƒbƒ`
+            'ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ãƒãƒƒãƒ
             If (1 <= InStr(TargetText, SearchStrArray(I))) Then
                 Result = I
                 Exit For
@@ -885,7 +885,7 @@ Public Function IndexOfArrayWildCard(ByVal TargetText, ByVal SearchStrArray)
     Dim Result: Result = -1
     Dim I
     For I = 0 To ArrayCount(SearchStrArray) - 1
-        'ƒƒCƒ‹ƒhƒJ[ƒhƒ}ƒbƒ`
+        'ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ãƒãƒƒãƒ
         If (LikeCompare(TargetText, SearchStrArray(I))) Then
             Result = I
             Exit For
@@ -917,7 +917,7 @@ Public Function IndexOfArrayKeyWord(ByVal TargetText, ByVal SearchStrArray)
     Dim Result: Result = -1
     Dim I
     For I = 0 To ArrayCount(SearchStrArray) - 1
-        'ƒL[ƒ[ƒhƒ}ƒbƒ`
+        'ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ãƒãƒƒãƒ
         If IsIncludeStr(TargetText, SearchStrArray(I)) Then
             Result = I
             Exit For
@@ -939,7 +939,7 @@ Private Sub testMatchTextKeyWord
 End Sub
 
 '----------------------------------------
-'E•¶š—ñˆê’v‚ğ³‹K•\Œ»‚ÅŠm”F‚·‚éŠÖ”
+'ãƒ»æ–‡å­—åˆ—ä¸€è‡´ã‚’æ­£è¦è¡¨ç¾ã§ç¢ºèªã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function MatchTextRegExp(ByVal TargetText, ByVal SearchPatternArray)
     MatchTextRegExp = (0 <= IndexOfArrayRegExp(TargetText, SearchPatternArray))
@@ -979,11 +979,11 @@ End Sub
 
 
 '----------------------------------------
-'•¶š—ñ’uŠ·
+'â—‡æ–‡å­—åˆ—ç½®æ›
 '----------------------------------------
 
 '----------------------------------------
-'E³‹K•\Œ»‚Éˆê’v‚·‚é‚à‚Ì‚ğíœ‚·‚éŠÖ”
+'ãƒ»æ­£è¦è¡¨ç¾ã«ä¸€è‡´ã™ã‚‹ã‚‚ã®ã‚’å‰Šé™¤ã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function DeleteRegText(ByVal Value, ByVal Pattern)
     Dim Result: Result = Value
@@ -992,15 +992,15 @@ Public Function DeleteRegText(ByVal Value, ByVal Pattern)
     Do While RegExp.Test(Result)
         Result = RegExp.Replace(Result, "")
     Loop
-    'ƒpƒ^[ƒ“‚Éˆê’v‚µ‘±‚¯‚éŒÀ‚è‚Í’u‚«Š·‚¦‚ğs‚¤
+    'ãƒ‘ã‚¿ãƒ¼ãƒ³ã«ä¸€è‡´ã—ç¶šã‘ã‚‹é™ã‚Šã¯ç½®ãæ›ãˆã‚’è¡Œã†
     DeleteRegText = Result
 End Function
 
 '----------------------------------------
-'E“ú•t•¶š—ñ‚ğíœ‚·‚éŠÖ”
+'ãƒ»æ—¥ä»˜æ–‡å­—åˆ—ã‚’å‰Šé™¤ã™ã‚‹é–¢æ•°
 '----------------------------------------
-'   E  [_YYYY-MM-DD_]‚â[YYYYMMDD]‚Æ‚¢‚¤•¶š—ñ‚ğ
-'       Œ³‚Ì•¶š—ñ‚©‚çíœ‚·‚é
+'   ãƒ»  [_YYYY-MM-DD_]ã‚„[YYYYMMDD]ã¨ã„ã†æ–‡å­—åˆ—ã‚’
+'       å…ƒã®æ–‡å­—åˆ—ã‹ã‚‰å‰Šé™¤ã™ã‚‹
 '----------------------------------------
 Public Function DeleteDateText(ByVal Value)
 '    DeleteDateText = DeleteRegText(Value, _
@@ -1033,10 +1033,10 @@ Private Sub testDeleteDateText
 End Sub
 
 '----------------------------------------
-'E“ú•t•¶š—ñ‚ğíœ‚·‚éŠÖ”
+'ãƒ»æ—¥ä»˜æ™‚åˆ»æ–‡å­—åˆ—ã‚’å‰Šé™¤ã™ã‚‹é–¢æ•°
 '----------------------------------------
-'   E  [_YYYY-MM-DD_HH-MM-DD_]‚â[YYYYMMDDHHMMDD]‚Æ‚¢‚¤•¶š—ñ‚ğ
-'       Œ³‚Ì•¶š—ñ‚©‚çíœ‚·‚é
+'   ãƒ»  [_YYYY-MM-DD_HH-MM-DD_]ã‚„[YYYYMMDDHHMMDD]ã¨ã„ã†æ–‡å­—åˆ—ã‚’
+'       å…ƒã®æ–‡å­—åˆ—ã‹ã‚‰å‰Šé™¤ã™ã‚‹
 '----------------------------------------
 Public Function DeleteDateTimeText(ByVal Value)
 '    DeleteDateTimeText = DeleteRegText(Value, _
@@ -1080,11 +1080,11 @@ End Sub
 
 
 '----------------------------------------
-'•W€•¶š—ñŠÖ”“®ìŠm”FƒeƒXƒg
+'â—‡æ¨™æº–æ–‡å­—åˆ—é–¢æ•°å‹•ä½œç¢ºèªãƒ†ã‚¹ãƒˆ
 '----------------------------------------
 
 '----------------------------------------
-'ESplit
+'ãƒ»Split
 '----------------------------------------
 Private Sub testSplit
     Call Check(0, ArrayCount(Split("", "-")))
@@ -1099,18 +1099,18 @@ Private Sub testSplit
 End Sub
 
 '----------------------------------------
-'Ÿ”z—ñˆ—
+'â—†é…åˆ—å‡¦ç†
 '----------------------------------------
-'VBScript‚Í
+'VBScriptã¯
 '   Dim A(3 To 5)
 '   ReDim B(4 To 6)
-'‚Æ‚¢‚¤‚æ‚¤‚ÈéŒ¾‚ª‚Å‚«‚È‚¢‚Ì‚Å
-'LBound‚Íí‚É0‚¾‚Æl‚¦‚Äˆ—‚ğÀ‘•‚·‚é
-'—áŠO‚Í‚ ‚é‚©‚à‚µ‚ê‚È‚¢‚ª•s–¾
+'ã¨ã„ã†ã‚ˆã†ãªå®£è¨€ãŒã§ããªã„ã®ã§
+'LBoundã¯å¸¸ã«0ã ã¨è€ƒãˆã¦å‡¦ç†ã‚’å®Ÿè£…ã™ã‚‹
+'ä¾‹å¤–ã¯ã‚ã‚‹ã‹ã‚‚ã—ã‚Œãªã„ãŒä¸æ˜
 '----------------------------------------
 
 '----------------------------------------
-'E”z—ñ‚Ì—v‘f”‚ğ‹‚ß‚éŠÖ”
+'ãƒ»é…åˆ—ã®è¦ç´ æ•°ã‚’æ±‚ã‚ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function ArrayCount(ByVal ArrayValue)
     Call Assert(IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array.")
@@ -1127,9 +1127,9 @@ Private Sub testArrayCount
 End Sub
 
 '----------------------------------------
-'E”z—ñ‚Ì—v‘f‚ğ’Ç‰Á‚·‚é
+'ãƒ»é…åˆ—ã®è¦ç´ ã‚’è¿½åŠ ã™ã‚‹
 '----------------------------------------
-'   E  ƒIƒuƒWƒFƒNƒg’l‚É‚à‘Î‰
+'   ãƒ»  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå€¤ã«ã‚‚å¯¾å¿œ
 '----------------------------------------
 Sub ArrayAdd(ByRef ArrayValue, ByVal Value)
     Call Assert(IsArray(ArrayValue), "Error:ArrayAdd:ArrayValue is not Array.")
@@ -1156,9 +1156,9 @@ Private Sub testArrayAdd
 End Sub
 
 '----------------------------------------
-'E”z—ñ‚Ì—v‘f‚ğ‘}“ü‚·‚é
+'ãƒ»é…åˆ—ã®è¦ç´ ã‚’æŒ¿å…¥ã™ã‚‹
 '----------------------------------------
-'   E  ƒIƒuƒWƒFƒNƒg’l‚É‚à‘Î‰
+'   ãƒ»  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå€¤ã«ã‚‚å¯¾å¿œ
 '----------------------------------------
 Sub ArrayInsert(ByRef ArrayValue, ByVal Index, ByVal Value)
     Call Assert(IsArray(ArrayValue), "Error:ArrayInsert:ArrayValue is not Array.")
@@ -1194,9 +1194,9 @@ Private Sub testArrayInsert
 End Sub
 
 '----------------------------------------
-'E”z—ñ‚Ì—v‘f‚ğíœ‚·‚é
+'ãƒ»é…åˆ—ã®è¦ç´ ã‚’å‰Šé™¤ã™ã‚‹
 '----------------------------------------
-'   E  ƒIƒuƒWƒFƒNƒg’l‚É‚à‘Î‰
+'   ãƒ»  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå€¤ã«ã‚‚å¯¾å¿œ
 '----------------------------------------
 Sub ArrayDelete(ByRef ArrayValue, ByVal Index)
     Call Assert(IsArray(ArrayValue), "Error:ArrayDelete:ArrayValue is not Array.")
@@ -1230,7 +1230,7 @@ Private Sub testArrayDelete
 End Sub
 
 '----------------------------------------
-'E”z—ñŠÖ”‚ÌƒeƒXƒg
+'ãƒ»é…åˆ—é–¢æ•°ã®ãƒ†ã‚¹ãƒˆ
 '----------------------------------------
 Sub testArrayFunctions
     Dim A
@@ -1259,10 +1259,10 @@ Sub testArrayFunctions
 End Sub
 
 '----------------------------------------
-'E”z—ñ‚ğ•¶š—ñ‚É‚µ‚Ä’Pƒ‚ÉŒ‹‡‚·‚éŠÖ”
+'ãƒ»é…åˆ—ã‚’æ–‡å­—åˆ—ã«ã—ã¦å˜ç´”ã«çµåˆã™ã‚‹é–¢æ•°
 '----------------------------------------
 Function ArrayToString(ByRef ArrayValue, ByVal Delimiter)
-    Call Assert(IsArray(ArrayValue), "”z—ñ‚Å‚Í‚ ‚è‚Ü‚¹‚ñ")
+    Call Assert(IsArray(ArrayValue), "é…åˆ—ã§ã¯ã‚ã‚Šã¾ã›ã‚“")
     Dim Result: Result = ""
     Dim I
     For I = LBound(ArrayValue) To UBound(ArrayValue)
@@ -1273,7 +1273,7 @@ Function ArrayToString(ByRef ArrayValue, ByVal Delimiter)
 End Function
 
 '----------------------------------------
-'E”z—ñ“¯m‚ğŒ‹‡‚·‚éŠÖ”
+'ãƒ»é…åˆ—åŒå£«ã‚’çµåˆã™ã‚‹é–¢æ•°
 '----------------------------------------
 Sub ArrayAddArray(ByRef ArrayValue, ByVal AddArrayValue)
     Call Assert(IsArray(ArrayValue), "Error:ArrayAddArray:ArrayValue is not array.")
@@ -1287,11 +1287,11 @@ End Sub
 
 
 '----------------------------------------
-'Ÿ“ú•tˆ—
+'â—†æ—¥ä»˜æ™‚åˆ»å‡¦ç†
 '----------------------------------------
 
 '----------------------------------------
-'E“ú•t‘®
+'ãƒ»æ—¥ä»˜æ›¸å¼
 '----------------------------------------
 Public Function FormatYYYYMMDD(ByVal DateValue)
     FormatYYYYMMDD = FormatYYYY_MM_DD(DateValue, "")
@@ -1318,7 +1318,7 @@ Public Function FormatYYYY_MM_DD(ByVal DateValue, ByVal Delimiter)
 End Function
 
 '----------------------------------------
-'E‘®
+'ãƒ»æ™‚åˆ»æ›¸å¼
 '----------------------------------------
 Public Function FormatHHMMSS(ByVal TimeValue)
     FormatHHMMSS = FormatHH_MM_SS(TimeValue, "")
@@ -1345,7 +1345,7 @@ Public Function FormatHH_MM_SS(ByVal TimeValue, ByVal Delimiter)
 End Function
 
 '----------------------------------------
-'E“ú•t‘®
+'ãƒ»æ—¥ä»˜æ™‚åˆ»æ›¸å¼
 '----------------------------------------
 Public Function FormatYYYYMMDDHHMMSS(ByVal DateTimeValue)
     FormatYYYYMMDDHHMMSS = _
@@ -1354,7 +1354,7 @@ Public Function FormatYYYYMMDDHHMMSS(ByVal DateTimeValue)
 End Function
 
 '----------------------------------------
-'‘®w’è
+'â—‡æ›¸å¼æŒ‡å®š
 '----------------------------------------
 'Const vbSunday = 1
 'Const vbMonday = 2
@@ -1370,13 +1370,13 @@ Public Function WeekDayJapaneseShort(ByVal DateValue)
         If IsDate(DateValue) = False Then Exit Do
 
         Select Case Weekday(DateValue)
-        Case vbSunday:      Result = "“ú"
-        Case vbMonday:      Result = "Œ"
-        Case vbTuesday:     Result = "‰Î"
-        Case vbWednesday:   Result = "…"
-        Case vbThursday:    Result = "–Ø"
-        Case vbFriday:      Result = "‹à"
-        Case vbSaturday:    Result = "“y"
+        Case vbSunday:      Result = "æ—¥"
+        Case vbMonday:      Result = "æœˆ"
+        Case vbTuesday:     Result = "ç«"
+        Case vbWednesday:   Result = "æ°´"
+        Case vbThursday:    Result = "æœ¨"
+        Case vbFriday:      Result = "é‡‘"
+        Case vbSaturday:    Result = "åœŸ"
         End Select
     Loop While False
     WeekDayJapaneseShort = Result
@@ -1386,7 +1386,7 @@ Public Function WeekDayJapaneseLong(ByVal DateValue)
     Dim Result: Result = ""
     Do
         If IsDate(DateValue) = False Then Exit Do
-        Result = WeekDayJapaneseShort(DateValue) + "—j“ú"
+        Result = WeekDayJapaneseShort(DateValue) + "æ›œæ—¥"
     Loop While False
     WeekDayJapaneseLong = Result
 End Function
@@ -1427,14 +1427,14 @@ Public Function WeekDayEnglishLong(ByVal DateValue)
     WeekDayEnglishLong = Result
 End Function
 '----------------------------------------
-'E‘®“ú•t•ÏŠ·ŠÖ”
+'ãƒ»æ›¸å¼æ—¥ä»˜æ™‚åˆ»å¤‰æ›é–¢æ•°
 '----------------------------------------
-'   E  ‘Î‰‘®•¶š—ñ
+'   ãƒ»  å¯¾å¿œæ›¸å¼æ–‡å­—åˆ—
 '   yyyy/yy/y
 '   mm/m
 '   dd/d
 '   dddd/ddd    Sunday..Saturday / Sun..Sat
-'   aaaa/aaa    “ú—j“ú..“y—j“ú / “ú..“y
+'   aaaa/aaa    æ—¥æ›œæ—¥..åœŸæ›œæ—¥ / æ—¥..åœŸ
 '   hh/h
 '   nn/n
 '   ss/s
@@ -1496,8 +1496,8 @@ Sub testFormatDateTimeToString
     Call Check("05", FormatDateTimeToString(Value, "ss"))
     Call Check("5", FormatDateTimeToString(Value, "s"))
 
-    Call Check("‹à", FormatDateTimeToString(Value, "aaa"))
-    Call Check("‹à—j“ú", FormatDateTimeToString(Value, "aaaa"))
+    Call Check("é‡‘", FormatDateTimeToString(Value, "aaa"))
+    Call Check("é‡‘æ›œæ—¥", FormatDateTimeToString(Value, "aaaa"))
     Call Check("Fri", FormatDateTimeToString(Value, "ddd"))
     Call Check("Friday", FormatDateTimeToString(Value, "dddd"))
 
@@ -1515,12 +1515,12 @@ Sub testFormatDateTimeToString
 End Sub
 
 '----------------------------------------
-'Ÿƒtƒ@ƒCƒ‹ƒtƒHƒ‹ƒ_ƒpƒXˆ—
+'â—†ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹å‡¦ç†
 '----------------------------------------
 
 '----------------------------------------
-'Eâ‘ÎƒpƒX‚ğæ“¾‚·‚éŠÖ”
-'ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠƒpƒX‚Æ‘Š‘ÎƒpƒX‚ğw’è‚·‚é
+'ãƒ»çµ¶å¯¾ãƒ‘ã‚¹ã‚’å–å¾—ã™ã‚‹é–¢æ•°
+'ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ‘ã‚¹ã¨ç›¸å¯¾ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹
 '----------------------------------------
 Public Function AbsoluteFilePath(ByVal BasePath, ByVal RelativePath)
     AbsoluteFilePath = AbsolutePath(BasePath, RelativePath)
@@ -1534,30 +1534,30 @@ Public Function AbsolutePath(ByVal BasePath, ByVal RelativePath)
             Exit Do
         End If
 
-        '‘Š‘ÎƒpƒXw’è•”•ª‚ªâ‘ÎƒpƒX‚Ìê‡A
-        'ˆ—‚Ís‚í‚¸‚É‚»‚Ì‚Ü‚Üâ‘ÎƒpƒX‚ğ•Ô‚·
+        'ç›¸å¯¾ãƒ‘ã‚¹æŒ‡å®šéƒ¨åˆ†ãŒçµ¶å¯¾ãƒ‘ã‚¹ã®å ´åˆã€
+        'å‡¦ç†ã¯è¡Œã‚ãšã«ãã®ã¾ã¾çµ¶å¯¾ãƒ‘ã‚¹ã‚’è¿”ã™
         If IsIncludeDrivePath(RelativePath) Then
             Result = RelativePath
             Exit Do
         End If
 
-        '‘Š‘ÎƒpƒXw’è•”•ª‚ªƒlƒbƒgƒ[ƒNƒpƒX‚Ìê‡A
-        'ˆ—‚Ís‚í‚¸‚É‚»‚Ì‚Ü‚Üâ‘ÎƒpƒX‚ğ•Ô‚·
+        'ç›¸å¯¾ãƒ‘ã‚¹æŒ‡å®šéƒ¨åˆ†ãŒãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‘ã‚¹ã®å ´åˆã€
+        'å‡¦ç†ã¯è¡Œã‚ãšã«ãã®ã¾ã¾çµ¶å¯¾ãƒ‘ã‚¹ã‚’è¿”ã™
         If IsNetworkPath(RelativePath) Then
             Result = RelativePath
             Exit Do
         End If
 
-        'ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğŠm•Û
+        'ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ç¢ºä¿
         Dim CurDirBuffer
         CurDirBuffer = Shell.CurrentDirectory
 
         Shell.CurrentDirectory = BasePath
 
-        '‘Š‘ÎƒpƒX‚ğæ“¾
+        'ç›¸å¯¾ãƒ‘ã‚¹ã‚’å–å¾—
         Result = fso.GetAbsolutePathName(RelativePath)
 
-        'ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğŒ³‚É–ß‚·
+        'ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å…ƒã«æˆ»ã™
         Shell.CurrentDirectory =  CurDirBuffer
 
     Loop While False
@@ -1566,18 +1566,18 @@ End Function
 
 Sub testAbsolutePath()
 
-     '’Êí‚Ì‘Š‘ÎƒpƒXw’è
+     'é€šå¸¸ã®ç›¸å¯¾ãƒ‘ã‚¹æŒ‡å®š
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Windows", ".\System32")))
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Program Files", "..\Windows\System32")))
 
-    'ƒsƒŠƒIƒh‚Å‚Í‚È‚¢‘Š‘ÎƒpƒXw’è
+    'ãƒ”ãƒªã‚ªãƒ‰ã§ã¯ãªã„ç›¸å¯¾ãƒ‘ã‚¹æŒ‡å®š
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Windows", "System32")))
 
-    'ƒhƒ‰ƒCƒuƒpƒXw’è
+    'ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ‘ã‚¹æŒ‡å®š
     Call Check(LCase("C:\Program Files"), LCase(AbsolutePath("C:\Windows", "C:\Program Files")))
     Call Check(LCase("C:\Windows\System32"), LCase(AbsolutePath("C:\Program Files", "C:\Windows\System32")))
 
-    'ƒlƒbƒgƒ[ƒNƒpƒXw’è
+    'ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‘ã‚¹æŒ‡å®š
     Call Check(LCase("\\127.0.0.1\C$"), LCase(AbsolutePath("C:\Windows", "\\127.0.0.1\C$")))
 
     Call Check(AbsolutePath(ScriptFolderPath, ".\Test\TestFileFolderPathList"), _
@@ -1589,8 +1589,8 @@ Sub testAbsolutePath()
 End Sub
 
 '----------------------------------------
-'Eƒhƒ‰ƒCƒuƒpƒX‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©Šm”F‚·‚éŠÖ”
-'[:]‚ª2•¶š–ÚˆÈ~‚É‚ ‚é‚©‚Ç‚¤‚©‚Å”»’è
+'ãƒ»ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ‘ã‚¹ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ç¢ºèªã™ã‚‹é–¢æ•°
+'[:]ãŒ2æ–‡å­—ç›®ä»¥é™ã«ã‚ã‚‹ã‹ã©ã†ã‹ã§åˆ¤å®š
 '----------------------------------------
 Public Function IsIncludeDrivePath(ByVal Path)
     Dim Result
@@ -1599,7 +1599,7 @@ Public Function IsIncludeDrivePath(ByVal Path)
 End Function
 '
 '----------------------------------------
-'Eƒlƒbƒgƒ[ƒNƒhƒ‰ƒCƒu‚©‚Ç‚¤‚©Šm”F‚·‚éŠÖ”
+'ãƒ»ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãƒ‰ãƒ©ã‚¤ãƒ–ã‹ã©ã†ã‹ç¢ºèªã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function IsNetworkPath(ByVal Path)
     Dim Result: Result = False
@@ -1612,7 +1612,7 @@ Public Function IsNetworkPath(ByVal Path)
 End Function
 '
 '----------------------------------------
-'Eƒhƒ‰ƒCƒuƒpƒX"C:"‚ğæ‚èo‚·ŠÖ”
+'ãƒ»ãƒ‰ãƒ©ã‚¤ãƒ–ãƒ‘ã‚¹"C:"ã‚’å–ã‚Šå‡ºã™é–¢æ•°
 '----------------------------------------
 Public Function GetDrivePath(ByVal Path)
     Dim Result: Result = ""
@@ -1624,7 +1624,7 @@ Public Function GetDrivePath(ByVal Path)
 End Function
 
 '----------------------------------------
-'EI’[‚ÉƒpƒX‹æØ‚è‚ğ’Ç‰Á‚·‚éŠÖ”
+'ãƒ»çµ‚ç«¯ã«ãƒ‘ã‚¹åŒºåˆ‡ã‚Šã‚’è¿½åŠ ã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function IncludeLastPathDelim(ByVal Path)
     Dim Result: Result = ""
@@ -1635,7 +1635,7 @@ Public Function IncludeLastPathDelim(ByVal Path)
 End Function
 
 '----------------------------------------
-'EI’[‚©‚çƒpƒX‹æØ‚è‚ğíœ‚·‚éŠÖ”
+'ãƒ»çµ‚ç«¯ã‹ã‚‰ãƒ‘ã‚¹åŒºåˆ‡ã‚Šã‚’å‰Šé™¤ã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function ExcludeLastPathDelim(ByVal Path)
     Dim Result: Result = ""
@@ -1646,7 +1646,7 @@ Public Function ExcludeLastPathDelim(ByVal Path)
 End Function
 
 '----------------------------------------
-'EƒXƒy[ƒX‚ÌŠÜ‚Ü‚ê‚½’l‚ğƒ_ƒuƒ‹ƒNƒEƒH[ƒg‚ÅˆÍ‚¤
+'ãƒ»ã‚¹ãƒšãƒ¼ã‚¹ã®å«ã¾ã‚ŒãŸå€¤ã‚’ãƒ€ãƒ–ãƒ«ã‚¯ã‚¦ã‚©ãƒ¼ãƒˆã§å›²ã†
 '----------------------------------------
 Function InSpacePlusDoubleQuote(ByVal Value)
     Dim Result: Result = ""
@@ -1659,7 +1659,7 @@ Function InSpacePlusDoubleQuote(ByVal Value)
 End Function
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹ƒpƒX”z—ñ‚ğƒ_ƒuƒ‹ƒNƒEƒH[ƒg‚ÅˆÍ‚İw’è•¶š‚Å˜AŒ‹‚·‚é
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹é…åˆ—ã‚’ãƒ€ãƒ–ãƒ«ã‚¯ã‚¦ã‚©ãƒ¼ãƒˆã§å›²ã¿æŒ‡å®šæ–‡å­—ã§é€£çµã™ã‚‹
 '----------------------------------------
 Function IncludeBothEndsDoubleQuoteCombineArray(ByVal ArrayValue, ByVal Delimiter)
     Call Assert(IsArray(ArrayValue), _
@@ -1677,11 +1677,11 @@ End Function
 
 
 '----------------------------------------
-'EƒsƒŠƒIƒh‚ğŠÜ‚ŞŠg’£q‚ğæ“¾‚·‚éŠÖ”
+'ãƒ»ãƒ”ãƒªã‚ªãƒ‰ã‚’å«ã‚€æ‹¡å¼µå­ã‚’å–å¾—ã™ã‚‹é–¢æ•°
 '----------------------------------------
-'ƒsƒŠƒIƒh‚Ì‚È‚¢ƒtƒ@ƒCƒ‹–¼‚Ìê‡‚Í‹ó•¶š‚ğ•Ô‚·
-'fso.GetExtensionName ‚Å‚ÍƒsƒŠƒIƒh‚ÅI‚í‚éƒtƒ@ƒCƒ‹–¼‚ğ
-'”»’f‚Å‚«‚È‚¢‚½‚ß‚Éì¬‚µ‚½B
+'ãƒ”ãƒªã‚ªãƒ‰ã®ãªã„ãƒ•ã‚¡ã‚¤ãƒ«åã®å ´åˆã¯ç©ºæ–‡å­—ã‚’è¿”ã™
+'fso.GetExtensionName ã§ã¯ãƒ”ãƒªã‚ªãƒ‰ã§çµ‚ã‚ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«åã‚’
+'åˆ¤æ–­ã§ããªã„ãŸã‚ã«ä½œæˆã—ãŸã€‚
 '----------------------------------------
 Public Function PeriodExtName(ByVal Path)
     Dim Result: Result = ""
@@ -1700,7 +1700,7 @@ Sub testPeriodExtName
 End Sub
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹–¼‚©‚çŠg’£q‚ğæ‚èœ‚­ŠÖ”
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰æ‹¡å¼µå­ã‚’å–ã‚Šé™¤ãé–¢æ•°
 '----------------------------------------
 Public Function ExcludePathExt(ByVal Path)
     Dim Result: Result = ""
@@ -1718,7 +1718,7 @@ Sub testExcludePathExt
 End Sub
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹ƒpƒX‚ÌŠg’£q‚ğ•ÏX‚·‚éŠÖ”
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®æ‹¡å¼µå­ã‚’å¤‰æ›´ã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function ChangeFileExt(ByVal Path, ByVal NewExt)
     Dim Result: Result = ""
@@ -1738,7 +1738,7 @@ Sub testChangeFileExt
 End Sub
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹ƒpƒX‚ğŒ‹‡‚·‚éŠÖ”
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚’çµåˆã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Function PathCombine(ByVal Values)
     Call Assert(IsArray(Values), "Error:PathCombine")
@@ -1764,18 +1764,18 @@ Sub testPathCombine()
 End Sub
 
 '----------------------------------------
-'Ÿƒtƒ@ƒCƒ‹ƒtƒHƒ‹ƒ_ƒpƒXæ“¾
+'â—†ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹å–å¾—
 '----------------------------------------
 
 '----------------------------------------
-'EƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚Ìæ“¾
+'ãƒ»ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å–å¾—
 '----------------------------------------
 Public Function CurrentDirectory
     CurrentDirectory = Shell.CurrentDirectory
 End Function
 
 '----------------------------------------
-'EƒXƒNƒŠƒvƒgƒtƒHƒ‹ƒ_‚Ìæ“¾
+'ãƒ»ã‚¹ã‚¯ãƒªãƒ—ãƒˆãƒ•ã‚©ãƒ«ãƒ€ã®å–å¾—
 '----------------------------------------
 Public Function ScriptFolderPath
     ScriptFolderPath = _
@@ -1783,9 +1783,9 @@ Public Function ScriptFolderPath
 End Function
 
 '----------------------------------------
-'Eˆêƒtƒ@ƒCƒ‹‚Ìæ“¾
+'ãƒ»ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã®å–å¾—
 '----------------------------------------
-'   E  ‚±‚Ì‚æ‚¤‚ÈƒpƒX‚ªæ“¾‚Å‚«‚é
+'   ãƒ»  ã“ã®ã‚ˆã†ãªãƒ‘ã‚¹ãŒå–å¾—ã§ãã‚‹
 '       C:\Users\<UserName>\AppData\Local\Temp\rad92218.tmp
 '----------------------------------------
 Public Function TemporaryPath
@@ -1796,7 +1796,7 @@ Public Function TemporaryFilePath
     Dim Result
     Const TemporaryFolder = 2
 
-    ' ƒŠƒ_ƒCƒŒƒNƒgæ‚Ìƒtƒ@ƒCƒ‹–¼‚ğ¶¬B
+    ' ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆå…ˆã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ç”Ÿæˆã€‚
     Do
         Result = fso.BuildPath( _
             fso.GetSpecialFolder(TemporaryFolder).Path, _
@@ -1806,9 +1806,9 @@ Public Function TemporaryFilePath
 End Function
 
 '----------------------------------------
-'EˆêƒtƒHƒ‹ƒ_‚Ìæ“¾
+'ãƒ»ä¸€æ™‚ãƒ•ã‚©ãƒ«ãƒ€ã®å–å¾—
 '----------------------------------------
-'   E  ‚±‚Ì‚æ‚¤‚ÈƒpƒX‚ªæ“¾‚Å‚«‚é
+'   ãƒ»  ã“ã®ã‚ˆã†ãªãƒ‘ã‚¹ãŒå–å¾—ã§ãã‚‹
 '       C:\Users\<UserName>\AppData\Local\Temp\rad92218
 '----------------------------------------
 Public Function TemporaryFolderPath
@@ -1820,9 +1820,9 @@ Public Function TemporaryFolderPath
 End Function
 
 '----------------------------------------
-'Eˆêƒtƒ@ƒCƒ‹–¼
+'ãƒ»ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«å
 '----------------------------------------
-'   E  ‚±‚Ì‚æ‚¤‚È–¼‘O‚ªæ“¾‚Å‚«‚é
+'   ãƒ»  ã“ã®ã‚ˆã†ãªåå‰ãŒå–å¾—ã§ãã‚‹
 '       [rad92218.tmp]
 '----------------------------------------
 Function TemporaryFileName
@@ -1831,9 +1831,9 @@ End Function
 
 
 '----------------------------------------
-'EˆêƒtƒHƒ‹ƒ_–¼
+'ãƒ»ä¸€æ™‚ãƒ•ã‚©ãƒ«ãƒ€å
 '----------------------------------------
-'   E  ‚±‚Ì‚æ‚¤‚È–¼‘O‚ªæ“¾‚Å‚«‚é
+'   ãƒ»  ã“ã®ã‚ˆã†ãªåå‰ãŒå–å¾—ã§ãã‚‹
 '       [rad92218]
 '----------------------------------------
 Function TemporaryFolderName
@@ -1841,7 +1841,7 @@ Function TemporaryFolderName
 End Function
 
 '----------------------------------------
-'Ÿƒtƒ@ƒCƒ‹ƒtƒHƒ‹ƒ_—ñ‹“
+'â—†ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ«ãƒ€åˆ—æŒ™
 '----------------------------------------
 
 Sub testFileFolderPathList()
@@ -1908,10 +1908,10 @@ Sub testFileFolderPathList()
 End Sub
 
 '----------------------------------------
-'EƒtƒHƒ‹ƒ_ƒŠƒXƒg‚ğæ“¾
+'ãƒ»ãƒ•ã‚©ãƒ«ãƒ€ãƒªã‚¹ãƒˆã‚’å–å¾—
 '----------------------------------------
-'   E  ‘¶İ‚µ‚È‚¯‚ê‚Î‹ó•¶š‚ğ•Ô‚·B
-'   E  ƒpƒX‚Í‰üsƒR[ƒh‚Å‹æØ‚ç‚ê‚Ä‚¢‚é
+'   ãƒ»  å­˜åœ¨ã—ãªã‘ã‚Œã°ç©ºæ–‡å­—ã‚’è¿”ã™ã€‚
+'   ãƒ»  ãƒ‘ã‚¹ã¯æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã§åŒºåˆ‡ã‚‰ã‚Œã¦ã„ã‚‹
 '----------------------------------------
 Public Function FolderPathListTopFolder(ByVal FolderPath)
     Call Assert(fso.FolderExists(FolderPath), _
@@ -1938,10 +1938,10 @@ Public Function FolderPathListSubFolder(ByVal FolderPath)
 End Function
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğæ“¾
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—
 '----------------------------------------
-'   E  ‘¶İ‚µ‚È‚¯‚ê‚Î‹ó•¶š‚ğ•Ô‚·B
-'   E  ƒpƒX‚Í‰üsƒR[ƒh‚Å‹æØ‚ç‚ê‚Ä‚¢‚é
+'   ãƒ»  å­˜åœ¨ã—ãªã‘ã‚Œã°ç©ºæ–‡å­—ã‚’è¿”ã™ã€‚
+'   ãƒ»  ãƒ‘ã‚¹ã¯æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã§åŒºåˆ‡ã‚‰ã‚Œã¦ã„ã‚‹
 '----------------------------------------
 Public Function FilePathListTopFolder(ByVal FolderPath)
     Call Assert(fso.FolderExists(FolderPath), _
@@ -1973,11 +1973,11 @@ End Function
 
 
 '----------------------------------------
-'Ÿƒtƒ@ƒCƒ‹ƒtƒHƒ‹ƒ_‘€ì
+'â—†ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ«ãƒ€æ“ä½œ
 '----------------------------------------
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹ƒtƒHƒ‹ƒ_‚Ì–¼‘O•ÏX
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ«ãƒ€ã®åå‰å¤‰æ›´
 '----------------------------------------
 Public Sub RenameFileFolder(ByVal Path, ByVal NewName)
     If fso.FileExists(Path) Then
@@ -2004,11 +2004,11 @@ Public Sub RenameFileFolder(ByVal Path, ByVal NewName)
 End Sub
 
 '----------------------------------------
-'Force/Recrate
+'â—‡Force/Recrate
 '----------------------------------------
 
 '----------------------------------------
-'E[‚¢ŠK‘w‚ÌƒtƒHƒ‹ƒ_‚Å‚àˆê‹C‚Éì¬‚·‚éŠÖ”
+'ãƒ»æ·±ã„éšå±¤ã®ãƒ•ã‚©ãƒ«ãƒ€ã§ã‚‚ä¸€æ°—ã«ä½œæˆã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Sub ForceCreateFolder(ByVal FolderPath)
     Dim ParentFolderPath
@@ -2018,8 +2018,8 @@ Public Sub ForceCreateFolder(ByVal FolderPath)
         Call ForceCreateFolder(ParentFolderPath)
     End If
 
-    'ƒtƒHƒ‹ƒ_‚ªo—ˆ‚é‚Ü‚ÅŒJ‚è•Ô‚·B
-    '100‰ñŒJ‚è•Ô‚µ‚Ä–³—‚È‚çƒGƒ‰[
+    'ãƒ•ã‚©ãƒ«ãƒ€ãŒå‡ºæ¥ã‚‹ã¾ã§ç¹°ã‚Šè¿”ã™ã€‚
+    '100å›ç¹°ã‚Šè¿”ã—ã¦ç„¡ç†ãªã‚‰ã‚¨ãƒ©ãƒ¼
     Dim I: I = 1
     On Error Resume Next
     Do Until fso.FolderExists(FolderPath)
@@ -2048,11 +2048,11 @@ Private Sub testForceCreateFolder
 End Sub
 
 '----------------------------------------
-'EƒtƒHƒ‹ƒ_íœ‚ğŠm”F‚·‚é‚Ü‚ÅDeleteFolder‚·‚éŠÖ”
+'ãƒ»ãƒ•ã‚©ãƒ«ãƒ€å‰Šé™¤ã‚’ç¢ºèªã™ã‚‹ã¾ã§DeleteFolderã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Sub ForceDeleteFolder(ByVal FolderPath)
-    'ƒtƒHƒ‹ƒ_‚ª‚ ‚éŠÔŒJ‚è•Ô‚·B
-    '100‰ñŒJ‚è•Ô‚µ‚Ä–³—‚È‚çƒGƒ‰[
+    'ãƒ•ã‚©ãƒ«ãƒ€ãŒã‚ã‚‹é–“ç¹°ã‚Šè¿”ã™ã€‚
+    '100å›ç¹°ã‚Šè¿”ã—ã¦ç„¡ç†ãªã‚‰ã‚¨ãƒ©ãƒ¼
     Dim I: I = 1
     On Error Resume Next
     Do While fso.FolderExists(FolderPath)
@@ -2064,16 +2064,16 @@ Public Sub ForceDeleteFolder(ByVal FolderPath)
     On Error GoTo 0
     Call Assert(fso.FolderExists(FolderPath) = False, _
         "Error:ForceDeleteFolder:Folder Delete Fail.")
-    'fso.DeleteFolder‚Íƒtƒ@ƒCƒ‹‚âƒTƒuƒtƒHƒ‹ƒ_‚ ‚Á‚Ä‚à‚·‚×‚ÄÁ‚µ‚Ä‚­‚ê‚é
+    'fso.DeleteFolderã¯ãƒ•ã‚¡ã‚¤ãƒ«ã‚„ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€ã‚ã£ã¦ã‚‚ã™ã¹ã¦æ¶ˆã—ã¦ãã‚Œã‚‹
 End Sub
 
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹íœ‚ğŠm”F‚·‚é‚Ü‚ÅDeleteFile‚·‚éŠÖ”
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ã‚’ç¢ºèªã™ã‚‹ã¾ã§DeleteFileã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Sub ForceDeleteFile(ByVal FilePath)
-    'ƒtƒ@ƒCƒ‹‚ª‚ ‚éŠÔŒJ‚è•Ô‚·B
-    '100‰ñŒJ‚è•Ô‚µ‚Ä–³—‚È‚çƒGƒ‰[
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚‹é–“ç¹°ã‚Šè¿”ã™ã€‚
+    '100å›ç¹°ã‚Šè¿”ã—ã¦ç„¡ç†ãªã‚‰ã‚¨ãƒ©ãƒ¼
     Dim I: I = 1
     On Error Resume Next
     Do While fso.FileExists(FilePath)
@@ -2088,7 +2088,7 @@ Public Sub ForceDeleteFile(ByVal FilePath)
 End Sub
 
 '----------------------------------------
-'EƒtƒHƒ‹ƒ_‚ğÄ¶¬‚·‚éŠÖ”
+'ãƒ»ãƒ•ã‚©ãƒ«ãƒ€ã‚’å†ç”Ÿæˆã™ã‚‹é–¢æ•°
 '----------------------------------------
 Public Sub RecreateFolder(ByVal FolderPath)
     Call ForceDeleteFolder(FolderPath)
@@ -2096,9 +2096,9 @@ Public Sub RecreateFolder(ByVal FolderPath)
 End Sub
 
 '----------------------------------------
-'EƒtƒHƒ‹ƒ_‚ğÄ¶¬‚µ‚ÄƒRƒs[‚·‚éŠÖ”
+'ãƒ»ãƒ•ã‚©ãƒ«ãƒ€ã‚’å†ç”Ÿæˆã—ã¦ã‚³ãƒ”ãƒ¼ã™ã‚‹é–¢æ•°
 '----------------------------------------
-'ƒtƒHƒ‹ƒ_‚Ì“ú•t‚ªÅV‚É‚È‚é
+'ãƒ•ã‚©ãƒ«ãƒ€ã®æ—¥ä»˜ãŒæœ€æ–°ã«ãªã‚‹
 '----------------------------------------
 Public Sub RecreateCopyFolder( _
 ByVal SourceFolderPath, ByVal DestFolderPath)
@@ -2118,22 +2118,22 @@ ByVal SourceFolderPath, ByVal DestFolderPath)
         WScript.Sleep 100
         I = I + 1
     Loop Until fso.FolderExists(DestFolderPath)
-    'ƒtƒHƒ‹ƒ_‚ªì¬‚Å‚«‚é‚Ü‚Åƒ‹[ƒv
+    'ãƒ•ã‚©ãƒ«ãƒ€ãŒä½œæˆã§ãã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
     On Error GoTo 0
     Call Assert(fso.FolderExists(DestFolderPath), _
         "Error:ReCreateCopyFolder:Copy Folder Fail.")
 End Sub
 
 '----------------------------------------
-'œŠOƒtƒ@ƒCƒ‹/ƒtƒHƒ‹ƒ_w’è
+'â—‡é™¤å¤–ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ•ã‚©ãƒ«ãƒ€æŒ‡å®š
 '----------------------------------------
 
 '----------------------------------------
-'Eã‘‚«œŠOƒtƒ@ƒCƒ‹‚ğw’è‚µ‚½ƒtƒHƒ‹ƒ_“àƒtƒ@ƒCƒ‹‚ÌƒRƒs[ŠÖ”
+'ãƒ»ä¸Šæ›¸ãé™¤å¤–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®šã—ãŸãƒ•ã‚©ãƒ«ãƒ€å†…ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ”ãƒ¼é–¢æ•°
 '----------------------------------------
-'   E  ƒCƒ“ƒXƒg[ƒ‹‚È‚Ç‚Éiniƒtƒ@ƒCƒ‹‚ğœŠO‚µ‚Ä
-'       ã‘‚«ƒCƒ“ƒXƒg[ƒ‹‚·‚é‚Æ‚«‚Ég—p‚·‚é
-'   E  w’è—áF
+'   ãƒ»  ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ™‚ãªã©ã«iniãƒ•ã‚¡ã‚¤ãƒ«ã‚’é™¤å¤–ã—ã¦
+'       ä¸Šæ›¸ãã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ã¨ãã«ä½¿ç”¨ã™ã‚‹
+'   ãƒ»  æŒ‡å®šä¾‹ï¼š
 '       IgnorePathsStr = "*.ini"
 '       IgnorePathsStr = "*.ini,setting.txt"
 '----------------------------------------
@@ -2162,13 +2162,13 @@ ByVal IgnorePathsStr)
 End Sub
 
 Private Sub testCopyFolderOverWriteIgnorePath
-    'ƒeƒXƒg‹Lq‚Í‚Ü‚¾“r’†
+    'ãƒ†ã‚¹ãƒˆè¨˜è¿°ã¯ã¾ã é€”ä¸­
 End Sub
 
 '----------------------------------------
-'EœŠOƒtƒ@ƒCƒ‹/ƒtƒHƒ‹ƒ_‚ğw’è‚µ‚½ƒtƒHƒ‹ƒ_“àƒtƒ@ƒCƒ‹‚ÌƒRƒs[ŠÖ”
+'ãƒ»é™¤å¤–ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ•ã‚©ãƒ«ãƒ€ã‚’æŒ‡å®šã—ãŸãƒ•ã‚©ãƒ«ãƒ€å†…ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ”ãƒ¼é–¢æ•°
 '----------------------------------------
-'   E  IgnorePathsStr ‚ÍƒJƒ“ƒ}‹æØ‚è‚Å•¡”w’è‰Â”\
+'   ãƒ»  IgnorePathsStr ã¯ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§è¤‡æ•°æŒ‡å®šå¯èƒ½
 '----------------------------------------
 Public Sub CopyFolderIgnorePath( _
 ByVal SourceFolderPath, ByVal DestFolderPath, _
@@ -2195,11 +2195,11 @@ ByVal IgnorePathsStr)
 End Sub
 
 '----------------------------------------
-'EœŠOƒtƒ@ƒCƒ‹/ƒtƒHƒ‹ƒ_‚ğw’è‚µ‚½ƒtƒ@ƒCƒ‹ƒRƒs[ŠÖ”
+'ãƒ»é™¤å¤–ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ•ã‚©ãƒ«ãƒ€ã‚’æŒ‡å®šã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚³ãƒ”ãƒ¼é–¢æ•°
 '----------------------------------------
-'   E  IgnorePathsStr ‚ÍƒJƒ“ƒ}‹æØ‚è‚Å•¡”w’è‰Â”\
-'   E  ŠY“–‚·‚éƒtƒ@ƒCƒ‹‚Í‚·‚×‚Ä–³‹‚·‚é‚Ì‚Æ
-'       ã‘‚«‚¾‚¯–³‹‚·‚é‚à‚Ì‚ª‚ ‚é
+'   ãƒ»  IgnorePathsStr ã¯ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§è¤‡æ•°æŒ‡å®šå¯èƒ½
+'   ãƒ»  è©²å½“ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã™ã¹ã¦ç„¡è¦–ã™ã‚‹ã®ã¨
+'       ä¸Šæ›¸ãã ã‘ç„¡è¦–ã™ã‚‹ã‚‚ã®ãŒã‚ã‚‹
 '----------------------------------------
 Public Sub CopyFileIgnorePath( _
 ByVal SourceFilePath, ByVal DestFilePath, _
@@ -2223,7 +2223,7 @@ ByVal OverWriteIgnoreMode)
     Call Assert(fso.FileExists(SourceFilePath), _
         "Error:CopyFileIgnorePathBase:SourceFilePath is not exists")
     Do
-        'œŠOƒtƒ@ƒCƒ‹
+        'é™¤å¤–ãƒ•ã‚¡ã‚¤ãƒ«
         If MatchText(LCase(SourceFilePath), _
             Split(LCase(IgnorePathsStr), ",")) Then
             If OverWriteIgnoreMode Then
@@ -2242,9 +2242,9 @@ ByVal OverWriteIgnoreMode)
 End Sub
 
 '----------------------------------------
-'EœŠO/‘ÎÛƒpƒXw’èƒtƒ@ƒCƒ‹íœˆ—
+'ãƒ»é™¤å¤–/å¯¾è±¡ãƒ‘ã‚¹æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤å‡¦ç†
 '----------------------------------------
-'   E  Target/IgnorePathsStr ‚ÍƒJƒ“ƒ}‹æØ‚è‚Å•¡”w’è‰Â”\
+'   ãƒ»  Target/IgnorePathsStr ã¯ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã§è¤‡æ•°æŒ‡å®šå¯èƒ½
 '----------------------------------------
 Public Sub DeleteFileTargetPath( _
 ByVal FileFolderPath, _
@@ -2295,12 +2295,12 @@ ByVal DeleteFilePath, _
 ByVal PathsStr, _
 ByVal DeleteIgnoreMode)
     Dim DeleteTargetMode: DeleteTargetMode = not DeleteIgnoreMode
-    'DeleteIgnoreƒ‚[ƒhƒgDeleteTargetMode‚Åˆ—‚ğ”»’f‚·‚é‚½‚ß
+    'DeleteIgnoreãƒ¢ãƒ¼ãƒ‰ãƒˆDeleteTargetModeã§å‡¦ç†ã‚’åˆ¤æ–­ã™ã‚‹ãŸã‚
 
     Call Assert(fso.FileExists(DeleteFilePath), _
         "Error:DeleteFileTargetIgnorePathBase:DeleteFilePath is not exists")
     Do
-        'œŠOƒtƒ@ƒCƒ‹
+        'é™¤å¤–ãƒ•ã‚¡ã‚¤ãƒ«
         If MatchText(LCase(DeleteFilePath), _
             Split(LCase(PathsStr), ",")) Then
             If DeleteIgnoreMode Then
@@ -2317,15 +2317,15 @@ ByVal DeleteIgnoreMode)
 End Sub
 
 '----------------------------------------
-'ƒGƒ‰[‚ğ–³‹‚·‚éˆ—
+'â—‡ã‚¨ãƒ©ãƒ¼ã‚’ç„¡è¦–ã™ã‚‹å‡¦ç†
 '----------------------------------------
 
 '----------------------------------------
-'ECopyFile
+'ãƒ»CopyFile
 '----------------------------------------
-'   E  fso.CopyFile‚ÌÅI—v‘f‚É"*.*"‚ğw’è‚·‚é‚ÆA
-'       ƒtƒ@ƒCƒ‹‚ª‚È‚¢ê‡‚ÉƒGƒ‰[‚É‚È‚é‚Ì‚Å
-'       ‚»‚ê‚ğ–³‹‚·‚é‚½‚ß‚ÌŠÖ”
+'   ãƒ»  fso.CopyFileã®æœ€çµ‚è¦ç´ ã«"*.*"ã‚’æŒ‡å®šã™ã‚‹ã¨ã€
+'       ãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã„å ´åˆã«ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã®ã§
+'       ãã‚Œã‚’ç„¡è¦–ã™ã‚‹ãŸã‚ã®é–¢æ•°
 '----------------------------------------
 Sub CopyFile(ByVal SourceFilePath, ByVal DestFilePath)
 On Error Resume Next
@@ -2333,11 +2333,11 @@ On Error Resume Next
 End Sub
 
 '----------------------------------------
-'EMoveFile
+'ãƒ»MoveFile
 '----------------------------------------
-'   E  fso.MoveFile‚ÌÅI—v‘f‚É"*.*"‚ğw’è‚·‚é‚ÆA
-'   ƒtƒ@ƒCƒ‹‚ª‚È‚¢ê‡‚ÉƒGƒ‰[‚É‚È‚é‚Ì‚Å
-'   ‚»‚ê‚ğ–³‹‚·‚é‚½‚ß‚ÌŠÖ”
+'   ãƒ»  fso.MoveFileã®æœ€çµ‚è¦ç´ ã«"*.*"ã‚’æŒ‡å®šã™ã‚‹ã¨ã€
+'   ãƒ•ã‚¡ã‚¤ãƒ«ãŒãªã„å ´åˆã«ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã®ã§
+'   ãã‚Œã‚’ç„¡è¦–ã™ã‚‹ãŸã‚ã®é–¢æ•°
 '----------------------------------------
 Sub MoveFile(ByVal SourceFilePath, ByVal DestFilePath)
 On Error Resume Next
@@ -2345,11 +2345,11 @@ On Error Resume Next
 End Sub
 
 '----------------------------------------
-'ECopyFolder
+'ãƒ»CopyFolder
 '----------------------------------------
-'   E  fso.CopyFolder‚ÌÅI—v‘f‚É"*"‚ğw’è‚·‚é‚ÆA
-'       ƒtƒHƒ‹ƒ_‚ª‚È‚¢ê‡‚ÉƒGƒ‰[‚É‚È‚é‚Ì‚Å
-'       ‚»‚ê‚ğ–³‹‚·‚é‚½‚ß‚ÌŠÖ”
+'   ãƒ»  fso.CopyFolderã®æœ€çµ‚è¦ç´ ã«"*"ã‚’æŒ‡å®šã™ã‚‹ã¨ã€
+'       ãƒ•ã‚©ãƒ«ãƒ€ãŒãªã„å ´åˆã«ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã®ã§
+'       ãã‚Œã‚’ç„¡è¦–ã™ã‚‹ãŸã‚ã®é–¢æ•°
 '----------------------------------------
 Sub CopyFolder(ByVal SourceFolderPath, ByVal DestFolderPath)
 On Error Resume Next
@@ -2357,11 +2357,11 @@ On Error Resume Next
 End Sub
 
 '----------------------------------------
-'EMoveFolder
+'ãƒ»MoveFolder
 '----------------------------------------
-'   E  fso.MoveFolder‚ÌÅI—v‘f‚É"*"‚ğw’è‚·‚é‚ÆA
-'       ƒtƒHƒ‹ƒ_‚ª‚È‚¢ê‡‚ÉƒGƒ‰[‚É‚È‚é‚Ì‚Å
-'       ‚»‚ê‚ğ–³‹‚·‚é‚½‚ß‚ÌŠÖ”
+'   ãƒ»  fso.MoveFolderã®æœ€çµ‚è¦ç´ ã«"*"ã‚’æŒ‡å®šã™ã‚‹ã¨ã€
+'       ãƒ•ã‚©ãƒ«ãƒ€ãŒãªã„å ´åˆã«ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã®ã§
+'       ãã‚Œã‚’ç„¡è¦–ã™ã‚‹ãŸã‚ã®é–¢æ•°
 '----------------------------------------
 Sub MoveFolder(ByVal SourceFolderPath, ByVal DestFolderPath)
 On Error Resume Next
@@ -2369,11 +2369,11 @@ On Error Resume Next
 End Sub
 
 '----------------------------------------
-'Ÿƒtƒ@ƒCƒ‹‚Ìó‘ÔŠm”F
+'â—†ãƒ•ã‚¡ã‚¤ãƒ«ã®çŠ¶æ…‹ç¢ºèª
 '----------------------------------------
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹ƒtƒHƒ‹ƒ_‘¶İŠm”F
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ«ãƒ€å­˜åœ¨ç¢ºèª
 '----------------------------------------
 Public Function FileFolderExists(ByVal Path)
     Dim Result: Result = False
@@ -2385,7 +2385,7 @@ Public Function FileFolderExists(ByVal Path)
 End Function
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹g—p’†‚©‚Ç‚¤‚©‚ğŠm”F‚·‚é
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ä½¿ç”¨ä¸­ã‹ã©ã†ã‹ã‚’ç¢ºèªã™ã‚‹
 '----------------------------------------
 Function IsUseFile(FilePath)
     Dim Result: Result = False
@@ -2403,13 +2403,13 @@ Function IsUseFile(FilePath)
 End Function
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹‚ª“Ç‚İæ‚èê—p‚©‚Ç‚¤‚©Šm”F‚·‚é
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãŒèª­ã¿å–ã‚Šå°‚ç”¨ã‹ã©ã†ã‹ç¢ºèªã™ã‚‹
 '----------------------------------------
 Function IsReadOnlyFile(FilePath)
     Dim Result: Result = False
     Do
         If fso.FileExists(FilePath) Then Exit Do
-        '“Ç‚İæ‚è‘®«’²¸‚Í’è”1‚Æ‚ÌAnd‚Å”»’è‚·‚é
+        'èª­ã¿å–ã‚Šå±æ€§èª¿æŸ»ã¯å®šæ•°1ã¨ã®Andã§åˆ¤å®šã™ã‚‹
         If fso.GetFile(FilePath).Attributes And 1 Then
             Result = True
         End If
@@ -2419,11 +2419,11 @@ End Function
 
 
 '----------------------------------------
-'Ÿƒtƒ@ƒCƒ‹ƒtƒHƒ‹ƒ_“ú
+'â—†ãƒ•ã‚¡ã‚¤ãƒ«ãƒ•ã‚©ãƒ«ãƒ€æ—¥æ™‚
 '----------------------------------------
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹/ƒtƒHƒ‹ƒ_‚ÌÅIXV“ú‚ğ“¾‚é
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ•ã‚©ãƒ«ãƒ€ã®æœ€çµ‚æ›´æ–°æ—¥æ™‚ã‚’å¾—ã‚‹
 '----------------------------------------
 Public Function FileFolderDate_LastModified(ByVal Path)
     Dim Result: Result = Now()
@@ -2440,11 +2440,11 @@ End Function
 
 
 '----------------------------------------
-'ŸƒVƒ‡[ƒgƒJƒbƒgƒtƒ@ƒCƒ‹‘€ì
+'â—†ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆãƒ•ã‚¡ã‚¤ãƒ«æ“ä½œ
 '----------------------------------------
 
 '----------------------------------------
-'EƒVƒ‡[ƒgƒJƒbƒgƒtƒ@ƒCƒ‹‚ÌƒŠƒ“ƒNæ‚ğæ“¾‚·‚é
+'ãƒ»ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªãƒ³ã‚¯å…ˆã‚’å–å¾—ã™ã‚‹
 '----------------------------------------
 Public Function ShortcutFileLinkPath(ByVal ShortcutFilePath)
     Dim Result: Result = ""
@@ -2455,7 +2455,7 @@ End Function
 
 
 '----------------------------------------
-'ŸƒeƒLƒXƒgƒtƒ@ƒCƒ‹“Ç‚İ‘‚«
+'â—†ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿æ›¸ã
 '----------------------------------------
 
 Public Function CheckEncodeName(ByVal EncodeName)
@@ -2472,21 +2472,21 @@ Public Function CheckEncodeName(ByVal EncodeName)
 End Function
 
 '----------------------------------------
-'EƒeƒLƒXƒgƒtƒ@ƒCƒ‹“Ç
+'ãƒ»ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«èª­è¾¼
 '----------------------------------------
-'   E  ƒGƒ“ƒR[ƒhw’è‚Í‰º‹L‚Ì’Ê‚è
-'           ƒGƒ“ƒR[ƒh          w’è•¶š
+'   ãƒ»  ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰æŒ‡å®šã¯ä¸‹è¨˜ã®é€šã‚Š
+'           ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰          æŒ‡å®šæ–‡å­—
 '           ShiftJIS            SHIFT_JIS
-'           UTF-16LE BOM—L/–³   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
-'                           BOM‚Ì—L–³‚ÉŠÖ‚í‚ç‚¸“Ç‰Â”\
+'           UTF-16LE BOMæœ‰/ç„¡   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
+'                           BOMã®æœ‰ç„¡ã«é–¢ã‚ã‚‰ãšèª­è¾¼å¯èƒ½
 '           UTF-16BE _BOM_ON    UNICODEFEFF
 '           UTF-16BE _BOM_OFF   UTF-16BE
-'           UTF-8 BOM—L/–³      UTF-8/UTF-8N
-'                           BOM‚Ì—L–³‚ÉŠÖ‚í‚ç‚¸“Ç‰Â”\
+'           UTF-8 BOMæœ‰/ç„¡      UTF-8/UTF-8N
+'                           BOMã®æœ‰ç„¡ã«é–¢ã‚ã‚‰ãšèª­è¾¼å¯èƒ½
 '           JIS                 ISO-2022-JP
 '           EUC-JP              EUC-JP
 '           UTF-7               UTF-7
-'   E  UTF-16LE‚ÆUTF-8‚ÍABOM‚Ì—L–³‚É‚©‚©‚í‚ç‚¸“Ç‚İ‚ß‚é
+'   ãƒ»  UTF-16LEã¨UTF-8ã¯ã€BOMã®æœ‰ç„¡ã«ã‹ã‹ã‚ã‚‰ãšèª­ã¿è¾¼ã‚ã‚‹
 '----------------------------------------
 Const StreamTypeEnum_adTypeBinary = 1
 Const StreamTypeEnum_adTypeText = 2
@@ -2517,35 +2517,35 @@ ByVal TextFilePath, ByVal EncodeName)
 End Function
 
 Private Sub testLoadTextFile()
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
 
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
 
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
 
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE"))
 
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF"))
 
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODE"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODEFFFE"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODE"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODEFFFE"))
 
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16LE"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODE"))
-    Call Check("123ABC‚ ‚¢‚¤‚¦‚¨", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16LE"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODE"))
+    Call Check("123ABCã‚ã„ã†ãˆãŠ", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE"))
 End Sub
 
 '----------------------------------------
-'EƒeƒLƒXƒgƒtƒ@ƒCƒ‹•Û‘¶
+'ãƒ»ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ä¿å­˜
 '----------------------------------------
-'   E  ƒGƒ“ƒR[ƒhw’è‚Í‰º‹L‚Ì’Ê‚è
-'           ƒGƒ“ƒR[ƒh          w’è•¶š
+'   ãƒ»  ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰æŒ‡å®šã¯ä¸‹è¨˜ã®é€šã‚Š
+'           ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰          æŒ‡å®šæ–‡å­—
 '           ShiftJIS            SHIFT_JIS
 '           UTF-16LE _BOM_ON    UNICODEFFFE/UNICODE/UTF-16
 '           UTF-16LE _BOM_OFF    UTF-16LE
@@ -2556,8 +2556,8 @@ End Sub
 '           JIS                 ISO-2022-JP
 '           EUC-JP              EUC-JP
 '           UTF-7               UTF-7
-'   E  UTF-16LE‚ÆUTF-8‚Í‚»‚Ì‚Ü‚Ü‚¾‚Æ_BOM_ON‚É‚È‚é‚Ì‚Å
-'       BON–³‚µw’è‚Ìê‡‚Í“Áêˆ—‚ğ‚µ‚Ä‚¢‚é
+'   ãƒ»  UTF-16LEã¨UTF-8ã¯ãã®ã¾ã¾ã ã¨_BOM_ONã«ãªã‚‹ã®ã§
+'       BONç„¡ã—æŒ‡å®šã®å ´åˆã¯ç‰¹æ®Šå‡¦ç†ã‚’ã—ã¦ã„ã‚‹
 '----------------------------------------
 Public Sub SaveTextFile(ByVal Text, _
 ByVal TextFilePath, ByVal EncodeName)
@@ -2601,21 +2601,21 @@ ByVal TextFilePath, ByVal EncodeName)
 End Sub
 
 Private Sub testSaveTextFile()
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-7_File.txt", "UTF-7")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-8_File.txt", "UTF-8")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-7_File.txt", "UTF-7")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-8_File.txt", "UTF-8")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
 
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-16LE_BOM_ON2_File.txt", "UNICODE")
-    Call SaveTextFile("123ABC‚ ‚¢‚¤‚¦‚¨", "Test\TestSaveTextFile\UTF-16LE_BOM_ON3_File.txt", "UTF-16")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-16LE_BOM_ON2_File.txt", "UNICODE")
+    Call SaveTextFile("123ABCã‚ã„ã†ãˆãŠ", "Test\TestSaveTextFile\UTF-16LE_BOM_ON3_File.txt", "UTF-16")
 End Sub
 
 '----------------------------------------
-'ŸIniƒtƒ@ƒCƒ‹‘€ìƒNƒ‰ƒX
+'â—†Iniãƒ•ã‚¡ã‚¤ãƒ«æ“ä½œã‚¯ãƒ©ã‚¹
 '----------------------------------------
 
 Class IniFile
@@ -2691,7 +2691,7 @@ Class IniFile
         If IniDic.Exists(Key) Then
             Result = IniDic(Key)
             If Result = "" Then Result = DefaultValue
-            '‹ó•¶šİ’è‚È‚çƒfƒtƒHƒ‹ƒg’l‚ğ‘ã“ü
+            'ç©ºæ–‡å­—è¨­å®šãªã‚‰ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ä»£å…¥
         Else
             Result = DefaultValue
         End If
@@ -2711,8 +2711,8 @@ Class IniFile
 
     Public Sub Update
         If UpdateFlag = False Then Exit Sub
-        'WriteString‚ğÀs‚µ‚½‚Æ‚«‚¾‚¯
-        'Updateƒƒ\ƒbƒh‚ª“®ì‚·‚é
+        'WriteStringã‚’å®Ÿè¡Œã—ãŸã¨ãã ã‘
+        'Updateãƒ¡ã‚½ãƒƒãƒ‰ãŒå‹•ä½œã™ã‚‹
 
         Dim IniSectionDic: Set IniSectionDic = WScript.CreateObject("Scripting.Dictionary")
         Dim Keys1: Keys1 = IniDic.Keys
@@ -2773,14 +2773,14 @@ End Sub
 
 
 '----------------------------------------
-'Ÿˆ³kƒtƒ@ƒCƒ‹ˆ—
+'â—†åœ§ç¸®ãƒ•ã‚¡ã‚¤ãƒ«å‡¦ç†
 '----------------------------------------
 
 '----------------------------------------
-'EZipƒtƒ@ƒCƒ‹‰ğ“€
+'ãƒ»Zipãƒ•ã‚¡ã‚¤ãƒ«è§£å‡
 '----------------------------------------
-'   E  Windows•W€‹@”\‚ğ—˜—p
-'   E  ƒeƒ“ƒ|ƒ‰ƒŠƒtƒHƒ‹ƒ_‚É“WŠJ‚µ‚Ä‚©‚çˆÚ“®‚·‚é
+'   ãƒ»  Windowsæ¨™æº–æ©Ÿèƒ½ã‚’åˆ©ç”¨
+'   ãƒ»  ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ•ã‚©ãƒ«ãƒ€ã«å±•é–‹ã—ã¦ã‹ã‚‰ç§»å‹•ã™ã‚‹
 '----------------------------------------
 Function UnZip(ByVal ZipFilePath, ByVal UnCompressFolderPath)
     Call Assert(fso.FileExists(ZipFilePath), "Error:UnZip:ZipFilePath no exists")
@@ -2804,10 +2804,10 @@ Function UnZip(ByVal ZipFilePath, ByVal UnCompressFolderPath)
 End Function
 
 '----------------------------------------
-'EZipƒtƒ@ƒCƒ‹ˆ³k
+'ãƒ»Zipãƒ•ã‚¡ã‚¤ãƒ«åœ§ç¸®
 '----------------------------------------
-'   E  Windows•W€‹@”\‚ğ—˜—p
-'   E  ƒeƒ“ƒ|ƒ‰ƒŠƒtƒ@ƒCƒ‹‚ğì¬‚µ‚Ä‚©‚ç–¼‘O•ÏX‚µ‚Ä‚¢‚é
+'   ãƒ»  Windowsæ¨™æº–æ©Ÿèƒ½ã‚’åˆ©ç”¨
+'   ãƒ»  ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã—ã¦ã‹ã‚‰åå‰å¤‰æ›´ã—ã¦ã„ã‚‹
 '----------------------------------------
 Function Zip(ByVal CompressSourcePath, ByVal ZipFilePath)
     Call Assert(fso.FileExists(ZipFilePath) = False, "Error:Zip:ZipFilePath exists")
@@ -2820,13 +2820,13 @@ Function Zip(ByVal CompressSourcePath, ByVal ZipFilePath)
                 fso.GetParentFolderName(ZipFilePath), TemporaryFileName))
         OutputTempZipFilePath = ChangeFileExt(OutputTempZipFilePath, ".zip")
     Loop While fso.FileExists(OutputTempZipFilePath)
-    'ˆêƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğw’è‚·‚é
-    'Šg’£q‚Ízip‚Å‚È‚¢‚Æ“®ì‚µ‚È‚¢‚Ì‚Å’ˆÓ
+    'ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹
+    'æ‹¡å¼µå­ã¯zipã§ãªã„ã¨å‹•ä½œã—ãªã„ã®ã§æ³¨æ„
 
     Dim Data: Data = _
         Chr(80) +  Chr(75) + Chr(5) + Chr(6) + _
         String(18, Chr(0))
-    '‹ó‚ÌZIPƒtƒ@ƒCƒ‹‚Ìì¬
+    'ç©ºã®ZIPãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
     Call SaveTextFile(Data, OutputTempZipFilePath, "SHIFT_JIS")
 
     Dim Shell_Application
@@ -2834,11 +2834,11 @@ Function Zip(ByVal CompressSourcePath, ByVal ZipFilePath)
     Call Shell_Application.Namespace(OutputTempZipFilePath).CopyHere( _
         CompressSourcePath)
 
-    'ƒtƒ@ƒCƒ‹‚ª‚Å‚«‚é‚Ü‚Å‘Ò‹@
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãŒã§ãã‚‹ã¾ã§å¾…æ©Ÿ
     Do: Call WScript.Sleep(100)
     Loop Until fso.FileExists(OutputTempZipFilePath)
 
-    'ƒtƒ@ƒCƒ‹‚ªg—pó‘Ô‚ÌŠÔ‘Ò‹@
+    'ãƒ•ã‚¡ã‚¤ãƒ«ãŒä½¿ç”¨çŠ¶æ…‹ã®é–“å¾…æ©Ÿ
     Do: Call WScript.Sleep(100)
     Loop While IsUseFile(OutputTempZipFilePath)
 
@@ -2846,11 +2846,11 @@ Function Zip(ByVal CompressSourcePath, ByVal ZipFilePath)
 End Function
 
 '----------------------------------------
-'ŸƒVƒXƒeƒ€
+'â—†ã‚·ã‚¹ãƒ†ãƒ 
 '----------------------------------------
 
 '----------------------------------------
-'EÀsGUI/CUIŠm”F
+'ãƒ»å®Ÿè¡Œæ™‚GUI/CUIç¢ºèª
 '----------------------------------------
 
 Function IsCUI
@@ -2864,11 +2864,11 @@ Function IsGUI
 End Function
 
 '----------------------------------------
-'ŸƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”
+'â—†ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°
 '----------------------------------------
 
 '----------------------------------------
-'EƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ğ”z—ñ‚É“ü‚ê‚éŠÖ”
+'ãƒ»ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã‚’é…åˆ—ã«å…¥ã‚Œã‚‹é–¢æ•°
 '----------------------------------------
 Public Function ArgsToArray
     Dim Result()
@@ -2882,15 +2882,15 @@ Public Function ArgsToArray
 End Function
 
 '----------------------------------------
-'Eˆø”‚©‚çƒIƒvƒVƒ‡ƒ“‚ğ’²‚×‚é
+'ãƒ»å¼•æ•°ã‹ã‚‰ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’èª¿ã¹ã‚‹
 '----------------------------------------
-'   E  OptionFirstStrArray = Array("/a", "-a") ‚Ì‚æ‚¤‚Éw’è‚·‚é
-'   E  ‚»‚ÌƒIƒvƒVƒ‡ƒ“‚ÅŠJn‚·‚éˆø”‚ª‘¶İ‚·‚ê‚Î‚»‚Ìˆø”‚ğ•Ô‚·B
-'       ‘¶İ‚µ‚È‚¯‚ê‚Î‹ó•¶š‚ğ•Ô‚·
-'       —áF[/a:123 /b /c file.txt]‚Æ‚¢‚¤ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚©‚ç
-'       ArgsOption(ArgsArray, Array("/a"))‚ğw’è‚·‚é‚Æ
-'       –ß‚è’l‚Í "/a:123" ‚É‚È‚é
-'   E  ŠY“–ƒIƒvƒVƒ‡ƒ“‚ª2‚Â‘¶İ‚µ‚Ä‚àæ“ª‚Ì‚à‚Ì‚¾‚¯æ‚èo‚·
+'   ãƒ»  OptionFirstStrArray = Array("/a", "-a") ã®ã‚ˆã†ã«æŒ‡å®šã™ã‚‹
+'   ãƒ»  ãã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§é–‹å§‹ã™ã‚‹å¼•æ•°ãŒå­˜åœ¨ã™ã‚Œã°ãã®å¼•æ•°ã‚’è¿”ã™ã€‚
+'       å­˜åœ¨ã—ãªã‘ã‚Œã°ç©ºæ–‡å­—ã‚’è¿”ã™
+'       ä¾‹ï¼š[/a:123 /b /c file.txt]ã¨ã„ã†ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‹ã‚‰
+'       ArgsOption(ArgsArray, Array("/a"))ã‚’æŒ‡å®šã™ã‚‹ã¨
+'       æˆ»ã‚Šå€¤ã¯ "/a:123" ã«ãªã‚‹
+'   ãƒ»  è©²å½“ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒ2ã¤å­˜åœ¨ã—ã¦ã‚‚å…ˆé ­ã®ã‚‚ã®ã ã‘å–ã‚Šå‡ºã™
 '----------------------------------------
 Public Function ArgsOption(ByRef ArgsArray, ByVal OptionFirstStrArray)
     Call Assert(IsArray(ArgsArray), _
@@ -2921,16 +2921,16 @@ Private Sub testArgsOption
 End Sub
 
 '----------------------------------------
-'Eˆø”‚©‚çƒIƒvƒVƒ‡ƒ“‚ÌƒGƒ‰[‚ğ’²‚×‚é
+'ãƒ»å¼•æ•°ã‹ã‚‰ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ã‚¨ãƒ©ãƒ¼ã‚’èª¿ã¹ã‚‹
 '----------------------------------------
-'   E  OptionFirstStrArray = Array("/a", "-a") ‚Ì‚æ‚¤‚Éw’è‚·‚é
-'   E  d•¡ƒIƒvƒVƒ‡ƒ“‚ª‚ ‚ê‚Î True ‚ğ•Ô‚·
-'       —áF[/a:123 -a /c file.txt]‚Æ‚¢‚¤ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚©‚ç
-'       ArgsOption(ArgsArray, Array("/a", "-a"))‚ğw’è‚·‚é‚Æ
-'       ŠY“–ƒIƒvƒVƒ‡ƒ“‚ª2‚Â‚ ‚é‚Ì‚ÅƒGƒ‰[‚Æ‚¢‚¤‚±‚Æ‚ÅTrue‚ğ•Ô‚·
+'   ãƒ»  OptionFirstStrArray = Array("/a", "-a") ã®ã‚ˆã†ã«æŒ‡å®šã™ã‚‹
+'   ãƒ»  é‡è¤‡ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒã‚ã‚Œã° True ã‚’è¿”ã™
+'       ä¾‹ï¼š[/a:123 -a /c file.txt]ã¨ã„ã†ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‹ã‚‰
+'       ArgsOption(ArgsArray, Array("/a", "-a"))ã‚’æŒ‡å®šã™ã‚‹ã¨
+'       è©²å½“ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒ2ã¤ã‚ã‚‹ã®ã§ã‚¨ãƒ©ãƒ¼ã¨ã„ã†ã“ã¨ã§Trueã‚’è¿”ã™
 '----------------------------------------
-'ˆø”‚©‚çƒIƒvƒVƒ‡ƒ“‚ğ’²‚×‚é
-'“¯‚¶‚à‚Ì‚ª“ñ‚Â‚İ‚Â‚©‚ê‚Î True = ƒGƒ‰[‚ª‚ ‚é‚Æ‚¢‚¤‚±‚Æ
+'å¼•æ•°ã‹ã‚‰ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’èª¿ã¹ã‚‹
+'åŒã˜ã‚‚ã®ãŒäºŒã¤ã¿ã¤ã‹ã‚Œã° True = ã‚¨ãƒ©ãƒ¼ãŒã‚ã‚‹ã¨ã„ã†ã“ã¨
 Public Function ArgsOptionCheckError(ByRef ArgsArray, ByVal OptionFirstStrArray)
     Call Assert(IsArray(ArgsArray), _
         "Error:ArgsOptionCheckError:ArgsArray is not array")
@@ -2964,11 +2964,11 @@ End Sub
 
 
 '----------------------------------------
-'ŸƒNƒŠƒbƒvƒ{[ƒh
+'â—†ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
 '----------------------------------------
 
 '----------------------------------------
-'EƒeƒLƒXƒgƒf[ƒ^æ“¾
+'ãƒ»ãƒ†ã‚­ã‚¹ãƒˆãƒ‡ãƒ¼ã‚¿å–å¾—
 '----------------------------------------
 Public Function GetClipboardText
     Dim HtmlFile
@@ -2977,11 +2977,11 @@ Public Function GetClipboardText
 End Function
 
 '----------------------------------------
-'EƒeƒLƒXƒgƒf[ƒ^İ’è
+'ãƒ»ãƒ†ã‚­ã‚¹ãƒˆãƒ‡ãƒ¼ã‚¿è¨­å®š
 '----------------------------------------
-'   E  IEƒIƒuƒWƒFƒNƒg—˜—p‚ÌƒNƒŠƒbƒvƒ{[ƒhİ’è•û–@‚È‚Ç‚Í
-'       ƒZƒLƒ…ƒŠƒeƒB‚ÌŠÖŒW‚ÅˆÀ’è‚µ‚Ä“®ì‚µ‚È‚¢‚æ‚¤‚È‚Ì‚Å
-'       ˆêƒtƒ@ƒCƒ‹‚ÆClipƒRƒ}ƒ“ƒh‚ğg—p‚µ‚½
+'   ãƒ»  IEã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåˆ©ç”¨ã®ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰è¨­å®šæ–¹æ³•ãªã©ã¯
+'       ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ã®é–¢ä¿‚ã§å®‰å®šã—ã¦å‹•ä½œã—ãªã„ã‚ˆã†ãªã®ã§
+'       ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã¨Clipã‚³ãƒãƒ³ãƒ‰ã‚’ä½¿ç”¨ã—ãŸ
 '----------------------------------------
 Public Sub SetClipboardText(ByVal ClipboardToText)
     Dim TempFileName: TempFileName = TemporaryPath
@@ -2996,7 +2996,7 @@ Public Sub SetClipboardText(ByVal ClipboardToText)
     Call ForceDeleteFile(TempFileName)
 End Sub
 
-'Excel‚È‚ÇOffice‚Ì‚ ‚éŠÂ‹«‚Ìê‡‚ÍŸ‚ÌƒR[ƒh‚Å‚à‰Â”\
+'Excelãªã©Officeã®ã‚ã‚‹ç’°å¢ƒã®å ´åˆã¯æ¬¡ã®ã‚³ãƒ¼ãƒ‰ã§ã‚‚å¯èƒ½
 'Sub SetClipboardText(ByVal Value)
 '    Dim FormObj: Set FormObj = CreateObject("Forms.Form.1")
 '    Dim TextBoxObj: Set TextBoxObj=FormObj.Controls.Add("Forms.TextBox.1").Object
@@ -3008,21 +3008,21 @@ End Sub
 'End Sub
 
 '----------------------------------------
-'ŸƒVƒFƒ‹
+'â—†ã‚·ã‚§ãƒ«
 '----------------------------------------
 
 '----------------------------------------
-'EƒVƒFƒ‹‹N“®’è”
+'ãƒ»ã‚·ã‚§ãƒ«èµ·å‹•å®šæ•°
 '----------------------------------------
-Const vbHide = 0             'ƒEƒBƒ“ƒhƒE”ñ•\¦
-Const vbNormalFocus = 1      '’Êí•\¦‹N“®
-Const vbMinimizedFocus = 2   'Å¬‰»‹N“®
-Const vbMaximizedFocus = 3   'Å‘å‰»‹N“®
-Const vbNormalNoFocus = 4    '’Êí•\¦‹N“®AƒtƒH[ƒJƒX‚È‚µ
-Const vbMinimizedNoFocus = 6 'Å¬‰»‹N“®AƒtƒH[ƒJƒX‚È‚µ
+Const vbHide = 0             'ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦éè¡¨ç¤º
+Const vbNormalFocus = 1      'é€šå¸¸è¡¨ç¤ºèµ·å‹•
+Const vbMinimizedFocus = 2   'æœ€å°åŒ–èµ·å‹•
+Const vbMaximizedFocus = 3   'æœ€å¤§åŒ–èµ·å‹•
+Const vbNormalNoFocus = 4    'é€šå¸¸è¡¨ç¤ºèµ·å‹•ã€ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ãªã—
+Const vbMinimizedNoFocus = 6 'æœ€å°åŒ–èµ·å‹•ã€ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ãªã—
 
 '----------------------------------------
-'Eƒtƒ@ƒCƒ‹w’è‚µ‚½ƒVƒFƒ‹‹N“®
+'ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«æŒ‡å®šã—ãŸã‚·ã‚§ãƒ«èµ·å‹•
 '----------------------------------------
 Public Sub ShellFileOpen( _
 ByVal FilePath, ByVal Focus)
@@ -3032,8 +3032,8 @@ ByVal FilePath, ByVal Focus)
         "rundll32.exe url.dll" & _
         ",FileProtocolHandler " + FilePath _
         , Focus, False)
-    'ƒtƒ@ƒCƒ‹‹N“®‚Ìê‡
-    '‘æOˆø”‚ÌWait‚ÍTrue‚É‚µ‚Ä‚à–³‹‚³‚ê‚é—lq
+    'ãƒ•ã‚¡ã‚¤ãƒ«èµ·å‹•ã®å ´åˆ
+    'ç¬¬ä¸‰å¼•æ•°ã®Waitã¯Trueã«ã—ã¦ã‚‚ç„¡è¦–ã•ã‚Œã‚‹æ§˜å­
 End Sub
 
 Private Sub testShellFileOpen
@@ -3045,10 +3045,10 @@ Private Sub testShellFileOpen
 End Sub
 
 '----------------------------------------
-'EƒRƒ}ƒ“ƒhw’è‚µ‚½ƒVƒFƒ‹‹N“®
+'ãƒ»ã‚³ãƒãƒ³ãƒ‰æŒ‡å®šã—ãŸã‚·ã‚§ãƒ«èµ·å‹•
 '----------------------------------------
-'   E  Wait = True‚È‚çƒvƒƒOƒ‰ƒ€‚ÌI—¹‚ğ‘Ò‚Â
-'          False‚È‚ç‚»‚Ì‚Ü‚ÜÀs‚ğ‘±‚¯‚é
+'   ãƒ»  Wait = Trueãªã‚‰ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã®çµ‚äº†ã‚’å¾…ã¤
+'          Falseãªã‚‰ãã®ã¾ã¾å®Ÿè¡Œã‚’ç¶šã‘ã‚‹
 '----------------------------------------
 Public Sub ShellCommandRun(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
@@ -3067,9 +3067,9 @@ Private Sub testShellCommandRun
 End Sub
 
 '----------------------------------------
-'EDOSƒRƒ}ƒ“ƒh‚ÌÀsB–ß‚è’læ“¾B
+'ãƒ»DOSã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œã€‚æˆ»ã‚Šå€¤å–å¾—ã€‚
 '----------------------------------------
-'   E  DOS‘‹‚ª•\¦‚³‚ê‚È‚¢
+'   ãƒ»  DOSçª“ãŒè¡¨ç¤ºã•ã‚Œãªã„
 '----------------------------------------
 Public Function ShellCommandRunReturn(Command, Focus)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
@@ -3079,7 +3079,7 @@ Public Function ShellCommandRunReturn(Command, Focus)
     Call Shell.Run( _
         "%ComSpec% /c " + Command + ">" + TempFileName + " 2>&1" _
                , Focus, True)
-    ' –ß‚è’l‚ğæ“¾
+    ' æˆ»ã‚Šå€¤ã‚’å–å¾—
     ShellCommandRunReturn = _
         LoadTextFile(TempFileName, "shift_jis")
 
@@ -3092,7 +3092,7 @@ Sub testShellCommandRunReturn()
 End Sub
 
 '----------------------------------------
-'EŠÂ‹«•Ï”‚Ìæ“¾
+'ãƒ»ç’°å¢ƒå¤‰æ•°ã®å–å¾—
 '----------------------------------------
 Public Function EnvironmentalVariables(ByVal Name)
 On Error Resume Next
@@ -3109,9 +3109,9 @@ Private Sub testEnvironmentalVariables
 End Sub
 
 '----------------------------------------
-'ŸƒvƒƒZƒX‘¶İƒ`ƒFƒbƒN
+'â—†ãƒ—ãƒ­ã‚»ã‚¹å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 '----------------------------------------
-' ƒvƒƒZƒX‚ª‹N“®‚µ‚Ä‚¢‚é‚©’²‚×‚é
+' ãƒ—ãƒ­ã‚»ã‚¹ãŒèµ·å‹•ã—ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 '----------------------------------------
 Public Function ProcessExists1(ByVal ProcessName)
     Dim Result: Result = False
@@ -3161,24 +3161,24 @@ Private Sub testProcessExists
     'Call Check(False, ProcessExists("C:\Windows\explorer.exe"))
     'Call Check(False, ProcessExists1("C:\Windows\explorer.exe"))
     'Call Check(False, ProcessExists2("C:\Windows\explorer.exe"))
-    'ã‹L‚ÍƒGƒ‰[‚É‚È‚é
+    'ä¸Šè¨˜ã¯ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹
 End Sub
 
 
 '----------------------------------------
-'ŸƒL[ƒR[ƒh‘—M
+'â—†ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰é€ä¿¡
 '----------------------------------------
 
 '----------------------------------------
-'EƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚ğw’è‚µ‚ÄƒL[‘—M
+'ãƒ»ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«ã‚’æŒ‡å®šã—ã¦ã‚­ãƒ¼é€ä¿¡
 '----------------------------------------
-'   E  Shell.AppActivate‚ğÀs‚µ‚Ä¬Œ÷‚µ‚Ä‚©‚ç
-'       Shell.SendKeys‚ğ‘—M‚·‚éŠÖ”
-'   E  SearchWindowTitle=""‚Æw’è‚·‚é‚Æ
-'       Shell.SendKeys‚¾‚¯‚Ìˆ—‚É‚È‚é
-'   E  ƒL[‚Ì•¶š‚Í¬•¶š‚Åw’è‚·‚é‚±‚ÆB
-'       Ctrl+CƒL[‚ğw’è‚µ‚æ‚¤‚Æ‚µ‚Ä[^C]‚Æ
-'       ‘å•¶š‚Åw’è‚·‚é‚ÆShift‚ªƒƒbƒN‚³‚ê‚Ä‹““®‚ª‚¨‚©‚µ‚­‚È‚é
+'   ãƒ»  Shell.AppActivateã‚’å®Ÿè¡Œã—ã¦æˆåŠŸã—ã¦ã‹ã‚‰
+'       Shell.SendKeysã‚’é€ä¿¡ã™ã‚‹é–¢æ•°
+'   ãƒ»  SearchWindowTitle=""ã¨æŒ‡å®šã™ã‚‹ã¨
+'       Shell.SendKeysã ã‘ã®å‡¦ç†ã«ãªã‚‹
+'   ãƒ»  ã‚­ãƒ¼ã®æ–‡å­—ã¯å°æ–‡å­—ã§æŒ‡å®šã™ã‚‹ã“ã¨ã€‚
+'       Ctrl+Cã‚­ãƒ¼ã‚’æŒ‡å®šã—ã‚ˆã†ã¨ã—ã¦[^C]ã¨
+'       å¤§æ–‡å­—ã§æŒ‡å®šã™ã‚‹ã¨ShiftãŒãƒ­ãƒƒã‚¯ã•ã‚Œã¦æŒ™å‹•ãŒãŠã‹ã—ããªã‚‹
 '----------------------------------------
 Public Function AppActSendKeysLoop( _
 ByVal SearchWindowTitle, _
@@ -3214,12 +3214,12 @@ ByVal KeyValue, ByVal WaitMilliSec)
 End Function
 
 '----------------------------------------
-'EƒL[‘—MŒãAw’èƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚ÌƒAƒNƒeƒBƒu‰»Šm”F
+'ãƒ»ã‚­ãƒ¼é€ä¿¡å¾Œã€æŒ‡å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ç¢ºèª
 '----------------------------------------
-'   E  AppActSendKeysLoopŒã
-'       ”z—ñ‚Åw’è‚µ‚½ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹‚Ì‚Ç‚ê‚©‚ğƒAƒNƒeƒBƒu‚É
-'       o—ˆ‚½‚çTrue‚ğ•Ô‚·ŠÖ”
-'   E  —áF    Call AppActSendKeysAfterWindow("test", _
+'   ãƒ»  AppActSendKeysLoopå¾Œ
+'       é…åˆ—ã§æŒ‡å®šã—ãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«ã®ã©ã‚Œã‹ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«
+'       å‡ºæ¥ãŸã‚‰Trueã‚’è¿”ã™é–¢æ•°
+'   ãƒ»  ä¾‹ï¼š    Call AppActSendKeysAfterWindow("test", _
 '               Array("WindowA", "WindowB"), "%te", 1000)
 '----------------------------------------
 Public Function AppActSendKeysAfterWindowLoop( _
@@ -3254,12 +3254,12 @@ End Function
 
 
 '----------------------------------------
-'ŸVBScript ƒ\[ƒXƒR[ƒh•ÒW
+'â—†VBScript ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ç·¨é›†
 '----------------------------------------
 
 '----------------------------------------
-'Eƒ\[ƒX’†‚Ì[Call Include("ƒ‰ƒCƒuƒ‰ƒŠƒpƒX")]‚Æ‚¢‚¤‹Lq‚ğ
-'  ƒ‰ƒCƒuƒ‰ƒŠƒtƒ@ƒCƒ‹‚Ì’†g‘S‚Ä‚Å’u‚«Š·‚¦‚éˆ—
+'ãƒ»ã‚½ãƒ¼ã‚¹ä¸­ã®[Call Include("ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ‘ã‚¹")]ã¨ã„ã†è¨˜è¿°ã‚’
+'  ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®ä¸­èº«å…¨ã¦ã§ç½®ãæ›ãˆã‚‹å‡¦ç†
 '----------------------------------------
 Public Function IncludeExpanded( _
 ByVal SourceFilePath, ByVal DestFilePath)
@@ -3306,7 +3306,7 @@ ByVal SourceFilePath, ByVal DestFilePath)
 End Function
 
 '----------------------------------------
-'EƒXƒNƒŠƒvƒgƒGƒ“ƒR[ƒ_[‚ğg‚Á‚½VBS‚ÌƒGƒ“ƒR[ƒh
+'ãƒ»ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚¨ãƒ³ã‚³ãƒ¼ãƒ€ãƒ¼ã‚’ä½¿ã£ãŸVBSã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
 '----------------------------------------
 Sub EncodeVBScriptFile(ByVal ScriptEncoderExePath, _
 ByVal SourceFilePath, ByVal DestFilePath)
@@ -3318,142 +3318,142 @@ ByVal SourceFilePath, ByVal DestFilePath)
 End Sub
 
 '--------------------------------------------------
-'¡—š—ğ
-' ver 2015/01/20
-'E ì¬
-'E Assert/Check/OrValue
-'E fso
-'E TestStandardSoftwareLibrary.vbs/Include
-'E LoadTextFile/SaveTextFile
-' ver 2015/01/21
-'E FirstStrFirstDelim/FirstStrLastDelim
+'â– å±¥æ­´
+'â—‡ ver 2015/01/20
+'ãƒ» ä½œæˆ
+'ãƒ» Assert/Check/OrValue
+'ãƒ» fso
+'ãƒ» TestStandardSoftwareLibrary.vbs/Include
+'ãƒ» LoadTextFile/SaveTextFile
+'â—‡ ver 2015/01/21
+'ãƒ» FirstStrFirstDelim/FirstStrLastDelim
 '   /LastStrFirstDelim/LastStrLastDelim
-' ver 2015/01/26
-'E IsFirstStr/IncludeFirstStr/ExcludeFirstStr
+'â—‡ ver 2015/01/26
+'ãƒ» IsFirstStr/IncludeFirstStr/ExcludeFirstStr
 '   /IsLastStr/IncludeLastStr/ExcludeLastStr
-' ver 2015/01/27
-'E ArrayCount
-'E TrimFirstStrs/TrimLastStrs/TrimBothEndsStrs
-'E StringCombine
-' ver 2015/02/02
-'E ShellƒIƒuƒWƒFƒNƒg
-'E CurrentDirectory/ScriptFolderPath
-'E AbsoluteFilePath
+'â—‡ ver 2015/01/27
+'ãƒ» ArrayCount
+'ãƒ» TrimFirstStrs/TrimLastStrs/TrimBothEndsStrs
+'ãƒ» StringCombine
+'â—‡ ver 2015/02/02
+'ãƒ» Shellã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+'ãƒ» CurrentDirectory/ScriptFolderPath
+'ãƒ» AbsoluteFilePath
 '   /IsNetworkPath/GetDrivePath
 '   /IsIncludeDrivePath/IncludeLastPathDelim/ExcludeLastPathDelim
 '   /PeriodExtName/ExcludePathExt/ChangeFileExt
 '   /PathCombine
-'E IIF
-' ver 2015/02/04
-'E StringCombineC³
-'E FolderPathListTopFolder/FolderPathListSubFolder
+'ãƒ» IIF
+'â—‡ ver 2015/02/04
+'ãƒ» StringCombineä¿®æ­£
+'ãƒ» FolderPathListTopFolder/FolderPathListSubFolder
 '   /FilePathListTopFolder/FilePathListSubFolder
-'E ForceCreateFolder/ReCreateCopyFolder
-'E ShellFileOpen/ShellCommandRun/ShellCommandRunReturn
-'E EnvironmentalVariables
-'E FormatYYYY_MM_DD/FormatHH_MM_SS
-' ver 2015/02/05
-'E ForceDeleteFolder/RecreateFolder
-'E IniFile“Ç‚İ‘‚«ƒNƒ‰ƒXì¬
-'E IsCUI/IsGUI
-' ver 2015/02/06
-'E ArrayText
-'E LikeCompare/MatchText
-'E ShortcutFileLinkPath
-'E ForceCreateFolderC³
-' ver 2015/02/08
-'E ForceCreateFolder/ForceDeleteFolderC³
-'E CopyFolderOverWriteIgnoreFileì¬
-' ver 2015/02/09
-'E IniFileˆ—‚ğƒŠƒtƒ@ƒNƒ^ƒŠƒ“ƒO
-'E MaxValue/MinValueì¬
-'E IsLong/LongToStrDigitZero/StrToLongDefault’Ç‰Á
-'E AppActSendKeys/AppActSendKeysAfterWindow“™‚ğ’Ç‰Á
-' ver 2015/02/10
-'E InSpacePlusDoubleQuoteC³
-'E ShellCommandRunReturnƒŠƒtƒ@ƒNƒ^ƒŠƒ“ƒO
-'   TemporaryFilePath‚Ìì¬
-'E GetClipbordText/SetClipbordTextì¬
-'E ForceDeleteFileì¬
-' ver 2015/02/12
-'E FilePathListSubFolder‚ÌC³
-' ver 2015/02/16
-'E IncludeStr’Ç‰Á
-'E MatchTextWildCard/MatchTextKeyWord’Ç‰Á
-'E CopyFolderIgnoreFileFolder’Ç‰Á
-'E ArrayText”p~
-'   IncludeBothEndsDoubleQuoteCombineArray’Ç‰Á
-' ver 2015/02/17
-'E LikeCompareC³
-'E TemporaryFilePath>>TemporaryPath–¼‘O•ÏX
-' ver 2015/02/18
-'E TemporaryFolderPath’Ç‰Á
-' ver 2015/02/19
-'E ArrayAdd/ArrayDelete/ArrayInsert ’Ç‰Á
-'E CopyFileIgnoreFileFolder‚ğ’Ç‰Á
-'   CopyFolderIgnoreFileFolder‚ğC³
-'E UnZip‹@”\’Ç‰Á
-'E CopyFile/CopyFolder’Ç‰Á
-' ver 2015/02/23
-'E TemporaryFilePath/TemporaryFolderName’Ç‰Á
-'E ForceDeleteFolder/ForceDeleteFile 
+'ãƒ» ForceCreateFolder/ReCreateCopyFolder
+'ãƒ» ShellFileOpen/ShellCommandRun/ShellCommandRunReturn
+'ãƒ» EnvironmentalVariables
+'ãƒ» FormatYYYY_MM_DD/FormatHH_MM_SS
+'â—‡ ver 2015/02/05
+'ãƒ» ForceDeleteFolder/RecreateFolder
+'ãƒ» IniFileèª­ã¿æ›¸ãã‚¯ãƒ©ã‚¹ä½œæˆ
+'ãƒ» IsCUI/IsGUI
+'â—‡ ver 2015/02/06
+'ãƒ» ArrayText
+'ãƒ» LikeCompare/MatchText
+'ãƒ» ShortcutFileLinkPath
+'ãƒ» ForceCreateFolderä¿®æ­£
+'â—‡ ver 2015/02/08
+'ãƒ» ForceCreateFolder/ForceDeleteFolderä¿®æ­£
+'ãƒ» CopyFolderOverWriteIgnoreFileä½œæˆ
+'â—‡ ver 2015/02/09
+'ãƒ» IniFileå‡¦ç†ã‚’ãƒªãƒ•ã‚¡ã‚¯ã‚¿ãƒªãƒ³ã‚°
+'ãƒ» MaxValue/MinValueä½œæˆ
+'ãƒ» IsLong/LongToStrDigitZero/StrToLongDefaultè¿½åŠ 
+'ãƒ» AppActSendKeys/AppActSendKeysAfterWindowç­‰ã‚’è¿½åŠ 
+'â—‡ ver 2015/02/10
+'ãƒ» InSpacePlusDoubleQuoteä¿®æ­£
+'ãƒ» ShellCommandRunReturnãƒªãƒ•ã‚¡ã‚¯ã‚¿ãƒªãƒ³ã‚°
+'   TemporaryFilePathã®ä½œæˆ
+'ãƒ» GetClipbordText/SetClipbordTextä½œæˆ
+'ãƒ» ForceDeleteFileä½œæˆ
+'â—‡ ver 2015/02/12
+'ãƒ» FilePathListSubFolderã®ä¿®æ­£
+'â—‡ ver 2015/02/16
+'ãƒ» IncludeStrè¿½åŠ 
+'ãƒ» MatchTextWildCard/MatchTextKeyWordè¿½åŠ 
+'ãƒ» CopyFolderIgnoreFileFolderè¿½åŠ 
+'ãƒ» ArrayTextå»ƒæ­¢
+'   IncludeBothEndsDoubleQuoteCombineArrayè¿½åŠ 
+'â—‡ ver 2015/02/17
+'ãƒ» LikeCompareä¿®æ­£
+'ãƒ» TemporaryFilePath>>TemporaryPathåå‰å¤‰æ›´
+'â—‡ ver 2015/02/18
+'ãƒ» TemporaryFolderPathè¿½åŠ 
+'â—‡ ver 2015/02/19
+'ãƒ» ArrayAdd/ArrayDelete/ArrayInsert è¿½åŠ 
+'ãƒ» CopyFileIgnoreFileFolderã‚’è¿½åŠ 
+'   CopyFolderIgnoreFileFolderã‚’ä¿®æ­£
+'ãƒ» UnZipæ©Ÿèƒ½è¿½åŠ 
+'ãƒ» CopyFile/CopyFolderè¿½åŠ 
+'â—‡ ver 2015/02/23
+'ãƒ» TemporaryFilePath/TemporaryFolderNameè¿½åŠ 
+'ãƒ» ForceDeleteFolder/ForceDeleteFile 
 '   /ForceCreateFolder/ReCreateCopyFolder
-'   —áŠO”­¶‚Ì•s‹ï‡C³
-' ver 2015/02/26
-'E CopyFolderIgnoreFileFolder‚ğCopyFolderIgnorePath‚É–¼Ì•ÏX
-'E CopyFileIgnoreFileFolder‚ğCopyFileIgnorePath‚É–¼Ì•ÏX
-'E CopyFileIgnorePathBase‚ğì¬‚µ‚Ä
-'   CopyFileIgnorePath/CopyFileOverWriteIgnorePath‚Æ
-'   ˆ—‚ğ‹¤’Ê‰»
-'E CopyFolderOverWriteIgnore‚ğCopyFolderOverWriteIgnorePath‚É–¼Ì•ÏX
-'   “à•”‚ğCopyFileOverWriteIgnorePath‚Æ‚µ‚Äì¬
-'E DeleteFileTargetPath/DeleteFileIgnorePath‚ğ’Ç‰Á
-' ver 2015/02/27
-'E IniFile.ReadString‚Ì‹ó€–Úæ“¾‚ÌƒfƒtƒHƒ‹ƒg’lˆ—‚ğC³
-' ver 2015/03/02
-'E IsUseFile/IsReadOnlyFile’Ç‰Á
-'E ProcessExists’Ç‰Á
-'E IncludeExpanded/EncodeVBScriptFile’Ç‰Á
-' ver 2015/03/03
-'E ForceCreateFolder/ForceDeleteFolder
-'   /ForceDeleteFile/ReCreateCopyFolder ‚Ì‘Ò‹@ŠÔ‚ğ’Ç‰Á
-' ver 2015/03/06
-'E MoveFile/MoveFolder‚ğ’Ç‰Á
-'E DeleteDateText‚ğ’Ç‰Á
-'E RenameFileFolder’Ç‰Á
-'E FileFolderDate_LastModified’Ç‰Á
-'E FileFolderExists’Ç‰Á
-' ver 2015/03/07
-'E MatchText/MatchTextWildCard/MatchTextKeyWord‚ğ
-'   ƒŠƒtƒ@ƒNƒ^ƒŠƒ“ƒO‚µ‚ÄIndexOfArray‚ğì¬
-'E MatchTextRegExp‚ğ’Ç‰Á
-' ver 2015/03/09
-'E IniFileƒNƒ‰ƒX‚ÉSectionIdentDelete’Ç‰Á
-' ver 2015/03/17
-'E ƒRƒƒ“ƒg‚â•À‚Ñ‡‚È‚Ç‚Ì•ÏX
-'E TemporaryFileNameì¬
-'E Zipì¬
-' ver 2015/03/18
-'E ƒRƒƒ“ƒg‚ÌC³
-'E InRange’Ç‰Á
-'E SetValue’Ç‰Á
-'E ArrayAdd/ArrayDelete/ArrayInsert‚ğƒIƒuƒWƒFƒNƒg’l‚É‚à‘Î‰‚µ‚½
-'E ArgsToArray/ArgsOption/ArgsOptionCheckError ‚ğ’Ç‰Á
-'E IsFirstText/IncludeFirstText/ExcludeFirstText
+'   ä¾‹å¤–ç™ºç”Ÿæ™‚ã®ä¸å…·åˆä¿®æ­£
+'â—‡ ver 2015/02/26
+'ãƒ» CopyFolderIgnoreFileFolderã‚’CopyFolderIgnorePathã«åç§°å¤‰æ›´
+'ãƒ» CopyFileIgnoreFileFolderã‚’CopyFileIgnorePathã«åç§°å¤‰æ›´
+'ãƒ» CopyFileIgnorePathBaseã‚’ä½œæˆã—ã¦
+'   CopyFileIgnorePath/CopyFileOverWriteIgnorePathã¨
+'   å‡¦ç†ã‚’å…±é€šåŒ–
+'ãƒ» CopyFolderOverWriteIgnoreã‚’CopyFolderOverWriteIgnorePathã«åç§°å¤‰æ›´
+'   å†…éƒ¨ã‚’CopyFileOverWriteIgnorePathã¨ã—ã¦ä½œæˆ
+'ãƒ» DeleteFileTargetPath/DeleteFileIgnorePathã‚’è¿½åŠ 
+'â—‡ ver 2015/02/27
+'ãƒ» IniFile.ReadStringã®ç©ºé …ç›®å–å¾—æ™‚ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤å‡¦ç†ã‚’ä¿®æ­£
+'â—‡ ver 2015/03/02
+'ãƒ» IsUseFile/IsReadOnlyFileè¿½åŠ 
+'ãƒ» ProcessExistsè¿½åŠ 
+'ãƒ» IncludeExpanded/EncodeVBScriptFileè¿½åŠ 
+'â—‡ ver 2015/03/03
+'ãƒ» ForceCreateFolder/ForceDeleteFolder
+'   /ForceDeleteFile/ReCreateCopyFolder ã®å¾…æ©Ÿæ™‚é–“ã‚’è¿½åŠ 
+'â—‡ ver 2015/03/06
+'ãƒ» MoveFile/MoveFolderã‚’è¿½åŠ 
+'ãƒ» DeleteDateTextã‚’è¿½åŠ 
+'ãƒ» RenameFileFolderè¿½åŠ 
+'ãƒ» FileFolderDate_LastModifiedè¿½åŠ 
+'ãƒ» FileFolderExistsè¿½åŠ 
+'â—‡ ver 2015/03/07
+'ãƒ» MatchText/MatchTextWildCard/MatchTextKeyWordã‚’
+'   ãƒªãƒ•ã‚¡ã‚¯ã‚¿ãƒªãƒ³ã‚°ã—ã¦IndexOfArrayã‚’ä½œæˆ
+'ãƒ» MatchTextRegExpã‚’è¿½åŠ 
+'â—‡ ver 2015/03/09
+'ãƒ» IniFileã‚¯ãƒ©ã‚¹ã«SectionIdentDeleteè¿½åŠ 
+'â—‡ ver 2015/03/17
+'ãƒ» ã‚³ãƒ¡ãƒ³ãƒˆã‚„ä¸¦ã³é †ãªã©ã®å¤‰æ›´
+'ãƒ» TemporaryFileNameä½œæˆ
+'ãƒ» Zipä½œæˆ
+'â—‡ ver 2015/03/18
+'ãƒ» ã‚³ãƒ¡ãƒ³ãƒˆã®ä¿®æ­£
+'ãƒ» InRangeè¿½åŠ 
+'ãƒ» SetValueè¿½åŠ 
+'ãƒ» ArrayAdd/ArrayDelete/ArrayInsertã‚’ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå€¤ã«ã‚‚å¯¾å¿œã—ãŸ
+'ãƒ» ArgsToArray/ArgsOption/ArgsOptionCheckError ã‚’è¿½åŠ 
+'ãƒ» IsFirstText/IncludeFirstText/ExcludeFirstText
 '   IsLastText/IncludeLastText/ExcludeLastText
-'   IncludeBothEndsText/ExcludeBothEndsText ‚ğ’Ç‰Á
-'E IncludeStr>>IsIncludeStr‚É–¼‘O•ÏX
-' ver 2015/04/10
-'E DeleteDateTimeText’Ç‰Á
-'E ƒRƒƒ“ƒgŒ`®‚Ì‘S‘Ì“I‚ÈC³
-' ver 2015/04/25
-'E ƒRƒƒ“ƒgŒ`®‚ğ•ÏX
-' ver 2015/05/17
-'E CopyFolderIgnorePath“à‚Ìƒtƒ@ƒCƒ‹ƒpƒX‚Ì‘å¬•¶š•sˆê’v‚Ì•s‹ï‡‚ğC³
-'E StrToBoolean‚ğ’Ç‰Á
-'E FormatDateTimeToString‚ğ’Ç‰Á
-' ver 2015/05/20
-'E DeleteDateText/DeleteDateTimeText ‚ğC³
-' ver 2015/07/23
-'E ƒ‰ƒCƒZƒ“ƒX‚ğGPL‚©‚çMIT‚É•ÏX‚µ‚Ü‚µ‚½B
+'   IncludeBothEndsText/ExcludeBothEndsText ã‚’è¿½åŠ 
+'ãƒ» IncludeStr>>IsIncludeStrã«åå‰å¤‰æ›´
+'â—‡ ver 2015/04/10
+'ãƒ» DeleteDateTimeTextè¿½åŠ 
+'ãƒ» ã‚³ãƒ¡ãƒ³ãƒˆå½¢å¼ã®å…¨ä½“çš„ãªä¿®æ­£
+'â—‡ ver 2015/04/25
+'ãƒ» ã‚³ãƒ¡ãƒ³ãƒˆå½¢å¼ã‚’å¤‰æ›´
+'â—‡ ver 2015/05/17
+'ãƒ» CopyFolderIgnorePathå†…ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®å¤§å°æ–‡å­—ä¸ä¸€è‡´ã®ä¸å…·åˆã‚’ä¿®æ­£
+'ãƒ» StrToBooleanã‚’è¿½åŠ 
+'ãƒ» FormatDateTimeToStringã‚’è¿½åŠ 
+'â—‡ ver 2015/05/20
+'ãƒ» DeleteDateText/DeleteDateTimeText ã‚’ä¿®æ­£
+'â—‡ ver 2015/07/23
+'ãƒ» ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã‚’GPLã‹ã‚‰MITã«å¤‰æ›´ã—ã¾ã—ãŸã€‚
 '--------------------------------------------------
