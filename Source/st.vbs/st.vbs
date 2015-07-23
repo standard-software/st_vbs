@@ -13,7 +13,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2015/07/23
+'Version:       2015/07/24
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -128,7 +128,7 @@ Public Sub test
     Call testArgsOption
     Call testArgsOptionCheckError
 
-Call MsgBox("StandardSoftwareLibrary_vbs Test Finish")
+Call MsgBox("st.vbs Test Finish")
 End Sub
 
 '----------------------------------------
@@ -2004,6 +2004,16 @@ Public Sub RenameFileFolder(ByVal Path, ByVal NewName)
 End Sub
 
 '----------------------------------------
+'・MoveFolder上書き可能
+'----------------------------------------
+'   ・  
+'----------------------------------------
+Sub MoveFolderOverWrite(ByVal SourceFolderPath, ByVal DestFolderPath)
+    Call fso.CopyFolder(SourceFolderPath, DestFolderPath, True)
+    Call ForceDeleteFolder(SourceFolderPath)
+End Sub
+
+'----------------------------------------
 '◇Force/Recrate
 '----------------------------------------
 
@@ -2336,8 +2346,8 @@ End Sub
 '・MoveFile
 '----------------------------------------
 '   ・  fso.MoveFileの最終要素に"*.*"を指定すると、
-'   ファイルがない場合にエラーになるので
-'   それを無視するための関数
+'       ファイルがない場合にエラーになるので
+'       それを無視するための関数
 '----------------------------------------
 Sub MoveFile(ByVal SourceFilePath, ByVal DestFilePath)
 On Error Resume Next
@@ -2367,6 +2377,8 @@ Sub MoveFolder(ByVal SourceFolderPath, ByVal DestFolderPath)
 On Error Resume Next
     Call fso.MoveFolder(SourceFolderPath, DestFolderPath)
 End Sub
+
+
 
 '----------------------------------------
 '◆ファイルの状態確認
@@ -3455,5 +3467,7 @@ End Sub
 '◇ ver 2015/05/20
 '・ DeleteDateText/DeleteDateTimeText を修正
 '◇ ver 2015/07/23
-'・ ライセンスをGPLからMITに変更しました。
+'・ StarndardSoftwareLibraryからst.vbsに名前変更
+'・ ライセンスをGPLからMITに変更した。
+'・ MoveFolderOverWriteを追加
 '--------------------------------------------------
