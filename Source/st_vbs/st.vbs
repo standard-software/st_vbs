@@ -6,9 +6,9 @@
 '--------------------------------------------------
 'Discription:   Standard Software Library For VBScript
 '--------------------------------------------------
-'OpenSource:    https://github.com/standard-software/st.vbs
+'OpenSource:    https://github.com/standard-software/st_vbs
 'License:       MIT License
-'   URL:        https://github.com/standard-software/st.vbs/blob/master/Document/Readme.txt
+'   URL:        https://github.com/standard-software/st_vbs/blob/master/Document/Readme.txt
 'All Right Reserved:
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
