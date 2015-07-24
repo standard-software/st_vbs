@@ -287,7 +287,7 @@ Private Sub testStrToLongDefault()
 End Sub
 
 '----------------------------------------
-'◇Boolean
+'・Boolean
 '----------------------------------------
 Function StrToBoolean(ByVal Value, ByVal DefaultValue)
     Call Assert(OrValue(DefaultValue, Array(True, False)), "Error:StrToBoolean")
@@ -582,7 +582,11 @@ Public Function ExcludeBothEndsText(ByVal Str, ByVal SubStr)
 End Function
 
 '----------------------------------------
-'・FirstStrFirst/LastDelim
+'◇First / Last Delim
+'----------------------------------------
+
+'----------------------------------------
+'・FirstStrFirstDelim
 '----------------------------------------
 Public Function FirstStrFirstDelim(ByVal Value, ByVal Delimiter)
     Dim Result: Result = ""
@@ -601,10 +605,6 @@ Private Sub testFirstStrFirstDelim
     Call Check("123", FirstStrFirstDelim("123ttt456", "t"))
     Call Check("", FirstStrFirstDelim("123ttt456", ","))
 End Sub
-
-'----------------------------------------
-'◇First / Last Delim
-'----------------------------------------
 
 '----------------------------------------
 '・FirstStrLastDelim
@@ -1098,193 +1098,6 @@ Private Sub testSplit
     Call Check(5, ArrayCount(Split("-a-a-a-", "-")))
 End Sub
 
-'----------------------------------------
-'◆配列処理
-'----------------------------------------
-'VBScriptは
-'   Dim A(3 To 5)
-'   ReDim B(4 To 6)
-'というような宣言ができないので
-'LBoundは常に0だと考えて処理を実装する
-'例外はあるかもしれないが不明
-'----------------------------------------
-
-'----------------------------------------
-'・配列の要素数を求める関数
-'----------------------------------------
-Public Function ArrayCount(ByVal ArrayValue)
-    Call Assert(IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array.")
-    ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
-End Function
-
-Private Sub testArrayCount
-    Dim A
-    A = Array("A", "B", "C")
-    Call Check(3, ArrayCount(A))
-
-    ReDim Preserve A(4) '0-4:Count=5
-    Call Check(5, ArrayCount(A))
-End Sub
-
-'----------------------------------------
-'・配列の要素を追加する
-'----------------------------------------
-'   ・  オブジェクト値にも対応
-'----------------------------------------
-Sub ArrayAdd(ByRef ArrayValue, ByVal Value)
-    Call Assert(IsArray(ArrayValue), "Error:ArrayAdd:ArrayValue is not Array.")
-
-    ReDim Preserve ArrayValue(ArrayCount(ArrayValue))
-    Call SetValue(ArrayValue(UBound(ArrayValue)), Value)
-End Sub
-
-Private Sub testArrayAdd
-    Dim A
-    A = Array("A", "B", "C")
-
-    Call ArrayAdd(A, "D")
-    Call Check(4, ArrayCount(A))
-    Call Check("D", A(3))
-
-    Dim B()
-    ReDim B(2)
-    Set B(0) = CreateObject("VBScript.RegExp")
-    Set B(1) = Shell
-    Set B(2) = CreateObject("ADODB.Stream")
-    Call ArrayAdd(B, fso)
-    Call Check("test.txt", B(3).GetFileName("C:\temp\test.txt"))
-End Sub
-
-'----------------------------------------
-'・配列の要素を挿入する
-'----------------------------------------
-'   ・  オブジェクト値にも対応
-'----------------------------------------
-Sub ArrayInsert(ByRef ArrayValue, ByVal Index, ByVal Value)
-    Call Assert(IsArray(ArrayValue), "Error:ArrayInsert:ArrayValue is not Array.")
-    Call Assert(InRange(LBound(ArrayValue), Index, UBound(ArrayValue)), _
-        "Error:ArrayInsert:Index Range Over.")
-
-    ReDim Preserve ArrayValue(UBound(ArrayValue) + 1)
-    Dim I
-    For I = UBound(ArrayValue) To Index + 1 Step -1
-        Call SetValue(ArrayValue(I), ArrayValue(I - 1))
-    Next
-    Call SetValue(ArrayValue(Index), Value)
-End Sub
-
-Private Sub testArrayInsert
-    Dim A
-    A = Array("A", "B", "C")
-
-    Call Check("B", A(1))
-    Call Check(3, ArrayCount(A))
-    Call ArrayInsert(A, 1, "1")
-    Call Check(4, ArrayCount(A))
-    Call Check("1", A(1))
-
-    Dim B()
-    ReDim B(2)
-    Set B(0) = CreateObject("VBScript.RegExp")
-    Set B(1) = Shell
-    Set B(2) = CreateObject("ADODB.Stream")
-    Call Check(CurrentDirectory, B(1).CurrentDirectory)
-    Call ArrayInsert(B, 1, fso)
-    Call Check("test.txt", B(1).GetFileName("C:\temp\test.txt"))
-End Sub
-
-'----------------------------------------
-'・配列の要素を削除する
-'----------------------------------------
-'   ・  オブジェクト値にも対応
-'----------------------------------------
-Sub ArrayDelete(ByRef ArrayValue, ByVal Index)
-    Call Assert(IsArray(ArrayValue), "Error:ArrayDelete:ArrayValue is not Array.")
-    Call Assert(InRange(LBound(ArrayValue), Index, UBound(ArrayValue)), _
-        "Error:ArrayDelete:Index Range Over.")
-
-    Dim I
-    For I = Index + 1 To UBound(ArrayValue)
-        Call SetValue(ArrayValue(I - 1), ArrayValue(I))
-    Next
-    ReDim Preserve ArrayValue(UBound(ArrayValue) - 1)
-End Sub
-
-Private Sub testArrayDelete
-    Dim A
-    A = Array("A", "B", "C")
-
-    Call Check("B", A(1))
-    Call ArrayDelete(A, 1)
-    Call Check(2, ArrayCount(A))
-    Call Check("C", A(1))
-
-    Dim B()
-    ReDim B(2)
-    Set B(0) = CreateObject("VBScript.RegExp")
-    Set B(1) = Shell
-    Set B(2) = fso
-    Call Check(CurrentDirectory, B(1).CurrentDirectory)
-    Call ArrayDelete(B, 1)
-    Call Check("test.txt", B(1).GetFileName("C:\temp\test.txt"))
-End Sub
-
-'----------------------------------------
-'・配列関数のテスト
-'----------------------------------------
-Sub testArrayFunctions
-    Dim A
-    A = Array("A", "B", "C")
-    Call Check(3, ArrayCount(A))
-    Call Check("A B C", ArrayToString(A, " "))
-    Call ArrayAdd(A, "D")
-    Call Check(4, ArrayCount(A))
-    Call Check("A B C D", ArrayToString(A, " "))
-
-    Call ArrayDelete(A, 0)
-    Call Check("B C D", ArrayToString(A, " "))
-    Call ArrayDelete(A, 2)
-    Call Check("B C", ArrayToString(A, " "))
-
-    A = Array("A", "B", "C")
-    Call ArrayDelete(A, 1)
-    Call Check("A C", ArrayToString(A, " "))
-
-    Call ArrayInsert(A, 1, "B")
-    Call Check("A B C", ArrayToString(A, " "))
-    Call ArrayInsert(A, 0, "1")
-    Call Check("1 A B C", ArrayToString(A, " "))
-    Call ArrayInsert(A, 3, "2")
-    Call Check("1 A B 2 C", ArrayToString(A, " "))
-End Sub
-
-'----------------------------------------
-'・配列を文字列にして単純に結合する関数
-'----------------------------------------
-Function ArrayToString(ByRef ArrayValue, ByVal Delimiter)
-    Call Assert(IsArray(ArrayValue), "配列ではありません")
-    Dim Result: Result = ""
-    Dim I
-    For I = LBound(ArrayValue) To UBound(ArrayValue)
-        Result = Result + ArrayValue(I) + Delimiter
-    Next
-    Result = ExcludeLastStr(Result, Delimiter)
-    ArrayToString = Result
-End Function
-
-'----------------------------------------
-'・配列同士を結合する関数
-'----------------------------------------
-Sub ArrayAddArray(ByRef ArrayValue, ByVal AddArrayValue)
-    Call Assert(IsArray(ArrayValue), "Error:ArrayAddArray:ArrayValue is not array.")
-    Call Assert(IsArray(AddArrayValue), "Error:ArrayAddArray:AddArrayValue is not array.")
-
-    Dim I
-    For I = LBound(AddArrayValue) To UBound(AddArrayValue)
-        Call ArrayAdd(ArrayValue, AddArrayValue(I))
-    Next
-End Sub
-
 
 '----------------------------------------
 '◆日付時刻処理
@@ -1514,6 +1327,195 @@ Sub testFormatDateTimeToString
     Call Check("15", FormatDateTimeToString(Value, "s"))
 End Sub
 
+
+'----------------------------------------
+'◆配列処理
+'----------------------------------------
+'VBScriptは
+'   Dim A(3 To 5)
+'   ReDim B(4 To 6)
+'というような宣言ができないので
+'LBoundは常に0だと考えて処理を実装する
+'例外はあるかもしれないが不明
+'----------------------------------------
+
+'----------------------------------------
+'・配列の要素数を求める関数
+'----------------------------------------
+Public Function ArrayCount(ByVal ArrayValue)
+    Call Assert(IsArray(ArrayValue), "Error:ArrayCount:ArrayValue is not Array.")
+    ArrayCount = UBound(ArrayValue) - LBound(ArrayValue) + 1
+End Function
+
+Private Sub testArrayCount
+    Dim A
+    A = Array("A", "B", "C")
+    Call Check(3, ArrayCount(A))
+
+    ReDim Preserve A(4) '0-4:Count=5
+    Call Check(5, ArrayCount(A))
+End Sub
+
+'----------------------------------------
+'・配列の要素を追加する
+'----------------------------------------
+'   ・  オブジェクト値にも対応
+'----------------------------------------
+Sub ArrayAdd(ByRef ArrayValue, ByVal Value)
+    Call Assert(IsArray(ArrayValue), "Error:ArrayAdd:ArrayValue is not Array.")
+
+    ReDim Preserve ArrayValue(ArrayCount(ArrayValue))
+    Call SetValue(ArrayValue(UBound(ArrayValue)), Value)
+End Sub
+
+Private Sub testArrayAdd
+    Dim A
+    A = Array("A", "B", "C")
+
+    Call ArrayAdd(A, "D")
+    Call Check(4, ArrayCount(A))
+    Call Check("D", A(3))
+
+    Dim B()
+    ReDim B(2)
+    Set B(0) = CreateObject("VBScript.RegExp")
+    Set B(1) = Shell
+    Set B(2) = CreateObject("ADODB.Stream")
+    Call ArrayAdd(B, fso)
+    Call Check("test.txt", B(3).GetFileName("C:\temp\test.txt"))
+End Sub
+
+'----------------------------------------
+'・配列の要素を挿入する
+'----------------------------------------
+'   ・  オブジェクト値にも対応
+'----------------------------------------
+Sub ArrayInsert(ByRef ArrayValue, ByVal Index, ByVal Value)
+    Call Assert(IsArray(ArrayValue), "Error:ArrayInsert:ArrayValue is not Array.")
+    Call Assert(InRange(LBound(ArrayValue), Index, UBound(ArrayValue)), _
+        "Error:ArrayInsert:Index Range Over.")
+
+    ReDim Preserve ArrayValue(UBound(ArrayValue) + 1)
+    Dim I
+    For I = UBound(ArrayValue) To Index + 1 Step -1
+        Call SetValue(ArrayValue(I), ArrayValue(I - 1))
+    Next
+    Call SetValue(ArrayValue(Index), Value)
+End Sub
+
+Private Sub testArrayInsert
+    Dim A
+    A = Array("A", "B", "C")
+
+    Call Check("B", A(1))
+    Call Check(3, ArrayCount(A))
+    Call ArrayInsert(A, 1, "1")
+    Call Check(4, ArrayCount(A))
+    Call Check("1", A(1))
+
+    Dim B()
+    ReDim B(2)
+    Set B(0) = CreateObject("VBScript.RegExp")
+    Set B(1) = Shell
+    Set B(2) = CreateObject("ADODB.Stream")
+    Call Check(CurrentDirectory, B(1).CurrentDirectory)
+    Call ArrayInsert(B, 1, fso)
+    Call Check("test.txt", B(1).GetFileName("C:\temp\test.txt"))
+End Sub
+
+'----------------------------------------
+'・配列の要素を削除する
+'----------------------------------------
+'   ・  オブジェクト値にも対応
+'----------------------------------------
+Sub ArrayDelete(ByRef ArrayValue, ByVal Index)
+    Call Assert(IsArray(ArrayValue), "Error:ArrayDelete:ArrayValue is not Array.")
+    Call Assert(InRange(LBound(ArrayValue), Index, UBound(ArrayValue)), _
+        "Error:ArrayDelete:Index Range Over.")
+
+    Dim I
+    For I = Index + 1 To UBound(ArrayValue)
+        Call SetValue(ArrayValue(I - 1), ArrayValue(I))
+    Next
+    ReDim Preserve ArrayValue(UBound(ArrayValue) - 1)
+End Sub
+
+Private Sub testArrayDelete
+    Dim A
+    A = Array("A", "B", "C")
+
+    Call Check("B", A(1))
+    Call ArrayDelete(A, 1)
+    Call Check(2, ArrayCount(A))
+    Call Check("C", A(1))
+
+    Dim B()
+    ReDim B(2)
+    Set B(0) = CreateObject("VBScript.RegExp")
+    Set B(1) = Shell
+    Set B(2) = fso
+    Call Check(CurrentDirectory, B(1).CurrentDirectory)
+    Call ArrayDelete(B, 1)
+    Call Check("test.txt", B(1).GetFileName("C:\temp\test.txt"))
+End Sub
+
+'----------------------------------------
+'・配列関数のテスト
+'----------------------------------------
+Sub testArrayFunctions
+    Dim A
+    A = Array("A", "B", "C")
+    Call Check(3, ArrayCount(A))
+    Call Check("A B C", ArrayToString(A, " "))
+    Call ArrayAdd(A, "D")
+    Call Check(4, ArrayCount(A))
+    Call Check("A B C D", ArrayToString(A, " "))
+
+    Call ArrayDelete(A, 0)
+    Call Check("B C D", ArrayToString(A, " "))
+    Call ArrayDelete(A, 2)
+    Call Check("B C", ArrayToString(A, " "))
+
+    A = Array("A", "B", "C")
+    Call ArrayDelete(A, 1)
+    Call Check("A C", ArrayToString(A, " "))
+
+    Call ArrayInsert(A, 1, "B")
+    Call Check("A B C", ArrayToString(A, " "))
+    Call ArrayInsert(A, 0, "1")
+    Call Check("1 A B C", ArrayToString(A, " "))
+    Call ArrayInsert(A, 3, "2")
+    Call Check("1 A B 2 C", ArrayToString(A, " "))
+End Sub
+
+'----------------------------------------
+'・配列を文字列にして単純に結合する関数
+'----------------------------------------
+Function ArrayToString(ByRef ArrayValue, ByVal Delimiter)
+    Call Assert(IsArray(ArrayValue), "配列ではありません")
+    Dim Result: Result = ""
+    Dim I
+    For I = LBound(ArrayValue) To UBound(ArrayValue)
+        Result = Result + ArrayValue(I) + Delimiter
+    Next
+    Result = ExcludeLastStr(Result, Delimiter)
+    ArrayToString = Result
+End Function
+
+'----------------------------------------
+'・配列同士を結合する関数
+'----------------------------------------
+Sub ArrayAddArray(ByRef ArrayValue, ByVal AddArrayValue)
+    Call Assert(IsArray(ArrayValue), "Error:ArrayAddArray:ArrayValue is not array.")
+    Call Assert(IsArray(AddArrayValue), "Error:ArrayAddArray:AddArrayValue is not array.")
+
+    Dim I
+    For I = LBound(AddArrayValue) To UBound(AddArrayValue)
+        Call ArrayAdd(ArrayValue, AddArrayValue(I))
+    Next
+End Sub
+
+
 '----------------------------------------
 '◆ファイルフォルダパス処理
 '----------------------------------------
@@ -1648,12 +1650,12 @@ End Function
 '----------------------------------------
 '・スペースの含まれた値をダブルクウォートで囲う
 '----------------------------------------
-Function InSpacePlusDoubleQuote(ByVal Value)
+Function InSpacePlusDoubleQuote(ByVal Path)
     Dim Result: Result = ""
-    If 0 < InStr(Value, " ") Then
-        Result = IncludeBothEndsStr(Value, """")
+    If 0 < InStr(Path, " ") Then
+        Result = IncludeBothEndsStr(Path, """")
     Else
-        Result = Value
+        Result = Path
     End If
     InSpacePlusDoubleQuote = Result
 End Function
@@ -2108,7 +2110,7 @@ End Sub
 '----------------------------------------
 '・フォルダを再生成してコピーする関数
 '----------------------------------------
-'フォルダの日付が最新になる
+'   ・  フォルダの日付が最新になる
 '----------------------------------------
 Public Sub RecreateCopyFolder( _
 ByVal SourceFolderPath, ByVal DestFolderPath)
