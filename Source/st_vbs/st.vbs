@@ -13,7 +13,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2015/07/24
+'Version:       2015/08/07
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -1681,9 +1681,9 @@ End Function
 '----------------------------------------
 '・ピリオドを含む拡張子を取得する関数
 '----------------------------------------
-'ピリオドのないファイル名の場合は空文字を返す
-'fso.GetExtensionName ではピリオドで終わるファイル名を
-'判断できないために作成した。
+'   ・  ピリオドのないファイル名の場合は空文字を返す
+'   ・  fso.GetExtensionName ではピリオドで終わるファイル名を
+'       判断できないために作成した。
 '----------------------------------------
 Public Function PeriodExtName(ByVal Path)
     Dim Result: Result = ""
@@ -2439,13 +2439,29 @@ End Function
 '◆ショートカットファイル操作
 '----------------------------------------
 
+
+'----------------------------------------
+'・ショートカットファイルかどうかをファイル名で判定する
+'----------------------------------------
+Public Function IsShortcutLinkFile(ByVal FilePath)
+    Dim Result: Result = False
+    If LCase(PeriodExtName(FilePath)) = ".lnk" Then
+        Result = True
+    Else
+        Result = False
+    End If 
+    IsShortcutLinkFile = Result
+End Function
+
 '----------------------------------------
 '・ショートカットファイルのリンク先を取得する
 '----------------------------------------
 Public Function ShortcutFileLinkPath(ByVal ShortcutFilePath)
     Dim Result: Result = ""
-    Dim file: Set file = Shell.CreateShortcut(ShortcutFilePath)
-    Result = file.TargetPath
+    If IsShortcutLinkFile(ShortcutFilePath) Then
+        Dim file: Set file = Shell.CreateShortcut(ShortcutFilePath)
+        Result = file.TargetPath
+    End If
     ShortcutFileLinkPath = Result
 End Function
 
@@ -3457,4 +3473,7 @@ End Sub
 '◇ ver 2015/07/24
 '・ CopyFileIgnorePathBase/CopyFolderIgnorePathを変更
 '   通常無視と上書き無視を同時指定可能にした
+'◇ ver 2015/08/07
+'・ IsShortcutLinkFileを作成
+'   ShortcutFileLinkPathを修正
 '--------------------------------------------------
