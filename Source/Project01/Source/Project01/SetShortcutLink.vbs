@@ -79,7 +79,7 @@ Do
     Call CreateShortcutFile( _
         ShortcutLinkFilePath, _
         TargetSourceFilePath, _
-        ScriptProgramFilePath + ",2", _
+        ScriptProgramFilePath, 2, _
         "")
 
      Call ShellFileOpen( _

@@ -2553,14 +2553,35 @@ End Function
 Public Sub CreateShortcutFile( _
 ByVal ShortcutFilePath, _
 ByVal TargetFilePath, _
-ByVal IconFilePath, _
+ByVal IconFilePath, ByVal IconIndex, _
 ByVal Description)
+
+    Call Assert(fso.FolderExists( _
+        fso.GetParentFolderName(ShortcutFilePath)), _
+        "No Exists ShortcutFileFolder")
+
+    Call Assert(fso.FileExists( _
+        TargetFilePath), _
+        "No Exists ShortcutTargetFile")
+
+    Dim IconLocationStr: IconLocationStr = ""
+    If IconFilePath = "" Then
+        IconLocationStr = -1
+    ElseIf fso.FileExists(IconFilePath) = False Then
+        IconLocationStr = -1
+    Else
+        If IsLong(IconIndex) Then
+            IconLocationStr = IconFilePath + "," + CStr(IconIndex)
+        Else
+            IconLocationStr = IconFilePath + ",0"
+        End If
+    End If
 
     Dim ShortcutFile
     Set ShortcutFile = Shell.CreateShortcut(ShortcutFilePath)
     ShortcutFile.TargetPath = TargetFilePath
     ShortcutFile.Description = Description
-    ShortcutFile.IconLocation = IconFilePath
+    ShortcutFile.IconLocation = IconLocationStr
     ShortcutFile.RelativePath = ""
     ShortcutFile.WorkingDirectory = ""
     ShortcutFile.Hotkey = ""
