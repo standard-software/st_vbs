@@ -13,7 +13,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2015/08/07
+'Version:       2015/08/24
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -1785,6 +1785,84 @@ Public Function ScriptFolderPath
 End Function
 
 '----------------------------------------
+'・スクリプトプログラムパスの取得
+'----------------------------------------
+Public Function ScriptProgramFilePath
+    ScriptProgramFilePath = _
+        fso.BuildPath(WScript.Path, "wscript.exe")
+End Function
+
+'----------------------------------------
+'・デスクトップフォルダの取得
+'----------------------------------------
+Public Function DesktopFolderPath
+    DesktopFolderPath = _
+        Shell.SpecialFolders("Desktop")
+End Function
+
+Public Function DesktopAllUsersFolderPath
+    DesktopAllUsersFolderPath = _
+        Shell.SpecialFolders("AllUsersDesktop")
+End Function
+
+'----------------------------------------
+'・スタートメニューフォルダの取得
+'----------------------------------------
+Public Function StartMenuFolderPath
+    StartMenuFolderPath = _
+        Shell.SpecialFolders("StartMenu")
+End Function
+
+Public Function StartMenuAllUsersFolderPath
+    StartMenuAllUsersFolderPath = _
+        Shell.SpecialFolders("AllUsersStartMenu")
+End Function
+
+Public Function StartMenuProgramsFolderPath
+    StartMenuProgramsFolderPath = _
+        Shell.SpecialFolders("Programs")
+End Function
+
+Public Function StartMenuProgramsAllUsersFolderPath
+    StartMenuProgramsAllUsersFolderPath = _
+        Shell.SpecialFolders("AllUsersPrograms")
+End Function
+
+Public Function StartUpFolderPath
+    StartUpFolderPath = _
+        Shell.SpecialFolders("Startup")
+End Function
+
+Public Function StartUpAllUsersFolderPath
+    StartUpAllUsersFolderPath = _
+        Shell.SpecialFolders("AllUsersStartup")
+End Function
+
+'----------------------------------------
+'・送るフォルダの取得
+'----------------------------------------
+Public Function SendToFolderPath
+    SendToFolderPath = _
+        Shell.SpecialFolders("SendTo")
+End Function
+
+'----------------------------------------
+'・マイドキュメントフォルダの取得
+'----------------------------------------
+Public Function MyDocumentsFolderPath
+    MyDocumentsFolderPath = _
+        Shell.SpecialFolders("MyDocuments")
+End Function
+
+'----------------------------------------
+'・マイドキュメントフォルダの取得
+'----------------------------------------
+Public Function AppdataFolderPath
+    MyDocumentsFolderPath = _
+        Shell.SpecialFolders("Appdata")
+End Function
+
+'----------------------------------------
 '・一時ファイルの取得
 '----------------------------------------
 '   ・  このようなパスが取得できる
@@ -2465,6 +2543,29 @@ Public Function ShortcutFileLinkPath(ByVal ShortcutFilePath)
     ShortcutFileLinkPath = Result
 End Function
 
+'----------------------------------------
+'・ショートカットファイルの作成
+'----------------------------------------
+'   ・  IconLocation は "ファイルパス,0"という形式で指定する
+'   ・  IconLocationを設定したくない場合は
+'       IconLocation = -1 にする
+'----------------------------------------
+Public Sub CreateShortcutFile( _
+ByVal ShortcutFilePath, _
+ByVal TargetFilePath, _
+ByVal IconFilePath, _
+ByVal Description)
+
+    Dim ShortcutFile
+    Set ShortcutFile = Shell.CreateShortcut(ShortcutFilePath)
+    ShortcutFile.TargetPath = TargetFilePath
+    ShortcutFile.Description = Description
+    ShortcutFile.IconLocation = IconFilePath
+    ShortcutFile.RelativePath = ""
+    ShortcutFile.WorkingDirectory = ""
+    ShortcutFile.Hotkey = ""
+    ShortcutFile.Save
+End Sub
 
 '----------------------------------------
 '◆テキストファイル読み書き
@@ -3476,4 +3577,7 @@ End Sub
 '◇ ver 2015/08/07
 '・ IsShortcutLinkFileを作成
 '   ShortcutFileLinkPathを修正
+'◇ ver 2015/08/24
+'・ CreateShortcutFileを追加
+'・ 特殊フォルダパス取得関数の追加Desktop/StartMenu/Startup/SendToなど
 '--------------------------------------------------
