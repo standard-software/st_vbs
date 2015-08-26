@@ -94,14 +94,13 @@ Sub Main
         fso.GetFileName(InstallFolderPath) + vbCrLf
 
     Dim MessageResult: MessageResult = _
-        MsgBox( _
-            StringCombine(vbCrLf, Array( _
-                "フォルダを開きますか？", _
-                "Finish " + WScript.ScriptName, _
-                "----------", _
-                Trim(MessageText) )), vbYesNo)
+        MsgBox(StringCombine(vbCrLf, Array( _
+            "フォルダを開きますか？", _
+            "Finish " + WScript.ScriptName, _
+            "----------", _
+            Trim(MessageText) )), vbYesNo)
     If MessageResult = vbYes Then
-        Call ShellFileOpen(InstallFolderPath, vbNormalFocus)
+        Call ShellFileOpen(InstallFolderPath, vbNormalFocus, True)
     End If
 End Sub
 

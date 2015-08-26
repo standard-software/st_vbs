@@ -1,7 +1,10 @@
 '--------------------------------------------------
-'Standard Software Library For Windows VBScript
-'
-'ModuleName:    TestStandardSoftwareLibrary.vbs
+'st.vbs
+'--------------------------------------------------
+'ModuleName:    Test Module
+'FileName:      st_test.vbs
+'--------------------------------------------------
+'Discription:   Standard Software Library For VBScript
 '--------------------------------------------------
 'Version:       2015/07/23
 '--------------------------------------------------
@@ -24,4 +27,5 @@ Call Include(".\st.vbs")
 '--------------------------------------------------
 
 Call test
+
 

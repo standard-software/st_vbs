@@ -55,18 +55,16 @@ Do
             TargetSourceFileName)
 
     If fso.FileExists(TargetSourceFilePath) = False Then
-        Call MsgBox( _
-            StringCombine(vbCrLf, _
-                Array("ファイルが存在しません。", _
-                    TargetSourceFilePath)))
+        Call MsgBox(StringCombine(vbCrLf, Array( _
+            "ファイルが存在しません。", _
+            TargetSourceFilePath )))
         Exit Do
     End If
 
     If fso.folderExists(SpecialFolderPath) = False Then
-        Call MsgBox( _
-            StringCombine(vbCrLf, _
-                Array("フォルダが存在しません。", _
-                    SpecialFolderPath)))
+        Call MsgBox(StringCombine(vbCrLf, Array( _
+            "フォルダが存在しません。", _
+            SpecialFolderPath )))
         Exit Do
     End If
 
@@ -84,7 +82,7 @@ Do
 
      Call ShellFileOpen( _
         fso.GetParentFolderName(ShortcutLinkFilePath), _
-        vbNormalFocus)
+        vbNormalFocus, True)
 
 Loop While False
 End Sub
