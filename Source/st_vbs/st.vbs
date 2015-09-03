@@ -13,7 +13,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2015/08/25
+'Version:       2015/09/01
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -2094,6 +2094,24 @@ Public Function FilePathListSubFolder(ByVal FolderPath)
     FilePathListSubFolder = ExcludeLastStr(Result, vbCrLf)
 End Function
 
+'----------------------------------------
+'・フォルダ下位項目の存在チェック
+'----------------------------------------
+'   ・  フォルダに下位項目が存在すれば True 存在しなければ False
+'----------------------------------------
+Function FolderHasSubItem(ByVal FolderPath)
+    Dim Result: Result = True
+    If fso.FolderExists(FolderPath) = False Then
+        Result = False
+    Else
+        If FilePathListTopFolder(FolderPath) = "" Then
+            If FolderPathListTopFolder(FolderPath) = "" Then
+                Result = False
+            End If
+        End If
+    End If
+    FolderHasSubItem = Result
+End Function
 
 '----------------------------------------
 '◆ファイルフォルダ操作
@@ -3247,8 +3265,9 @@ End Sub
 '----------------------------------------
 '・コマンド指定したシェル起動
 '----------------------------------------
-'   ・  Wait = Trueならプログラムの終了を待つ
-'          Falseならそのまま実行を続ける
+'   ・  Wait
+'           Trueならプログラムの終了を待つ
+'           Falseならそのまま実行を続ける
 '----------------------------------------
 Public Sub ShellCommandRun(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")
@@ -3671,4 +3690,6 @@ End Sub
 '・ ShellFileOpen修正 Wait引数追加
 '・ SetReadOnlyFile追加
 '   IsReadOnlyFile 修正
+'◇ ver 2015/09/01
+'・ FolderHasSubItem
 '--------------------------------------------------

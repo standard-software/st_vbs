@@ -49,7 +49,7 @@ Do
     Call CopyFolderIgnorePath( _
         AbsolutePath(ScriptFolderPath, "..\..\..\Project01\Source"), _
         PathCombine(Array(NewProjectFolderPath, "Source")), _
-        "CreateNewProject.vbs,SupportTool.ini")
+        "CreateNewProject.vbs,SupportTool.ini", "")
 
     'プロジェクトファイル名の変更
     Call fso.MoveFile( _
@@ -72,7 +72,7 @@ Do
     Call CopyFolderIgnorePath( _
         AbsolutePath(ScriptFolderPath, "..\..\..\_SupportTool"), _
         PathCombine(Array(NewProjectFolderPath, "Source\_SupportTool")), _
-        "Update_HereLib.vbs")
+        "Update_HereLib.vbs", "")
 
     'Iniファイル設定
     Dim IniFilePath: IniFilePath = _
