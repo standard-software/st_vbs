@@ -3265,8 +3265,9 @@ End Sub
 '----------------------------------------
 '・コマンド指定したシェル起動
 '----------------------------------------
-'   ・  Wait = Trueならプログラムの終了を待つ
-'          Falseならそのまま実行を続ける
+'   ・  Wait
+'           Trueならプログラムの終了を待つ
+'           Falseならそのまま実行を続ける
 '----------------------------------------
 Public Sub ShellCommandRun(Command, Focus, Wait)
     Call Assert(OrValue(Focus, Array(0, 1, 2, 3, 4, 6)), "Error:ShellCommandRun")

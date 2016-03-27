@@ -30,6 +30,9 @@ Sub Main
 Do
     Dim NewProjectName: NewProjectName = InputBox("新しいプロジェクト名を入力してください。")
 
+    'Test
+    'Dim NewProjectName: NewProjectName = "NewProject01"
+
     If NewProjectName = "" Then
         Call MsgBox("入力がありません。"+ vbCrLf + _
             "処理を終了します。")
@@ -58,6 +61,12 @@ Do
     Call fso.MoveFolder( _
         PathCombine(Array(NewProjectFolderPath, "Source", "Project01")), _
         PathCombine(Array(NewProjectFolderPath, "Source", NewProjectName)))
+
+    'Tools内ファイル名の変更
+    Call fso.MoveFile( _
+        PathCombine(Array(NewProjectFolderPath, "Source", NewProjectName, "Tools", "SetShortcutLink_Project01.vbs")), _
+        PathCombine(Array(NewProjectFolderPath, "Source", NewProjectName, "Tools", "SetShortcutLink_" + NewProjectName + ".vbs")))
+
 
     '新規プロジェクトファイルのヘッダー加工
     Dim VbsFilePath: VbsFilePath = PathCombine(Array( _

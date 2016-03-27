@@ -17,3 +17,9 @@
 ・  CreateNewProject.vbsの修正。
     新規プロジェクトファイルのヘッダーに
     プロジェクト名と現在日付を埋め込む処理の追加
+◇2015/09/01    ver 1.4.0
+・  SetShortcutLink.vbs の作成
+◇2015/09/05    ver 1.4.1
+・  SetShortcutLink.vbs 修正
+◇2015/09/07    ver 1.4.2
+・  SetShortcutLink.vbs 修正、メッセージ問い合わせ対応。
