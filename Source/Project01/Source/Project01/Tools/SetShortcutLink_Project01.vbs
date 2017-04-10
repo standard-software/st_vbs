@@ -4,7 +4,7 @@
 'ModuleName:    SetShortcutLink Module
 'FileName:      SetShortcutLink.vbs
 '--------------------------------------------------
-'Version:       2015/09/07
+'Version:       2016/05/06
 '--------------------------------------------------
 Option Explicit
 
@@ -100,7 +100,8 @@ Do
             "ショートカットファイルを作成しますか？", _
             fso.GetFileName(ShortcutLinkFileParentFolderPath), _
             "はい=作成する", _
-            "いいえ=削除する")), vbYesNo)
+            "いいえ=削除する", _
+            "キャンセル=処理しない")), vbYesNoCancel)
         Case vbYes
             Call ForceCreateFolder(ShortcutLinkFileParentFolderPath)
 
@@ -119,6 +120,7 @@ Do
                     ShortcutLinkFileParentFolderPath, _
                     vbNormalFocus, True)
             End If
+        Case vbCancel
         End Select
 
     Loop While False

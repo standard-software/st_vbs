@@ -128,7 +128,7 @@ Sub Main
             For I = 0 To ArrayCount(ScriptEncodeTargetArray) - 1
             Do
                 ScriptEncodeTargetArray(I) = AbsoluteFilePath( _ 
-                    ScriptFolderPath, ScriptEncodeTargetArray(I))
+                    SourceFolderPath, ScriptEncodeTargetArray(I))
 
                 'コピー先のリリースフォルダで処理を行う
                 ScriptEncodeTargetArray(I) = Replace(ScriptEncodeTargetArray(I), _
@@ -147,16 +147,18 @@ Sub Main
                     ChangeFileExt(ScriptEncodeTargetArray(I), ".vbe"))
             Loop While False
             Next
-            If MessageText = "" Then
-                For I = 0 To ArrayCount(ScriptEncodeTargetArray) - 1
+
+            For I = 0 To ArrayCount(ScriptEncodeTargetArray) - 1
+                If fso.FileExists(ChangeFileExt(ScriptEncodeTargetArray(I), ".vbe")) Then
                     Call ForceDeleteFile(ScriptEncodeTargetArray(I))
                     Call ForceDeleteFolder( _
                         PathCombine(Array( _
                         fso.GetParentFolderName(ScriptEncodeTargetArray(I)), _
                         "Lib")) )
                     'vbsファイルとLibフォルダの削除
-                Next
-            End If
+                End If
+            Next
+
         End If
     End If
 

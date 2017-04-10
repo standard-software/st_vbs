@@ -13,7 +13,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2015/11/06
+'Version:       2016/05/05
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -75,6 +75,7 @@ Public Sub test
 '    Call testIsLastStr()
 '    Call testIncludeLastStr()
 '    Call testExcludeLastStr()
+
 '    Call testTrimFirstStrs
 '    Call testTrimLastStrs
     Call testStringCombine
@@ -378,7 +379,7 @@ End Function
 '----------------------------------------
 
 '----------------------------------------
-'・IsInclude
+'・IsIncludeStr
 '----------------------------------------
 Public Function IsIncludeStr(ByVal Str, ByVal SubStr)
     IsIncludeStr = _
@@ -3098,12 +3099,12 @@ End Function
 
 Function IsCUI
     IsCui = _
-        IsFirstStr(LCase(WScript.FullName), "cscript.exe")
+        IsIncludeStr(LCase(WScript.FullName), "cscript.exe")
 End Function
 
 Function IsGUI
-    IsCui = _
-        IsFirstStr(LCase(WScript.FullName), "wscript.exe")
+    IsGUI = _
+        IsIncludeStr(LCase(WScript.FullName), "wscript.exe")
 End Function
 
 '----------------------------------------
@@ -3721,4 +3722,6 @@ End Sub
 '◇ ver 2015/11/06
 '・ FormatYYYY_MM/FormatHH_MM 追加
 '・ MoveFolderOverWriteの若干の修正
+'◇ ver 2016/05/05
+'・ IsCUI/IsGUI 不具合修正
 '--------------------------------------------------

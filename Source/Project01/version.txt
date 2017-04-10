@@ -23,3 +23,8 @@
 ・  SetShortcutLink.vbs 修正
 ◇2015/09/07    ver 1.4.2
 ・  SetShortcutLink.vbs 修正、メッセージ問い合わせ対応。
+◇2015/09/07    ver 1.5.0
+・  SetShortcutLink.vbs 修正
+    ショートカットを変更しないために
+    キャンセルを選択できるように変更
+
