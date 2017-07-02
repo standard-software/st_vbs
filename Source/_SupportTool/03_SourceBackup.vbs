@@ -57,6 +57,9 @@ Sub Main
     Else
         BackupFolderLastYYYY_MM_DD = False
     End If
+
+    Dim BackupIgnorePaths: BackupIgnorePaths = _
+        IniFile.ReadString("SourceBackup", "BackupIgnorePaths", "")
     '------------------------------
     Dim BackupSourceFolderPathArray
     BackupSourceFolderPathArray = Split(BackupSourceFolderPaths, ",")
@@ -121,9 +124,10 @@ Sub Main
             FolderPathListTopFolder(SourceFolderPath), vbCrLf)
         Dim Folder
         For Each Folder In Folders
-            Call fso.CopyFolder(Folder, _
+            Call CopyFolderIgnorePath(Folder, _
                 PathCombine(Array(BackupFolderPath, _
-                fso.GetFileName(Folder))), True)
+                fso.GetFileName(Folder))), _
+                BackupIgnorePaths, "")
             If BackupFolderLastYYYY_MM_DD Then
                 MessageText = MessageText + fso.GetFileName(Folder) + vbCrLf
             End If

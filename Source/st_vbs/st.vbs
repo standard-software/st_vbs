@@ -8,12 +8,12 @@
 '--------------------------------------------------
 'OpenSource:    https://github.com/standard-software/st_vbs
 'License:       MIT License
-'   URL:        https://github.com/standard-software/st_vbs/blob/master/Document/Readme.txt
+'   URL:        https://github.com/standard-software/st_vbs/blob/master/Document/Readme_jp.txt
 'All Right Reserved:
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2016/05/05
+'Version:       2017/07/02
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -63,8 +63,10 @@ Public Sub test
 '    Call testCheck
 '    Call testOrValue
     Call testSetValue
-'    Call testLoadTextFile
-'    Call testSaveTextFile
+
+    Call testString_SaveToFile
+    Call testString_LoadFromFile
+
 '    Call testFirstStrFirstDelim
 '    Call testFirstStrLastDelim
 '    Call testLastStrFirstDelim
@@ -1407,7 +1409,7 @@ Private Sub testArrayAdd
     ReDim B(2)
     Set B(0) = CreateObject("VBScript.RegExp")
     Set B(1) = Shell
-    Set B(2) = CreateObject("ADODB.Stream")
+    Set B(2) = Nothing
     Call ArrayAdd(B, fso)
     Call Check("test.txt", B(3).GetFileName("C:\temp\test.txt"))
 End Sub
@@ -1444,7 +1446,7 @@ Private Sub testArrayInsert
     ReDim B(2)
     Set B(0) = CreateObject("VBScript.RegExp")
     Set B(1) = Shell
-    Set B(2) = CreateObject("ADODB.Stream")
+    Set B(2) = Nothing
     Call Check(CurrentDirectory, B(1).CurrentDirectory)
     Call ArrayInsert(B, 1, fso)
     Call Check("test.txt", B(1).GetFileName("C:\temp\test.txt"))
@@ -2702,161 +2704,216 @@ End Sub
 '◆テキストファイル読み書き
 '----------------------------------------
 
-Public Function CheckEncodeName(ByVal EncodeName)
-    CheckEncodeName = OrValue(UCase(EncodeName), Array(_
-        "SHIFT_JIS", _
-        "UNICODE", "UNICODEFFFE", "UTF-16LE", "UTF-16", _
-        "UNICODEFEFF", _
-        "UTF-16BE", _
-        "UTF-8", _
-        "UTF-8N", _
-        "ISO-2022-JP", _
-        "EUC-JP", _
-        "UTF-7") )
-End Function
+' Public Function CheckEncodeName(ByVal EncodeName)
+'     CheckEncodeName = OrValue(UCase(EncodeName), Array(_
+'         "SHIFT_JIS", _
+'         "UNICODE", "UNICODEFFFE", "UTF-16LE", "UTF-16", _
+'         "UNICODEFEFF", _
+'         "UTF-16BE", _
+'         "UTF-8", _
+'         "UTF-8N", _
+'         "ISO-2022-JP", _
+'         "EUC-JP", _
+'         "UTF-7") )
+' End Function
+
+' '----------------------------------------
+' '・テキストファイル読込
+' '----------------------------------------
+' '   ・  エンコード指定は下記の通り
+' '           エンコード          指定文字
+' '           ShiftJIS            SHIFT_JIS
+' '           UTF-16LE BOM有/無   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
+' '                           BOMの有無に関わらず読込可能
+' '           UTF-16BE _BOM_ON    UNICODEFEFF
+' '           UTF-16BE _BOM_OFF   UTF-16BE
+' '           UTF-8 BOM有/無      UTF-8/UTF-8N
+' '                           BOMの有無に関わらず読込可能
+' '           JIS                 ISO-2022-JP
+' '           EUC-JP              EUC-JP
+' '           UTF-7               UTF-7
+' '   ・  UTF-16LEとUTF-8は、BOMの有無にかかわらず読み込める
+' '----------------------------------------
+' Const StreamTypeEnum_adTypeBinary = 1
+' Const StreamTypeEnum_adTypeText = 2
+' Const StreamReadEnum_adReadAll = -1
+' Const StreamReadEnum_adReadLine = -2
+' Const SaveOptionsEnum_adSaveCreateOverWrite = 2
+
+' Public Function LoadTextFile( _
+' ByVal TextFilePath, ByVal EncodeName)
+
+'     If CheckEncodeName(EncodeName) = False Then
+'         Call Assert(False, "Error:LoadTextFile")
+'     End If
+
+'     Dim Stream: Set Stream = CreateObject("ADODB.Stream")
+'     Stream.Type = StreamTypeEnum_adTypeText
+
+'     Select Case UCase(EncodeName)
+'     Case "UTF-8N"
+'         Stream.Charset = "UTF-8"
+'     Case Else
+'         Stream.Charset = EncodeName
+'     End Select
+'     Call Stream.Open
+'     Call Stream.LoadFromFile(TextFilePath)
+'     LoadTextFile = Stream.ReadText
+'     Call Stream.Close
+' End Function
+
+' Private Sub testLoadTextFile()
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
+
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
+
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
+
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE"))
+
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF"))
+
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODE"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODEFFFE"))
+
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16LE"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODE"))
+'     Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE"))
+' End Sub
+
+' '----------------------------------------
+' '・テキストファイル保存
+' '----------------------------------------
+' '   ・  エンコード指定は下記の通り
+' '           エンコード          指定文字
+' '           ShiftJIS            SHIFT_JIS
+' '           UTF-16LE _BOM_ON    UNICODEFFFE/UNICODE/UTF-16
+' '           UTF-16LE _BOM_OFF    UTF-16LE
+' '           UTF-16BE _BOM_ON    UNICODEFEFF
+' '           UTF-16BE _BOM_OFF    UTF-16BE
+' '           UTF-8 _BOM_ON       UTF-8
+' '           UTF-8 _BOM_OFF       UTF-8N
+' '           JIS                 ISO-2022-JP
+' '           EUC-JP              EUC-JP
+' '           UTF-7               UTF-7
+' '   ・  UTF-16LEとUTF-8はそのままだと_BOM_ONになるので
+' '       BON無し指定の場合は特殊処理をしている
+' '----------------------------------------
+' Public Sub SaveTextFile(ByVal Text, _
+' ByVal TextFilePath, ByVal EncodeName)
+'     If CheckEncodeName(EncodeName) = False Then
+'         Call Assert(False, "Error:SaveTextFile")
+'     End If
+
+'     Dim Stream: Set Stream = CreateObject("ADODB.Stream")
+'     Stream.Type = StreamTypeEnum_adTypeText
+
+'     Select Case UCase(EncodeName)
+'     Case "UTF-8N"
+'         Stream.Charset = "UTF-8"
+'     Case Else
+'         Stream.Charset = EncodeName
+'     End Select
+'     Call Stream.Open
+'     Call Stream.WriteText(Text)
+'     Dim ByteData
+'     Select Case UCase(EncodeName)
+'     Case "UTF-16LE"
+'         Stream.Position = 0
+'         Stream.Type = StreamTypeEnum_adTypeBinary
+'         Stream.Position = 2
+'         ByteData = Stream.Read
+'         Stream.Position = 0
+'         Call Stream.Write(ByteData)
+'         Call Stream.SetEOS
+'     Case "UTF-8N"
+'         Stream.Position = 0
+'         Stream.Type = StreamTypeEnum_adTypeBinary
+'         Stream.Position = 3
+'         ByteData = Stream.Read
+'         Stream.Position = 0
+'         Call Stream.Write(ByteData)
+'         Call Stream.SetEOS
+'     End Select
+'     Call Stream.SaveToFile(TextFilePath, _
+'         SaveOptionsEnum_adSaveCreateOverWrite)
+'     Call Stream.Close
+' End Sub
+
+' Private Sub testSaveTextFile()
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-7_File.txt", "UTF-7")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-8_File.txt", "UTF-8")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
+
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON2_File.txt", "UNICODE")
+'     Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON3_File.txt", "UTF-16")
+' End Sub
 
 '----------------------------------------
 '・テキストファイル読込
 '----------------------------------------
-'   ・  エンコード指定は下記の通り
-'           エンコード          指定文字
-'           ShiftJIS            SHIFT_JIS
-'           UTF-16LE BOM有/無   UNICODEFFFE/UNICODE/UTF-16/UTF-16LE
-'                           BOMの有無に関わらず読込可能
-'           UTF-16BE _BOM_ON    UNICODEFEFF
-'           UTF-16BE _BOM_OFF   UTF-16BE
-'           UTF-8 BOM有/無      UTF-8/UTF-8N
-'                           BOMの有無に関わらず読込可能
-'           JIS                 ISO-2022-JP
-'           EUC-JP              EUC-JP
-'           UTF-7               UTF-7
-'   ・  UTF-16LEとUTF-8は、BOMの有無にかかわらず読み込める
+'   ・  Shift_JISのみ対応
 '----------------------------------------
-Const StreamTypeEnum_adTypeBinary = 1
-Const StreamTypeEnum_adTypeText = 2
-Const StreamReadEnum_adReadAll = -1
-Const StreamReadEnum_adReadLine = -2
-Const SaveOptionsEnum_adSaveCreateOverWrite = 2
+Public Function String_LoadFromFile( _
+ByVal FilePath)
 
-Public Function LoadTextFile( _
-ByVal TextFilePath, ByVal EncodeName)
+    Const ForReading = 1
 
-    If CheckEncodeName(EncodeName) = False Then
-        Call Assert(False, "Error:LoadTextFile")
-    End If
+    Dim Stream
+    Set Stream = fso.OpenTextFile( _
+        FilePath, ForReading)
 
-    Dim Stream: Set Stream = CreateObject("ADODB.Stream")
-    Stream.Type = StreamTypeEnum_adTypeText
-
-    Select Case UCase(EncodeName)
-    Case "UTF-8N"
-        Stream.Charset = "UTF-8"
-    Case Else
-        Stream.Charset = EncodeName
-    End Select
-    Call Stream.Open
-    Call Stream.LoadFromFile(TextFilePath)
-    LoadTextFile = Stream.ReadText
+    String_LoadFromFile = Stream.ReadAll()
     Call Stream.Close
 End Function
 
-Private Sub testLoadTextFile()
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\SJIS_File.txt", "Shift_JIS"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-7_File.txt", "UTF-7"))
-
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8_File.txt", "UTF-8N"))
-
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8N"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-8N_File.txt", "UTF-8"))
-
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE"))
-
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF"))
-
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODE"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_OFF_File.txt", "UNICODEFFFE"))
-
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UTF-16LE"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODE"))
-    Call Check("123ABCあいうえお", LoadTextFile("Test\TestLoadTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE"))
+Public Sub testString_LoadFromFile()
+    Call Check("123ABCあいうえお" + vbCrLf + _
+        "123ABCあいうえお", _
+        String_LoadFromFile( _
+            "Test\TestLoadTextFile\SJIS_File.txt"))
 End Sub
 
 '----------------------------------------
 '・テキストファイル保存
 '----------------------------------------
-'   ・  エンコード指定は下記の通り
-'           エンコード          指定文字
-'           ShiftJIS            SHIFT_JIS
-'           UTF-16LE _BOM_ON    UNICODEFFFE/UNICODE/UTF-16
-'           UTF-16LE _BOM_OFF    UTF-16LE
-'           UTF-16BE _BOM_ON    UNICODEFEFF
-'           UTF-16BE _BOM_OFF    UTF-16BE
-'           UTF-8 _BOM_ON       UTF-8
-'           UTF-8 _BOM_OFF       UTF-8N
-'           JIS                 ISO-2022-JP
-'           EUC-JP              EUC-JP
-'           UTF-7               UTF-7
-'   ・  UTF-16LEとUTF-8はそのままだと_BOM_ONになるので
-'       BON無し指定の場合は特殊処理をしている
+'   ・  Shift_JISのみ対応
 '----------------------------------------
-Public Sub SaveTextFile(ByVal Text, _
-ByVal TextFilePath, ByVal EncodeName)
-    If CheckEncodeName(EncodeName) = False Then
-        Call Assert(False, "Error:SaveTextFile")
-    End If
+Public Sub String_SaveToFile( _
+ByVal Text, _
+ByVal FilePath)
 
-    Dim Stream: Set Stream = CreateObject("ADODB.Stream")
-    Stream.Type = StreamTypeEnum_adTypeText
+    Const ForWriting = 2
 
-    Select Case UCase(EncodeName)
-    Case "UTF-8N"
-        Stream.Charset = "UTF-8"
-    Case Else
-        Stream.Charset = EncodeName
-    End Select
-    Call Stream.Open
-    Call Stream.WriteText(Text)
-    Dim ByteData
-    Select Case UCase(EncodeName)
-    Case "UTF-16LE"
-        Stream.Position = 0
-        Stream.Type = StreamTypeEnum_adTypeBinary
-        Stream.Position = 2
-        ByteData = Stream.Read
-        Stream.Position = 0
-        Call Stream.Write(ByteData)
-        Call Stream.SetEOS
-    Case "UTF-8N"
-        Stream.Position = 0
-        Stream.Type = StreamTypeEnum_adTypeBinary
-        Stream.Position = 3
-        ByteData = Stream.Read
-        Stream.Position = 0
-        Call Stream.Write(ByteData)
-        Call Stream.SetEOS
-    End Select
-    Call Stream.SaveToFile(TextFilePath, _
-        SaveOptionsEnum_adSaveCreateOverWrite)
+    Dim Stream
+    Set Stream = fso.OpenTextFile( _
+        FilePath, ForWriting, True)
+
+    Call Stream.Write(Text)
     Call Stream.Close
+    
 End Sub
 
-Private Sub testSaveTextFile()
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\SJIS_File.txt", "Shift_JIS")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-7_File.txt", "UTF-7")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-8_File.txt", "UTF-8")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-8N_File.txt", "UTF-8N")
+Public Sub testString_SaveToFile()
 
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16BE_BOM_OFF_File.txt", "UTF-16BE")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16BE_BOM_ON_File.txt", "UNICODEFEFF")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_OFF_File.txt", "UTF-16LE")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON1_File.txt", "UNICODEFFFE")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON2_File.txt", "UNICODE")
-    Call SaveTextFile("123ABCあいうえお", "Test\TestSaveTextFile\UTF-16LE_BOM_ON3_File.txt", "UTF-16")
+    Call String_SaveToFile( _
+        "123ABCあいうえお" + vbCrLf + _
+        "123ABCあいうえお", _
+        "Test\TestSaveTextFile\SJIS_File.txt")
 End Sub
+
+
 
 '----------------------------------------
 '◆Iniファイル操作クラス
@@ -2884,7 +2941,7 @@ Class IniFile
 
         If fso.FileExists(IniFilePath) Then
             Dim IniFileText
-            IniFileText = LoadTextFile(IniFilePath, "SHIFT_JIS")
+            IniFileText = String_LoadFromFile(IniFilePath)
 
             Dim IniFileLines: IniFileLines = _
                 Split(IniFileText, vbCrLf)
@@ -3327,7 +3384,7 @@ Public Function ShellCommandRunReturn(Command, Focus)
                , Focus, True)
     ' 戻り値を取得
     ShellCommandRunReturn = _
-        LoadTextFile(TempFileName, "shift_jis")
+        String_LoadFromFile(TempFileName)
 
     Call ForceDeleteFile(TempFileName)
 End Function
@@ -3523,7 +3580,7 @@ ByVal SourceFilePath, ByVal DestFilePath)
             DestFilePath, True)
 
         Dim FileText: FileText = _
-            LoadTextFile(DestFilePath, "SHIFT_JIS")
+            String_LoadFromFile(DestFilePath)
         With Nothing
             Dim Lines: Lines = _
                 Split(FileText, vbCrLf)
@@ -3540,7 +3597,7 @@ ByVal SourceFilePath, ByVal DestFilePath)
                         "Error:IncludeExpanded:Inclde Library is not found.")
                     Lines(I) = _
                         Replace( _
-                            LoadTextFile(LibPath, "SHIFT_JIS"), _
+                            String_LoadFromFile(LibPath), _
                             "Option Explicit", "")
                 End If
             Next
@@ -3724,4 +3781,9 @@ End Sub
 '・ MoveFolderOverWriteの若干の修正
 '◇ ver 2016/05/05
 '・ IsCUI/IsGUI 不具合修正
+'◇ ver 2017/07/02
+'・ ADODB.StreamがWin7 64bit環境で不具合があり
+'   環境依存かもしれないが問題を解決できなかったためにコードを分離
+'・ ShiftJISのみ対応の String_LoadFromFile/String_SaveToFile 追加
+'・ LoadTextFileをString_LoadFromFileに置き換え
 '--------------------------------------------------
