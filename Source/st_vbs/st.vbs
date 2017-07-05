@@ -13,7 +13,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2017/07/02
+'Version:       2017/07/06
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -2176,8 +2176,6 @@ End Sub
 '----------------------------------------
 '・MoveFolder上書き可能
 '----------------------------------------
-'   ・  
-'----------------------------------------
 Sub MoveFolderOverWrite(ByVal SourceFolderPath, ByVal DestFolderPath)
     Call CopyFolder(SourceFolderPath, DestFolderPath)
     Call ForceDeleteFolder(SourceFolderPath)
@@ -2533,7 +2531,7 @@ End Sub
 
 
 '----------------------------------------
-'◆ファイルの状態確認
+'◆ファイルフォルダ状態確認
 '----------------------------------------
 
 '----------------------------------------
@@ -3043,7 +3041,7 @@ Class IniFile
         Next
         Set IniSectionDic = Nothing
 
-        Call SaveTextFile(IniFileText, Path, "SHIFT_JIS")
+        Call String_SaveToFile(IniFileText, Path)
     End Sub
 End Class
 
@@ -3128,7 +3126,7 @@ Function Zip(ByVal CompressSourcePath, ByVal ZipFilePath)
         Chr(80) +  Chr(75) + Chr(5) + Chr(6) + _
         String(18, Chr(0))
     '空のZIPファイルの作成
-    Call SaveTextFile(Data, OutputTempZipFilePath, "SHIFT_JIS")
+    Call String_SaveToFile(Data, OutputTempZipFilePath)
 
     Dim Shell_Application
     Set Shell_Application = WScript.CreateObject("Shell.Application")
@@ -3287,7 +3285,7 @@ End Function
 Public Sub SetClipboardText(ByVal ClipboardToText)
     Dim TempFileName: TempFileName = TemporaryPath
 
-    Call SaveTextFile(ClipboardToText, TempFileName, "Shift_JIS")
+    Call String_SaveToFile(ClipboardToText, TempFileName)
 
     Call Shell.Run( _
         "%ComSpec% /c clip < " + _
@@ -3603,7 +3601,7 @@ ByVal SourceFilePath, ByVal DestFilePath)
             Next
             FileText = ArrayToString(Lines, vbCrLf)
         End With
-        Call SaveTextFile(FileText, DestFilePath, "SHIFT_JIS")
+        Call String_SaveToFile(FileText, DestFilePath)
     Loop While False
     IncludeExpanded = Result
 End Function
@@ -3786,4 +3784,6 @@ End Sub
 '   環境依存かもしれないが問題を解決できなかったためにコードを分離
 '・ ShiftJISのみ対応の String_LoadFromFile/String_SaveToFile 追加
 '・ LoadTextFileをString_LoadFromFileに置き換え
+'◇ ver 2017/07/06
+'・ SaveTextFileをString_SaveToFileに置き換え
 '--------------------------------------------------
