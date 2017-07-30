@@ -1806,28 +1806,69 @@ Public Function CurrentDirectory
 End Function
 
 '----------------------------------------
-'・スクリプトファイルパスの取得
+'◇スクリプトファイルパスの取得
 '----------------------------------------
 Public Function ScriptFilePath
     ScriptFilePath = _
         WScript.ScriptFullName
 End Function
 
-'----------------------------------------
-'・スクリプトフォルダパスの取得
-'----------------------------------------
 Public Function ScriptFolderPath
     ScriptFolderPath = _
         fso.GetParentFolderName(WScript.ScriptFullName)
 End Function
 
+Public Function ScriptFileName
+    ScriptFileName = _
+        WScript.ScriptName
+End Function
+
+' MsgBox ScriptFilePath
+' MsgBox ScriptFileName
+' MsgBox ScriptFolderPath
+
 '----------------------------------------
 '・スクリプトプログラムパスの取得
 '----------------------------------------
-Public Function ScriptProgramFilePath
-    ScriptProgramFilePath = _
+' Public Function ScriptProgramFilePath
+'     ScriptProgramFilePath = _
+'         fso.BuildPath(WScript.Path, "wscript.exe")
+' End Function
+
+Public Function WshEngineFilePath
+    WshEngineFilePath = _
         fso.BuildPath(WScript.Path, "wscript.exe")
 End Function
+
+Public Function WshEngineFolderPath
+    WshEngineFolderPath = _
+        WScript.Path
+    'C:\Windows\SysWow64
+    'が出力される場合は、
+    'Win64bit版で32bitのScriptEngineを呼び出していることになる
+End Function
+
+Public Function WshEngineFileName
+    WshEngineFileName =  _
+        "wscript.exe"
+End Function
+
+Public Function WshEngineName
+    WshEngineName =  _
+        WScript.Name
+End Function
+
+Public Function WshEngineVersion
+    WshEngineVersion = _
+        WScript.Version
+End Function
+
+' MsgBox WshEngineFilePath
+' MsgBox WshEngineFolderPath
+' MsgBox WshEngineFileName
+' MsgBox WshEngineName
+' MsgBox WshEngineVersion
+
 
 '----------------------------------------
 '・デスクトップフォルダの取得
@@ -2877,10 +2918,11 @@ ByVal FilePath)
 End Function
 
 Public Sub testString_LoadFromFile()
-    Call Check("123ABCあいうえお" + vbCrLf + _
+    Call Check( _
+        "123ABCあいうえお" + vbCrLf + _
         "123ABCあいうえお", _
         String_LoadFromFile( _
-            "Test\TestLoadTextFile\SJIS_File.txt"))
+            "Test\TestStringSaveLoad\SJIS_File.txt"))
 End Sub
 
 '----------------------------------------
@@ -2908,7 +2950,7 @@ Public Sub testString_SaveToFile()
     Call String_SaveToFile( _
         "123ABCあいうえお" + vbCrLf + _
         "123ABCあいうえお", _
-        "Test\TestSaveTextFile\SJIS_File.txt")
+        "Test\TestStringSaveLoad\SJIS_File.txt")
 End Sub
 
 
@@ -3161,6 +3203,7 @@ Function IsGUI
     IsGUI = _
         IsIncludeStr(LCase(WScript.FullName), "wscript.exe")
 End Function
+
 
 '----------------------------------------
 '◆コマンドライン引数
@@ -3786,4 +3829,7 @@ End Sub
 '・ LoadTextFileをString_LoadFromFileに置き換え
 '◇ ver 2017/07/06
 '・ SaveTextFileをString_SaveToFileに置き換え
+'◇ ver 2017/07/30
+'・ Scriptのファイルパス取得と
+'   WshEngineのファイルパス取得を修正
 '--------------------------------------------------
