@@ -13,7 +13,7 @@
 '   Name:       Standard Software
 '   URL:        http://standard-software.net/
 '--------------------------------------------------
-'Version:       2017/07/06
+'Version:       2018/05/15
 '--------------------------------------------------
 
 '--------------------------------------------------
@@ -1950,7 +1950,7 @@ End Function
 '----------------------------------------
 '・マイドキュメントフォルダの取得
 '----------------------------------------
-'   ・  Win7:   
+'   ・  Win7:
 '----------------------------------------
 Public Function MyDocumentsFolderPath
     MyDocumentsFolderPath = _
@@ -2548,6 +2548,16 @@ On Error Resume Next
 End Sub
 
 '----------------------------------------
+'・DeleteFile
+'----------------------------------------
+'   ・  削除できないときのエラーを無視
+'----------------------------------------
+Sub DeleteFile(ByVal FilePath)
+On Error Resume Next
+    Call fso.DeleteFile(FilePath, true)
+End Sub
+
+'----------------------------------------
 '・CopyFolder
 '----------------------------------------
 '   ・  fso.CopyFolderの最終要素に"*"を指定すると、
@@ -2571,7 +2581,15 @@ On Error Resume Next
     Call fso.MoveFolder(SourceFolderPath, DestFolderPath)
 End Sub
 
-
+'----------------------------------------
+'・DeleteFolder
+'----------------------------------------
+'   ・  削除できないときのエラーを無視
+'----------------------------------------
+Sub DeleteFolder(ByVal FolderPath)
+On Error Resume Next
+    Call fso.DeleteFolder(FolderPath, true)
+End Sub
 
 '----------------------------------------
 '◆ファイルフォルダ状態確認
@@ -2676,7 +2694,7 @@ Public Function IsShortcutLinkFile(ByVal FilePath)
         Result = True
     Else
         Result = False
-    End If 
+    End If
     IsShortcutLinkFile = Result
 End Function
 
@@ -2965,7 +2983,7 @@ ByVal FilePath)
 
     Call Stream.Write(Text)
     Call Stream.Close
-    
+
 End Sub
 
 Public Sub testString_SaveToFile()
@@ -3763,7 +3781,7 @@ End Sub
 '・ CopyFile/CopyFolder追加
 '◇ ver 2015/02/23
 '・ TemporaryFilePath/TemporaryFolderName追加
-'・ ForceDeleteFolder/ForceDeleteFile 
+'・ ForceDeleteFolder/ForceDeleteFile
 '   /ForceCreateFolder/ReCreateCopyFolder
 '   例外発生時の不具合修正
 '◇ ver 2015/02/26
@@ -3858,4 +3876,6 @@ End Sub
 '◇ ver 2017/08/02
 '・ Win7 64bit環境で対応を確認できたので
 '   LoadTextFile/SaveTextFileを復活
+'◇ ver 2018/05/15
+'・ エラーを無視するためにDeleteFile/DeleteFolderを作成した。
 '--------------------------------------------------
